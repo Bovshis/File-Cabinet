@@ -26,7 +26,7 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "get stat on records", "The 'stat' command get stat on records." },
-            new string[] { "create", "create record", "The 'create firstName lastName dateOfBirth' command create record." },
+            new string[] { "create", "create record", "The 'create firstName lastName dateOfBirth height width favoriteCharacter' command create record." },
             new string[] { "list", "Write the list of records", "The 'list' command write the list of records." },
         };
 
@@ -115,11 +115,15 @@ namespace FileCabinetApp
         {
             var creationParameters = parameters.Split(' ');
 
-            if (creationParameters.Length == 3)
+            if (creationParameters.Length == FileCabinetRecord.NumberOfParameters)
             {
                 string firstName = creationParameters[0];
                 string lastName = creationParameters[1];
                 DateTime dateTime;
+                short height;
+                decimal weight;
+                char favoriteCharacter;
+
                 var dateParsed = DateTime.TryParse(creationParameters[2], out dateTime);
 
                 if (!dateParsed)
@@ -128,11 +132,38 @@ namespace FileCabinetApp
                     return;
                 }
 
-                var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime);
+                var heightParsed = short.TryParse(creationParameters[3], out height);
+
+                if (!heightParsed)
+                {
+                    Console.WriteLine("Invalid height format.");
+                    return;
+                }
+
+                var weightParsed = decimal.TryParse(creationParameters[4], out weight);
+
+                if (!weightParsed)
+                {
+                    Console.WriteLine("Invalid weight format.");
+                    return;
+                }
+
+                var charParsed = char.TryParse(creationParameters[5], out favoriteCharacter);
+
+                if (!charParsed)
+                {
+                    Console.WriteLine("Invalid char format.");
+                    return;
+                }
+
+                var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
 
                 Console.WriteLine($"First name: {firstName}");
                 Console.WriteLine($"Last name: {lastName}");
                 Console.WriteLine($"Date of birth: {dateTime.ToShortDateString()}");
+                Console.WriteLine($"Height: {height}");
+                Console.WriteLine($"Weight: {weight}");
+                Console.WriteLine($"Favorite Character: {favoriteCharacter}");
                 Console.WriteLine($"Record #{id} is created");
             }
             else
@@ -147,7 +178,8 @@ namespace FileCabinetApp
 
             foreach (var record in recordsList)
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd")}");
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd")}, " +
+                    $"{record.Height}, {record.Weight}, {record.FavoriteCharacter}");
             }
         }
     }
