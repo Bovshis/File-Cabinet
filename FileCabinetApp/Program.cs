@@ -19,6 +19,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
+            new Tuple<string, Action<string>>("edit", Edit),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -26,8 +27,9 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "get stat on records", "The 'stat' command get stat on records." },
-            new string[] { "create", "create record", "The 'create firstName lastName dateOfBirth height width favoriteCharacter' command create record." },
+            new string[] { "create", "create record", "The 'create' command create record." },
             new string[] { "list", "Write the list of records", "The 'list' command write the list of records." },
+            new string[] { "edit", "edit record", "The 'edit' command edit record." },
         };
 
         private static FileCabinetService fileCabinetService = new FileCabinetService();
@@ -121,69 +123,21 @@ namespace FileCabinetApp
             char favoriteCharacter;
 
             bool isCorrectData = false;
-
             while (!isCorrectData)
             {
                 try
                 {
-                    var creationParameters = parameters.Split(' ');
+                    CheckPersonData(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
 
-                    if (creationParameters.Length == FileCabinetRecord.NumberOfParameters)
-                    {
-                        firstName = creationParameters[0];
-                        lastName = creationParameters[1];
-
-                        var dateParsed = DateTime.TryParse(creationParameters[2], out dateTime);
-
-                        if (!dateParsed)
-                        {
-                            throw new ArgumentException($"Invalid date format", nameof(parameters));
-                        }
-
-                        var heightParsed = short.TryParse(creationParameters[3], out height);
-
-                        if (!heightParsed)
-                        {
-                            throw new ArgumentException($"Invalid height format", nameof(parameters));
-                        }
-
-                        var weightParsed = decimal.TryParse(creationParameters[4], out weight);
-
-                        if (!weightParsed)
-                        {
-                            throw new ArgumentException($"Invalid weight format", nameof(parameters));
-                        }
-
-                        var charParsed = char.TryParse(creationParameters[5], out favoriteCharacter);
-
-                        if (!charParsed)
-                        {
-                            throw new ArgumentException($"Invalid char format", nameof(parameters));
-                        }
-
-                        var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
-
-                        Console.WriteLine($"First name: {firstName}");
-                        Console.WriteLine($"Last name: {lastName}");
-                        Console.WriteLine($"Date of birth: {dateTime.ToShortDateString()}");
-                        Console.WriteLine($"Height: {height}");
-                        Console.WriteLine($"Weight: {weight}");
-                        Console.WriteLine($"Favorite Character: {favoriteCharacter}");
-                        Console.WriteLine($"Record #{id} is created");
-                    }
-                    else
-                    {
-                        throw new ArgumentException($"Invalid parameters format", nameof(parameters));
-                    }
-
+                    var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
+                    Console.WriteLine($"Record #{id} is created");
                     isCorrectData = true;
                 }
                 catch (Exception ex)
                 {
                     Console.Write("Bad data format: ");
                     Console.WriteLine(ex.Message);
-                    Console.Write("Enter correct data :");
-                    parameters = Console.ReadLine();
+                    Console.WriteLine("Enter correct data :");
                 }
             }
         }
@@ -196,6 +150,85 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd")}, " +
                     $"{record.Height}, {record.Weight}, {record.FavoriteCharacter}");
+            }
+        }
+
+        private static void Edit(string parameters)
+        {
+            string firstName;
+            string lastName;
+            DateTime dateTime;
+            short height;
+            decimal weight;
+            char favoriteCharacter;
+
+            bool isCorrectData = false;
+            while (!isCorrectData)
+            {
+                try
+                {
+                    int id;
+                    var idParsed = int.TryParse(parameters, out id);
+                    if (!idParsed || id < 0)
+                    {
+                        throw new ArgumentException($"Invalid parameters format", nameof(parameters));
+                    }
+
+                    if (id > fileCabinetService.GetStat())
+                    {
+                        Console.WriteLine($"#{id} record is not found.");
+                    }
+
+                    CheckPersonData(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
+
+                    fileCabinetService.EditRecord(id, firstName, lastName, dateTime, height, weight, favoriteCharacter);
+                    Console.WriteLine($"Record #{id} is updated");
+                    isCorrectData = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.Write("Bad data format: ");
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Enter correct data :");
+                }
+            }
+        }
+
+        private static void CheckPersonData(out string firstName, out string lastName, out DateTime dateTime, out short height, out decimal weight, out char favoriteCharacter)
+        {
+            Console.Write("First name: ");
+            firstName = Console.ReadLine();
+
+            Console.Write("Last name: ");
+            lastName = Console.ReadLine();
+
+            Console.Write("Date of birth: ");
+            var dateParsed = DateTime.TryParse(Console.ReadLine(), out dateTime);
+            if (!dateParsed)
+            {
+                throw new ArgumentException($"Invalid date format", nameof(dateTime));
+            }
+
+            Console.Write("Height: ");
+            var heightParsed = short.TryParse(Console.ReadLine(), out height);
+            if (!heightParsed)
+            {
+                throw new ArgumentException($"Invalid height format", nameof(height));
+            }
+
+            Console.Write("Weight: ");
+            var weightParsed = decimal.TryParse(Console.ReadLine(), out weight);
+            if (!weightParsed)
+            {
+                throw new ArgumentException($"Invalid weight format", nameof(weight));
+            }
+
+            Console.Write("Favorite Charachter: ");
+            var charParsed = char.TryParse(Console.ReadLine(), out favoriteCharacter);
+
+            if (!charParsed)
+            {
+                throw new ArgumentException($"Invalid char format", nameof(favoriteCharacter));
             }
         }
     }

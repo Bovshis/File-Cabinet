@@ -4,7 +4,7 @@ namespace FileCabinetApp
 {
     public class FileCabinetRecord
     {
-        public const int NumberOfParameters = 6;
+        public const int NumberOfParameters = 7;
 
         private string firstName;
         private string lastname;

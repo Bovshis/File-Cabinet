@@ -37,5 +37,19 @@ namespace FileCabinetApp
         {
             return this.list.Count;
         }
+
+        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
+        {
+            this.list[id - 1] = new FileCabinetRecord
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                Height = heigth,
+                Weight = weight,
+                FavoriteCharacter = favoriteCharacter,
+            };
+        }
     }
 }
