@@ -113,62 +113,78 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            var creationParameters = parameters.Split(' ');
+            string firstName;
+            string lastName;
+            DateTime dateTime;
+            short height;
+            decimal weight;
+            char favoriteCharacter;
 
-            if (creationParameters.Length == FileCabinetRecord.NumberOfParameters)
+            bool isCorrectData = false;
+
+            while (!isCorrectData)
             {
-                string firstName = creationParameters[0];
-                string lastName = creationParameters[1];
-                DateTime dateTime;
-                short height;
-                decimal weight;
-                char favoriteCharacter;
-
-                var dateParsed = DateTime.TryParse(creationParameters[2], out dateTime);
-
-                if (!dateParsed)
+                try
                 {
-                    Console.WriteLine("Invalid date format.");
-                    return;
+                    var creationParameters = parameters.Split(' ');
+
+                    if (creationParameters.Length == FileCabinetRecord.NumberOfParameters)
+                    {
+                        firstName = creationParameters[0];
+                        lastName = creationParameters[1];
+
+                        var dateParsed = DateTime.TryParse(creationParameters[2], out dateTime);
+
+                        if (!dateParsed)
+                        {
+                            throw new ArgumentException($"Invalid date format", nameof(parameters));
+                        }
+
+                        var heightParsed = short.TryParse(creationParameters[3], out height);
+
+                        if (!heightParsed)
+                        {
+                            throw new ArgumentException($"Invalid height format", nameof(parameters));
+                        }
+
+                        var weightParsed = decimal.TryParse(creationParameters[4], out weight);
+
+                        if (!weightParsed)
+                        {
+                            throw new ArgumentException($"Invalid weight format", nameof(parameters));
+                        }
+
+                        var charParsed = char.TryParse(creationParameters[5], out favoriteCharacter);
+
+                        if (!charParsed)
+                        {
+                            throw new ArgumentException($"Invalid char format", nameof(parameters));
+                        }
+
+                        var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
+
+                        Console.WriteLine($"First name: {firstName}");
+                        Console.WriteLine($"Last name: {lastName}");
+                        Console.WriteLine($"Date of birth: {dateTime.ToShortDateString()}");
+                        Console.WriteLine($"Height: {height}");
+                        Console.WriteLine($"Weight: {weight}");
+                        Console.WriteLine($"Favorite Character: {favoriteCharacter}");
+                        Console.WriteLine($"Record #{id} is created");
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"Invalid parameters format", nameof(parameters));
+                    }
+
+                    isCorrectData = true;
                 }
-
-                var heightParsed = short.TryParse(creationParameters[3], out height);
-
-                if (!heightParsed)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Invalid height format.");
-                    return;
+                    Console.Write("Bad data format: ");
+                    Console.WriteLine(ex.Message);
+                    Console.Write("Enter correct data :");
+                    parameters = Console.ReadLine();
                 }
-
-                var weightParsed = decimal.TryParse(creationParameters[4], out weight);
-
-                if (!weightParsed)
-                {
-                    Console.WriteLine("Invalid weight format.");
-                    return;
-                }
-
-                var charParsed = char.TryParse(creationParameters[5], out favoriteCharacter);
-
-                if (!charParsed)
-                {
-                    Console.WriteLine("Invalid char format.");
-                    return;
-                }
-
-                var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
-
-                Console.WriteLine($"First name: {firstName}");
-                Console.WriteLine($"Last name: {lastName}");
-                Console.WriteLine($"Date of birth: {dateTime.ToShortDateString()}");
-                Console.WriteLine($"Height: {height}");
-                Console.WriteLine($"Weight: {weight}");
-                Console.WriteLine($"Favorite Character: {favoriteCharacter}");
-                Console.WriteLine($"Record #{id} is created");
-            }
-            else
-            {
-                Console.WriteLine($"Invalid parameters format: {parameters}");
             }
         }
 
