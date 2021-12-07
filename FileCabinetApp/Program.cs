@@ -16,13 +16,21 @@ namespace FileCabinetApp
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
+            new Tuple<string, Action<string>>("stat", Stat),
+            new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
         };
 
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "stat", "get stat on records", "The 'stat' command get stat on records." },
+            new string[] { "create", "create record", "The 'create firstName lastName dateOfBirth height width favoriteCharacter' command create record." },
+            new string[] { "list", "Write the list of records", "The 'list' command write the list of records." },
         };
+
+        private static FileCabinetService fileCabinetService = new FileCabinetService();
 
         public static void Main(string[] args)
         {
@@ -95,6 +103,84 @@ namespace FileCabinetApp
         {
             Console.WriteLine("Exiting an application...");
             isRunning = false;
+        }
+
+        private static void Stat(string parameters)
+        {
+            var recordsCount = Program.fileCabinetService.GetStat();
+            Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Create(string parameters)
+        {
+            var creationParameters = parameters.Split(' ');
+
+            if (creationParameters.Length == FileCabinetRecord.NumberOfParameters)
+            {
+                string firstName = creationParameters[0];
+                string lastName = creationParameters[1];
+                DateTime dateTime;
+                short height;
+                decimal weight;
+                char favoriteCharacter;
+
+                var dateParsed = DateTime.TryParse(creationParameters[2], out dateTime);
+
+                if (!dateParsed)
+                {
+                    Console.WriteLine("Invalid date format.");
+                    return;
+                }
+
+                var heightParsed = short.TryParse(creationParameters[3], out height);
+
+                if (!heightParsed)
+                {
+                    Console.WriteLine("Invalid height format.");
+                    return;
+                }
+
+                var weightParsed = decimal.TryParse(creationParameters[4], out weight);
+
+                if (!weightParsed)
+                {
+                    Console.WriteLine("Invalid weight format.");
+                    return;
+                }
+
+                var charParsed = char.TryParse(creationParameters[5], out favoriteCharacter);
+
+                if (!charParsed)
+                {
+                    Console.WriteLine("Invalid char format.");
+                    return;
+                }
+
+                var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
+
+                Console.WriteLine($"First name: {firstName}");
+                Console.WriteLine($"Last name: {lastName}");
+                Console.WriteLine($"Date of birth: {dateTime.ToShortDateString()}");
+                Console.WriteLine($"Height: {height}");
+                Console.WriteLine($"Weight: {weight}");
+                Console.WriteLine($"Favorite Character: {favoriteCharacter}");
+                Console.WriteLine($"Record #{id} is created");
+            }
+            else
+            {
+                Console.WriteLine($"Invalid parameters format: {parameters}");
+            }
+        }
+
+        private static void List(string parameters)
+        {
+            var recordsList = fileCabinetService.GetRecords();
+
+            foreach (var record in recordsList)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd")}, " +
+                    $"{record.Height}, {record.Weight}, {record.FavoriteCharacter}");
+            }
         }
     }
 }
