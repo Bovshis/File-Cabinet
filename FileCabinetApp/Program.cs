@@ -17,6 +17,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
+            new Tuple<string, Action<string>>("create", Create),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -24,6 +25,7 @@ namespace FileCabinetApp
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "get stat on records", "The 'stat' command get stat on records." },
+            new string[] { "create", "create record", "The 'create firstName lastName dateOfBirth' command create record." },
         };
 
         private static FileCabinetService fileCabinetService = new FileCabinetService();
@@ -105,6 +107,36 @@ namespace FileCabinetApp
         {
             var recordsCount = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Create(string parameters)
+        {
+            var creationParameters = parameters.Split(' ');
+
+            if (creationParameters.Length == 3)
+            {
+                string firstName = creationParameters[0];
+                string lastName = creationParameters[1];
+                DateTime dateTime;
+                var dateParsed = DateTime.TryParse(creationParameters[2], out dateTime);
+
+                if (!dateParsed)
+                {
+                    Console.WriteLine("Invalid date format.");
+                    return;
+                }
+
+                var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime);
+
+                Console.WriteLine($"First name: {firstName}");
+                Console.WriteLine($"Last name: {lastName}");
+                Console.WriteLine($"Date of birth: {dateTime.ToShortDateString()}");
+                Console.WriteLine($"Record #{id} is created");
+            }
+            else
+            {
+                Console.WriteLine($"Invalid parameters format: {parameters}");
+            }
         }
     }
 }
