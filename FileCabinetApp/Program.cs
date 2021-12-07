@@ -18,6 +18,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("exit", Exit),
             new Tuple<string, Action<string>>("stat", Stat),
             new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -26,6 +27,7 @@ namespace FileCabinetApp
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
             new string[] { "stat", "get stat on records", "The 'stat' command get stat on records." },
             new string[] { "create", "create record", "The 'create firstName lastName dateOfBirth' command create record." },
+            new string[] { "list", "Write the list of records", "The 'list' command write the list of records." },
         };
 
         private static FileCabinetService fileCabinetService = new FileCabinetService();
@@ -136,6 +138,16 @@ namespace FileCabinetApp
             else
             {
                 Console.WriteLine($"Invalid parameters format: {parameters}");
+            }
+        }
+
+        private static void List(string parameters)
+        {
+            var recordsList = fileCabinetService.GetRecords();
+
+            foreach (var record in recordsList)
+            {
+                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd")}");
             }
         }
     }
