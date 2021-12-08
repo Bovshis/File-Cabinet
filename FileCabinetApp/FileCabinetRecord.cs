@@ -2,6 +2,9 @@
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class for storing record in the file cabinet.
+    /// </summary>
     public class FileCabinetRecord
     {
         private string firstName;
@@ -10,8 +13,15 @@ namespace FileCabinetApp
         private short height;
         private decimal weight;
 
+        /// <summary>
+        /// Gets or sets record number in the file cabinet.
+        /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets first name in the record in the file cabinet.
+        /// </summary>
+        /// <value>not null or whitespace, not less than 2 or not greater than 60.</value>
         public string FirstName
         {
             get
@@ -40,6 +50,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Gets or sets last name in the record in the file cabinet.
+        /// </summary>
+        /// <value>not null or whitespace, not less than 2 or not greater than 60.</value>
         public string LastName
         {
             get
@@ -68,6 +82,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Gets or sets date of birth in the record in the file cabinet.
+        /// </summary>
+        /// <value>not less than 1950-Jan-1 or not greater than current time.</value>
         public DateTime DateOfBirth
         {
             get
@@ -86,6 +104,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Gets or sets height in the record in the file cabinet.
+        /// </summary>
+        /// <value>not less than 0.</value>
         public short Height
         {
             get
@@ -104,6 +126,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Gets or sets weight in the record in the file cabinet.
+        /// </summary>
+        /// <value>not less than 0.</value>
         public decimal Weight
         {
             get
@@ -122,9 +148,18 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        /// Gets or sets favorite character in the record in the file cabinet.
+        /// </summary>
         public char FavoriteCharacter { get; set; }
 
-        public override string ToString() => $"#{this.Id}, {this.FirstName}, {this.LastName}, {this.DateOfBirth.ToString("yyyy-MMM-dd")}, " +
+        /// <summary>
+        /// Get record in string format.
+        /// </summary>
+        /// <returns>
+        /// return record in string format.
+        /// </returns>
+        public override string ToString() => $"#{this.Id}, {this.FirstName}, {this.LastName}, {this.DateOfBirth:yyyy-MMM-dd}, " +
                         $"{this.Height}, {this.Weight}, {this.FavoriteCharacter}";
     }
 }

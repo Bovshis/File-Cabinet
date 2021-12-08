@@ -1,20 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Сlass for working with a list of records.
+    /// </summary>
     public class FileCabinetService
     {
-        private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+        private readonly List<FileCabinetRecord> list = new ();
 
-        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
-        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new ();
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new ();
+        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new ();
 
+        /// <summary>
+        /// Method that creates record, adds to list and dictionaries.
+        /// </summary>
+        /// <param name="firstName">Person's first name.</param>
+        /// <param name="lastName">Person's last name.</param>
+        /// <param name="dateOfBirth">Person's date of birth.</param>
+        /// <param name="heigth">Person's height.</param>
+        /// <param name="weight">Person's weight.</param>
+        /// <param name="favoriteCharacter">Person's favorite character.</param>
+        /// <returns>record number.</returns>
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
         {
             var record = CreateRecord(this.list.Count + 1, firstName, lastName, dateOfBirth, heigth, weight, favoriteCharacter);
@@ -24,16 +34,34 @@ namespace FileCabinetApp
             return record.Id;
         }
 
+        /// <summary>
+        /// Get records from the file cabinet list.
+        /// </summary>
+        /// <returns>Array of records.</returns>
         public FileCabinetRecord[] GetRecords()
         {
             return this.list.ToArray();
         }
 
+        /// <summary>
+        /// Get count records from the file cabinet list..
+        /// </summary>
+        /// <returns>count of records.</returns>
         public int GetStat()
         {
             return this.list.Count;
         }
 
+        /// <summary>
+        /// Method that edit record.
+        /// </summary>
+        /// <param name="id">number of the edited record.</param>
+        /// <param name="firstName">new first name.</param>
+        /// <param name="lastName">new last name.</param>
+        /// <param name="dateOfBirth">newdate of birth.</param>
+        /// <param name="heigth">new height.</param>
+        /// <param name="weight">new weight.</param>
+        /// <param name="favoriteCharacter">newfavorite character.</param>
         public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
         {
             var oldRecord = this.list[id - 1];
@@ -46,6 +74,11 @@ namespace FileCabinetApp
             this.AddElementToDictionaries(record);
         }
 
+        /// <summary>
+        /// Find list of the records by first name.
+        /// </summary>
+        /// <param name="firstName">value to search.</param>
+        /// <returns>List of the searched records.</returns>
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
             var key = firstName.ToUpper(CultureInfo.InvariantCulture);
@@ -54,9 +87,14 @@ namespace FileCabinetApp
                 return this.firstNameDictionary[firstName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
             }
 
-            return null;
+            return Array.Empty<FileCabinetRecord>();
         }
 
+        /// <summary>
+        /// Find list of the records by last Name.
+        /// </summary>
+        /// <param name="lastName">value to search.</param>
+        /// <returns>List of the searched records.</returns>
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
             var key = lastName.ToUpper(CultureInfo.InvariantCulture);
@@ -65,9 +103,14 @@ namespace FileCabinetApp
                 return this.firstNameDictionary[lastName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
             }
 
-            return null;
+            return Array.Empty<FileCabinetRecord>();
         }
 
+        /// <summary>
+        /// Find list of the records by date Of Birth.
+        /// </summary>
+        /// <param name="dateOfBirth">value to search.</param>
+        /// <returns>List of the searched records.</returns>
         public FileCabinetRecord[] FindByDateOfBirth(string dateOfBirth)
         {
             DateTime dateOfBirthDate;
@@ -77,7 +120,7 @@ namespace FileCabinetApp
                 return this.dateOfBirthDictionary[dateOfBirthDate].ToArray();
             }
 
-            return null;
+            return Array.Empty<FileCabinetRecord>();
         }
 
         private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)

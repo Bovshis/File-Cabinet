@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Сonsole application for executing commands in the file cabinet.
+    /// </summary>
     public static class Program
     {
         private const string DeveloperName = "Daniil Bovshis";
@@ -36,9 +38,12 @@ namespace FileCabinetApp
             new string[] { "find", "find records", "The 'find' command find records." },
         };
 
-        private static FileCabinetService fileCabinetService = new FileCabinetService();
+        private static FileCabinetService fileCabinetService = new ();
 
-        public static void Main(string[] args)
+        /// <summary>
+        /// Main method that determines which command to execute.
+        /// </summary>
+        public static void Main()
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
@@ -119,8 +124,7 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            string firstName;
-            string lastName;
+            string firstName, lastName;
             DateTime dateTime;
             short height;
             decimal weight;
@@ -209,7 +213,7 @@ namespace FileCabinetApp
                 _ => null,
             };
 
-            if (records == null || records.Count() == 0)
+            if (records == null || records.Length == 0)
             {
                 Console.WriteLine($"There is no record for '{parameters}' parameters.");
             }
