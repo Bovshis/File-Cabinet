@@ -124,20 +124,14 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            string firstName, lastName;
-            DateTime dateTime;
-            short height;
-            decimal weight;
-            char favoriteCharacter;
-
+            RecordWithoutId record = new ();
             bool isCorrectData = false;
             while (!isCorrectData)
             {
                 try
                 {
-                    CheckDataForRecord(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
-
-                    var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
+                    CheckDataForRecord(record);
+                    var id = fileCabinetService.CreateRecord(record);
                     Console.WriteLine($"Record #{id} is created");
                     isCorrectData = true;
                 }
@@ -162,13 +156,7 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
-            string firstName;
-            string lastName;
-            DateTime dateTime;
-            short height;
-            decimal weight;
-            char favoriteCharacter;
-
+            RecordWithoutId record = new ();
             bool isCorrectData = false;
             while (!isCorrectData)
             {
@@ -187,8 +175,8 @@ namespace FileCabinetApp
                         return;
                     }
 
-                    CheckDataForRecord(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
-                    fileCabinetService.EditRecord(id, firstName, lastName, dateTime, height, weight, favoriteCharacter);
+                    CheckDataForRecord(record);
+                    fileCabinetService.EditRecord(id, record);
 
                     Console.WriteLine($"Record #{id} is updated");
                     isCorrectData = true;
@@ -226,42 +214,54 @@ namespace FileCabinetApp
             }
         }
 
-        private static void CheckDataForRecord(out string firstName, out string lastName, out DateTime dateTime, out short height, out decimal weight, out char favoriteCharacter)
+        private static void CheckDataForRecord(RecordWithoutId record)
         {
             Console.Write("First name: ");
-            firstName = Console.ReadLine();
+            record.FirstName = Console.ReadLine();
 
             Console.Write("Last name: ");
-            lastName = Console.ReadLine();
+            record.LastName = Console.ReadLine();
 
             Console.Write("Date of birth: ");
-            var dateParsed = DateTime.TryParse(Console.ReadLine(), out dateTime);
+            DateTime date;
+            var dateParsed = DateTime.TryParse(Console.ReadLine(), out date);
             if (!dateParsed)
             {
-                throw new ArgumentException($"Invalid date format", nameof(dateTime));
+                throw new ArgumentException($"Invalid date format");
             }
 
+            record.DateOfBirth = date;
+
             Console.Write("Height: ");
+            short height;
             var heightParsed = short.TryParse(Console.ReadLine(), out height);
             if (!heightParsed)
             {
-                throw new ArgumentException($"Invalid height format", nameof(height));
+                throw new ArgumentException($"Invalid height format");
             }
 
+            record.Height = height;
+
             Console.Write("Weight: ");
+            decimal weight;
             var weightParsed = decimal.TryParse(Console.ReadLine(), out weight);
             if (!weightParsed)
             {
-                throw new ArgumentException($"Invalid weight format", nameof(weight));
+                throw new ArgumentException($"Invalid weight format");
             }
 
+            record.Weight = weight;
+
             Console.Write("Favorite Charachter: ");
+            char favoriteCharacter;
             var charParsed = char.TryParse(Console.ReadLine(), out favoriteCharacter);
 
             if (!charParsed)
             {
-                throw new ArgumentException($"Invalid char format", nameof(favoriteCharacter));
+                throw new ArgumentException($"Invalid char format");
             }
+
+            record.FavoriteCharacter = favoriteCharacter;
         }
     }
 }

@@ -18,16 +18,11 @@ namespace FileCabinetApp
         /// <summary>
         /// Method that creates record, adds to list and dictionaries.
         /// </summary>
-        /// <param name="firstName">Person's first name.</param>
-        /// <param name="lastName">Person's last name.</param>
-        /// <param name="dateOfBirth">Person's date of birth.</param>
-        /// <param name="heigth">Person's height.</param>
-        /// <param name="weight">Person's weight.</param>
-        /// <param name="favoriteCharacter">Person's favorite character.</param>
+        /// <param name="recordWithoutId">Person's data without id.</param>
         /// <returns>record number.</returns>
-        public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
+        public int CreateRecord(RecordWithoutId recordWithoutId)
         {
-            var record = CreateRecord(this.list.Count + 1, firstName, lastName, dateOfBirth, heigth, weight, favoriteCharacter);
+            var record = CreateRecord(this.list.Count + 1, recordWithoutId);
             this.list.Add(record);
             this.AddElementToDictionaries(record);
 
@@ -56,20 +51,15 @@ namespace FileCabinetApp
         /// Method that edit record.
         /// </summary>
         /// <param name="id">number of the edited record.</param>
-        /// <param name="firstName">new first name.</param>
-        /// <param name="lastName">new last name.</param>
-        /// <param name="dateOfBirth">newdate of birth.</param>
-        /// <param name="heigth">new height.</param>
-        /// <param name="weight">new weight.</param>
-        /// <param name="favoriteCharacter">newfavorite character.</param>
-        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
+        /// <param name="recordWithoutId">data of the edited record without id.</param>
+        public void EditRecord(int id, RecordWithoutId recordWithoutId)
         {
             var oldRecord = this.list[id - 1];
             this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
 
-            var record = CreateRecord(id, firstName, lastName, dateOfBirth, heigth, weight, favoriteCharacter);
+            var record = CreateRecord(id, recordWithoutId);
             this.list[id - 1] = record;
             this.AddElementToDictionaries(record);
         }
@@ -135,17 +125,17 @@ namespace FileCabinetApp
             }
         }
 
-        private static FileCabinetRecord CreateRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
+        private static FileCabinetRecord CreateRecord(int id, RecordWithoutId recordWithoutId)
         {
             return new FileCabinetRecord
             {
                 Id = id,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Height = heigth,
-                Weight = weight,
-                FavoriteCharacter = favoriteCharacter,
+                FirstName = recordWithoutId.FirstName,
+                LastName = recordWithoutId.LastName,
+                DateOfBirth = recordWithoutId.DateOfBirth,
+                Height = recordWithoutId.Height,
+                Weight = recordWithoutId.Weight,
+                FavoriteCharacter = recordWithoutId.FavoriteCharacter,
             };
         }
 

@@ -4,5 +4,157 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FileCabinetRecord">
+            <summary>
+            Class for storing record in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+            <summary>
+            Gets or sets record number in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets first name in the record in the file cabinet.
+            </summary>
+            <value>not null or whitespace, not less than 2 or not greater than 60.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets last name in the record in the file cabinet.
+            </summary>
+            <value>not null or whitespace, not less than 2 or not greater than 60.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets date of birth in the record in the file cabinet.
+            </summary>
+            <value>not less than 1950-Jan-1 or not greater than current time.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Height">
+            <summary>
+            Gets or sets height in the record in the file cabinet.
+            </summary>
+            <value>not less than 0.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Weight">
+            <summary>
+            Gets or sets weight in the record in the file cabinet.
+            </summary>
+            <value>not less than 0.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FavoriteCharacter">
+            <summary>
+            Gets or sets favorite character in the record in the file cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
+            <summary>
+            Get record in string format.
+            </summary>
+            <returns>
+            return record in string format.
+            </returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetService">
+            <summary>
+            Сlass for working with a list of records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Method that creates record, adds to list and dictionaries.
+            </summary>
+            <param name="recordWithoutId">Person's data without id.</param>
+            <returns>record number.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+            <summary>
+            Get records from the file cabinet list.
+            </summary>
+            <returns>Array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+            <summary>
+            Get count records from the file cabinet list..
+            </summary>
+            <returns>count of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Method that edit record.
+            </summary>
+            <param name="id">number of the edited record.</param>
+            <param name="recordWithoutId">data of the edited record without id.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Find list of the records by first name.
+            </summary>
+            <param name="firstName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Find list of the records by last Name.
+            </summary>
+            <param name="lastName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Find list of the records by date Of Birth.
+            </summary>
+            <param name="dateOfBirth">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+            Сonsole application for executing commands in the file cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main">
+            <summary>
+            Main method that determines which command to execute.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.RecordWithoutId">
+            <summary>
+            Introduce Parameter Object.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.FirstName">
+            <summary>
+            Gets or sets last name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.LastName">
+            <summary>
+            Gets or sets last name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.DateOfBirth">
+            <summary>
+            Gets or sets date of birth.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.Height">
+            <summary>
+            Gets or sets height.
+            </summary>
+            <value>not less than 0.</value>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.Weight">
+            <summary>
+            Gets or sets weightt.
+            </summary>
+            <value>not less than 0.</value>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.FavoriteCharacter">
+            <summary>
+            Gets or sets favorite character.
+            </summary>
+        </member>
     </members>
 </doc>
