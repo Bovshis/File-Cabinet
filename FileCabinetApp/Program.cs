@@ -131,7 +131,7 @@ namespace FileCabinetApp
             {
                 try
                 {
-                    CheckPersonData(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
+                    CheckDataForRecord(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
 
                     var id = fileCabinetService.CreateRecord(firstName, lastName, dateTime, height, weight, favoriteCharacter);
                     Console.WriteLine($"Record #{id} is created");
@@ -180,11 +180,12 @@ namespace FileCabinetApp
                     if (id > fileCabinetService.GetStat())
                     {
                         Console.WriteLine($"#{id} record is not found.");
+                        return;
                     }
 
-                    CheckPersonData(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
-
+                    CheckDataForRecord(out firstName, out lastName, out dateTime, out height, out weight, out favoriteCharacter);
                     fileCabinetService.EditRecord(id, firstName, lastName, dateTime, height, weight, favoriteCharacter);
+
                     Console.WriteLine($"Record #{id} is updated");
                     isCorrectData = true;
                 }
@@ -221,7 +222,7 @@ namespace FileCabinetApp
             }
         }
 
-        private static void CheckPersonData(out string firstName, out string lastName, out DateTime dateTime, out short height, out decimal weight, out char favoriteCharacter)
+        private static void CheckDataForRecord(out string firstName, out string lastName, out DateTime dateTime, out short height, out decimal weight, out char favoriteCharacter)
         {
             Console.Write("First name: ");
             firstName = Console.ReadLine();

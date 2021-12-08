@@ -10,27 +10,16 @@ namespace FileCabinetApp
     public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
+
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
         {
-            var record = new FileCabinetRecord
-            {
-                Id = this.list.Count + 1,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Height = heigth,
-                Weight = weight,
-                FavoriteCharacter = favoriteCharacter,
-            };
-
+            var record = CreateRecord(this.list.Count + 1, firstName, lastName, dateOfBirth, heigth, weight, favoriteCharacter);
             this.list.Add(record);
-            AddElementToDictionary(firstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
-            AddElementToDictionary(lastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
-            AddElementToDictionary(dateOfBirth, record, this.dateOfBirthDictionary);
+            this.AddElementToDictionaries(record);
 
             return record.Id;
         }
@@ -47,27 +36,14 @@ namespace FileCabinetApp
 
         public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
         {
-            var record = new FileCabinetRecord
-            {
-                Id = id,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Height = heigth,
-                Weight = weight,
-                FavoriteCharacter = favoriteCharacter,
-            };
             var oldRecord = this.list[id - 1];
-            this.list[id - 1] = record;
-
             this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
-            AddElementToDictionary(firstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
-
             this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
-            AddElementToDictionary(lastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
-
             this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
-            AddElementToDictionary(dateOfBirth, record, this.dateOfBirthDictionary);
+
+            var record = CreateRecord(id, firstName, lastName, dateOfBirth, heigth, weight, favoriteCharacter);
+            this.list[id - 1] = record;
+            this.AddElementToDictionaries(record);
         }
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
@@ -104,7 +80,6 @@ namespace FileCabinetApp
             return null;
         }
 
-
         private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
         {
             if (dictionary.ContainsKey(key))
@@ -115,6 +90,27 @@ namespace FileCabinetApp
             {
                 dictionary[key] = new List<FileCabinetRecord>() { record };
             }
+        }
+
+        private static FileCabinetRecord CreateRecord(int id, string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
+        {
+            return new FileCabinetRecord
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                DateOfBirth = dateOfBirth,
+                Height = heigth,
+                Weight = weight,
+                FavoriteCharacter = favoriteCharacter,
+            };
+        }
+
+        private void AddElementToDictionaries(FileCabinetRecord record)
+        {
+            AddElementToDictionary(record.FirstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
+            AddElementToDictionary(record.LastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
+            AddElementToDictionary(record.DateOfBirth, record, this.dateOfBirthDictionary);
         }
     }
 }
