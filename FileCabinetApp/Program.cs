@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 
 namespace FileCabinetApp
 {
@@ -20,6 +22,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -30,6 +33,7 @@ namespace FileCabinetApp
             new string[] { "create", "create record", "The 'create' command create record." },
             new string[] { "list", "Write the list of records", "The 'list' command write the list of records." },
             new string[] { "edit", "edit record", "The 'edit' command edit record." },
+            new string[] { "find", "find records", "The 'find' command find records." },
         };
 
         private static FileCabinetService fileCabinetService = new FileCabinetService();
@@ -148,8 +152,7 @@ namespace FileCabinetApp
 
             foreach (var record in recordsList)
             {
-                Console.WriteLine($"#{record.Id}, {record.FirstName}, {record.LastName}, {record.DateOfBirth.ToString("yyyy-MMM-dd")}, " +
-                    $"{record.Height}, {record.Weight}, {record.FavoriteCharacter}");
+                Console.WriteLine(record.ToString());
             }
         }
 
@@ -190,6 +193,30 @@ namespace FileCabinetApp
                     Console.Write("Bad data format: ");
                     Console.WriteLine(ex.Message);
                     Console.WriteLine("Enter correct data :");
+                }
+            }
+        }
+
+        private static void Find(string parameters)
+        {
+            var findParameters = parameters.Split(' ');
+            var records = findParameters[0].ToUpper(CultureInfo.InvariantCulture) switch
+            {
+                "FIRSTNAME" => fileCabinetService.FindByFirstName(findParameters[1]),
+                "LASTNAME" => fileCabinetService.FindByLastName(findParameters[1]),
+                "DATEOFBIRTH" => fileCabinetService.FindByDateOfBirth(findParameters[1]),
+                _ => null,
+            };
+
+            if (records == null || records.Count() == 0)
+            {
+                Console.WriteLine($"There is no record for '{parameters}' parameters.");
+            }
+            else
+            {
+                foreach (var record in records)
+                {
+                    Console.WriteLine(record.ToString());
                 }
             }
         }

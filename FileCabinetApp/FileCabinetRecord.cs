@@ -4,8 +4,6 @@ namespace FileCabinetApp
 {
     public class FileCabinetRecord
     {
-        public const int NumberOfParameters = 7;
-
         private string firstName;
         private string lastname;
         private DateTime dateOfBirth;
@@ -125,5 +123,8 @@ namespace FileCabinetApp
         }
 
         public char FavoriteCharacter { get; set; }
+
+        public override string ToString() => $"#{this.Id}, {this.FirstName}, {this.LastName}, {this.DateOfBirth.ToString("yyyy-MMM-dd")}, " +
+                        $"{this.Height}, {this.Weight}, {this.FavoriteCharacter}";
     }
 }
