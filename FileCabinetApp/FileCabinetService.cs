@@ -51,5 +51,13 @@ namespace FileCabinetApp
                 FavoriteCharacter = favoriteCharacter,
             };
         }
+
+        public FileCabinetRecord[] FindByFirstName(string firstName)
+        {
+            var res = from p in this.list
+                      where p.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase)
+                      select p;
+            return res.ToArray();
+        }
     }
 }
