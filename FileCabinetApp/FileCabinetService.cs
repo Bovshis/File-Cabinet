@@ -12,6 +12,7 @@ namespace FileCabinetApp
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
         {
@@ -29,6 +30,7 @@ namespace FileCabinetApp
             this.list.Add(record);
             AddElementToDictionary(firstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
             AddElementToDictionary(lastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
+            AddElementToDictionary(dateOfBirth, record, this.dateOfBirthDictionary);
 
             return record.Id;
         }
@@ -63,27 +65,47 @@ namespace FileCabinetApp
 
             this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             AddElementToDictionary(lastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
+
+            this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
+            AddElementToDictionary(dateOfBirth, record, this.dateOfBirthDictionary);
         }
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
-            return this.firstNameDictionary[firstName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
+            var key = firstName.ToUpper(CultureInfo.InvariantCulture);
+            if (this.firstNameDictionary.ContainsKey(key))
+            {
+                return this.firstNameDictionary[firstName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
+            }
+
+            return null;
         }
 
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
-            return this.lastNameDictionary[lastName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
+            var key = lastName.ToUpper(CultureInfo.InvariantCulture);
+            if (this.firstNameDictionary.ContainsKey(key))
+            {
+                return this.firstNameDictionary[lastName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
+            }
+
+            return null;
         }
 
         public FileCabinetRecord[] FindByDateOfBirth(string dateOfBirth)
         {
-            var res = from p in this.list
-                      where p.DateOfBirth.ToString("yyyy-MMM-dd").Equals(dateOfBirth, StringComparison.InvariantCultureIgnoreCase)
-                      select p;
-            return res.ToArray();
+            DateTime dateOfBirthDate;
+            var dateParsed = DateTime.TryParse(dateOfBirth, out dateOfBirthDate);
+            if (dateParsed && this.dateOfBirthDictionary.ContainsKey(dateOfBirthDate))
+            {
+                return this.dateOfBirthDictionary[dateOfBirthDate].ToArray();
+            }
+
+            return null;
         }
 
-        private static void AddElementToDictionary(string key, FileCabinetRecord record, Dictionary<string, List<FileCabinetRecord>> dictionary)
+
+        private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
         {
             if (dictionary.ContainsKey(key))
             {
