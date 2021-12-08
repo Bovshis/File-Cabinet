@@ -59,5 +59,13 @@ namespace FileCabinetApp
                       select p;
             return res.ToArray();
         }
+
+        public FileCabinetRecord[] FindByLastName(string lastName)
+        {
+            var res = from p in this.list
+                      where p.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase)
+                      select p;
+            return res.ToArray();
+        }
     }
 }

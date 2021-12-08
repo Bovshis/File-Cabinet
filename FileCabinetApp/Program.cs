@@ -203,6 +203,7 @@ namespace FileCabinetApp
             var records = findParameters[0].ToUpper(CultureInfo.InvariantCulture) switch
             {
                 "FIRSTNAME" => fileCabinetService.FindByFirstName(findParameters[1]),
+                "LASTNAME" => fileCabinetService.FindByLastName(findParameters[1]),
                 _ => null,
             };
 
