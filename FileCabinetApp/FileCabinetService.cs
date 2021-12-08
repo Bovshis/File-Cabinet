@@ -11,6 +11,7 @@ namespace FileCabinetApp
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
 
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, short heigth, decimal weight, char favoriteCharacter)
         {
@@ -27,6 +28,7 @@ namespace FileCabinetApp
 
             this.list.Add(record);
             AddElementToDictionary(firstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
+            AddElementToDictionary(lastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
 
             return record.Id;
         }
@@ -58,6 +60,9 @@ namespace FileCabinetApp
 
             this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             AddElementToDictionary(firstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
+
+            this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
+            AddElementToDictionary(lastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
         }
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
@@ -67,10 +72,7 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByLastName(string lastName)
         {
-            var res = from p in this.list
-                      where p.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase)
-                      select p;
-            return res.ToArray();
+            return this.lastNameDictionary[lastName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
         }
 
         public FileCabinetRecord[] FindByDateOfBirth(string dateOfBirth)
