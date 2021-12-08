@@ -67,5 +67,13 @@ namespace FileCabinetApp
                       select p;
             return res.ToArray();
         }
+
+        public FileCabinetRecord[] FindByDateOfBirth(string dateOfBirth)
+        {
+            var res = from p in this.list
+                      where p.DateOfBirth.ToString("yyyy-MMM-dd").Equals(dateOfBirth, StringComparison.InvariantCultureIgnoreCase)
+                      select p;
+            return res.ToArray();
+        }
     }
 }

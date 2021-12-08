@@ -204,6 +204,7 @@ namespace FileCabinetApp
             {
                 "FIRSTNAME" => fileCabinetService.FindByFirstName(findParameters[1]),
                 "LASTNAME" => fileCabinetService.FindByLastName(findParameters[1]),
+                "DATEOFBIRTH" => fileCabinetService.FindByDateOfBirth(findParameters[1]),
                 _ => null,
             };
 
