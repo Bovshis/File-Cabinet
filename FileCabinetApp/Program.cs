@@ -38,7 +38,7 @@ namespace FileCabinetApp
             new string[] { "find", "find records", "The 'find' command find records." },
         };
 
-        private static FileCabinetService fileCabinetService = new ();
+        private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
 
         /// <summary>
         /// Main method that determines which command to execute.
@@ -156,7 +156,8 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
-            RecordWithoutId record = new ();
+            RecordWithoutId recordWithoutId = new ();
+
             bool isCorrectData = false;
             while (!isCorrectData)
             {
@@ -175,8 +176,8 @@ namespace FileCabinetApp
                         return;
                     }
 
-                    CheckDataForRecord(record);
-                    fileCabinetService.EditRecord(id, record);
+                    CheckDataForRecord(recordWithoutId);
+                    fileCabinetService.EditRecord(id, recordWithoutId);
 
                     Console.WriteLine($"Record #{id} is updated");
                     isCorrectData = true;

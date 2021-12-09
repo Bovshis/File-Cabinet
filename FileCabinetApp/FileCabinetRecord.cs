@@ -7,12 +7,6 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetRecord
     {
-        private string firstName;
-        private string lastname;
-        private DateTime dateOfBirth;
-        private short height;
-        private decimal weight;
-
         /// <summary>
         /// Gets or sets record number in the file cabinet.
         /// </summary>
@@ -21,132 +15,27 @@ namespace FileCabinetApp
         /// <summary>
         /// Gets or sets first name in the record in the file cabinet.
         /// </summary>
-        /// <value>not null or whitespace, not less than 2 or not greater than 60.</value>
-        public string FirstName
-        {
-            get
-            {
-                return this.firstName;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException($"{nameof(value)} is WhiteSpace", nameof(value));
-                }
-
-                if (value.Length < 2 || value.Length > 60)
-                {
-                    throw new ArgumentException($"{nameof(value)} lenght less than 2 or greater than 60", nameof(value));
-                }
-
-                this.firstName = value;
-            }
-        }
+        public string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets last name in the record in the file cabinet.
         /// </summary>
-        /// <value>not null or whitespace, not less than 2 or not greater than 60.</value>
-        public string LastName
-        {
-            get
-            {
-                return this.lastname;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException($"{nameof(value)} is WhiteSpace", nameof(value));
-                }
-
-                if (value.Length < 2 || value.Length > 60)
-                {
-                    throw new ArgumentException($"{nameof(value)} lenght less than 2 or greater than 60", nameof(value));
-                }
-
-                this.lastname = value;
-            }
-        }
+        public string LastName { get; set; }
 
         /// <summary>
         /// Gets or sets date of birth in the record in the file cabinet.
         /// </summary>
-        /// <value>not less than 1950-Jan-1 or not greater than current time.</value>
-        public DateTime DateOfBirth
-        {
-            get
-            {
-                return this.dateOfBirth;
-            }
-
-            set
-            {
-                if (value < new DateTime(1950, 1, 1) || value > DateTime.Now)
-                {
-                    throw new ArgumentException($"{nameof(value)} is less than 1 Jan 1950 or greater than current time", nameof(value));
-                }
-
-                this.dateOfBirth = value;
-            }
-        }
+        public DateTime DateOfBirth { get; set; }
 
         /// <summary>
         /// Gets or sets height in the record in the file cabinet.
         /// </summary>
-        /// <value>not less than 0.</value>
-        public short Height
-        {
-            get
-            {
-                return this.height;
-            }
-
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentException($"{nameof(value)} is less than 0", nameof(value));
-                }
-
-                this.height = value;
-            }
-        }
+        public short Height { get; set; }
 
         /// <summary>
         /// Gets or sets weight in the record in the file cabinet.
         /// </summary>
-        /// <value>not less than 0.</value>
-        public decimal Weight
-        {
-            get
-            {
-                return this.weight;
-            }
-
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentException($"{nameof(value)} is less than 0", nameof(value));
-                }
-
-                this.weight = value;
-            }
-        }
+        public decimal Weight { get; set; }
 
         /// <summary>
         /// Gets or sets favorite character in the record in the file cabinet.

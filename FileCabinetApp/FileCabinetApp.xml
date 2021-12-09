@@ -4,6 +4,28 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FileCabinetCustomService">
+            <summary>
+            File cabinet with custom settings.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateParameters(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Method that validates parameters.
+            </summary>
+            <param name="recordWithoutId">Parameters.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetDefaultService">
+            <summary>
+            File cabinet with default settings.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Method that validates parameters.
+            </summary>
+            <param name="recordWithoutId">Parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Class for storing record in the file cabinet.
@@ -18,31 +40,26 @@
             <summary>
             Gets or sets first name in the record in the file cabinet.
             </summary>
-            <value>not null or whitespace, not less than 2 or not greater than 60.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
             <summary>
             Gets or sets last name in the record in the file cabinet.
             </summary>
-            <value>not null or whitespace, not less than 2 or not greater than 60.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
             <summary>
             Gets or sets date of birth in the record in the file cabinet.
             </summary>
-            <value>not less than 1950-Jan-1 or not greater than current time.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.Height">
             <summary>
             Gets or sets height in the record in the file cabinet.
             </summary>
-            <value>not less than 0.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.Weight">
             <summary>
             Gets or sets weight in the record in the file cabinet.
             </summary>
-            <value>not less than 0.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.FavoriteCharacter">
             <summary>
@@ -109,6 +126,12 @@
             <param name="dateOfBirth">value to search.</param>
             <returns>List of the searched records.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Abstract method for validation paramenters.
+            </summary>
+            <param name="recordWithoutId">parameters.</param>
+        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             Сonsole application for executing commands in the file cabinet.
@@ -126,7 +149,7 @@
         </member>
         <member name="P:FileCabinetApp.RecordWithoutId.FirstName">
             <summary>
-            Gets or sets last name.
+            Gets or sets first name.
             </summary>
         </member>
         <member name="P:FileCabinetApp.RecordWithoutId.LastName">

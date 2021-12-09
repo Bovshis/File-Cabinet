@@ -8,7 +8,7 @@ namespace FileCabinetApp
     public class RecordWithoutId
     {
         /// <summary>
-        /// Gets or sets last name.
+        /// Gets or sets first name.
         /// </summary>
         public string FirstName { get; set; }
 
