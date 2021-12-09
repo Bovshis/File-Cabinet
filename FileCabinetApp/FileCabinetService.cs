@@ -15,6 +15,13 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new ();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new ();
 
+        private IRecordValidator validator;
+
+        public FileCabinetService (IRecordValidator recordValidator)
+        {
+            this.validator = recordValidator;
+        }
+
         /// <summary>
         /// Method that creates record, adds to list and dictionaries.
         /// </summary>
@@ -22,7 +29,7 @@ namespace FileCabinetApp
         /// <returns>record number.</returns>
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
-            this.ValidateParameters(recordWithoutId);
+            this.validator.ValidateParameters(recordWithoutId);
             var record = CreateRecord(this.list.Count + 1, recordWithoutId);
             this.list.Add(record);
             this.AddElementToDictionaries(record);
@@ -55,7 +62,7 @@ namespace FileCabinetApp
         /// <param name="recordWithoutId">data of the edited record without id.</param>
         public void EditRecord(int id, RecordWithoutId recordWithoutId)
         {
-            this.ValidateParameters(recordWithoutId);
+            this.validator.ValidateParameters(recordWithoutId);
             var oldRecord = this.list[id - 1];
             this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
@@ -114,12 +121,6 @@ namespace FileCabinetApp
 
             return Array.Empty<FileCabinetRecord>();
         }
-
-        /// <summary>
-        /// Abstract method for validation paramenters.
-        /// </summary>
-        /// <param name="recordWithoutId">parameters.</param>
-        protected abstract void ValidateParameters(RecordWithoutId recordWithoutId);
 
         private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
         {
