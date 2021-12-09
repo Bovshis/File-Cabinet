@@ -38,13 +38,31 @@ namespace FileCabinetApp
             new string[] { "find", "find records", "The 'find' command find records." },
         };
 
-        private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
+        private static FileCabinetService fileCabinetService;
 
         /// <summary>
         /// Main method that determines which command to execute.
         /// </summary>
         public static void Main()
         {
+            var isCorrectSettings = false;
+            while (!isCorrectSettings)
+            {
+                try
+                {
+                    Console.Write("$ FileCabinetApp.exe ");
+                    var settings = Console.ReadLine().Split(' ');
+                    const int validationSettingIndex = 0;
+                    SetValidationMode(settings[validationSettingIndex]);
+
+                    isCorrectSettings = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
             Console.WriteLine(Program.HintMessage);
             Console.WriteLine();
@@ -75,6 +93,40 @@ namespace FileCabinetApp
                 }
             }
             while (isRunning);
+        }
+
+        private static void SetValidationMode(string settings)
+        {
+            if (settings.Length == 0 || string.IsNullOrWhiteSpace(settings))
+            {
+                fileCabinetService = new FileCabinetDefaultService();
+                Console.WriteLine("Using default validation rules.");
+                return;
+            }
+
+            var validationSettings = settings.Split('=');
+            const int command = 0;
+            const int mode = 1;
+            const string validationRulesCommand = "--validation-rules", shortValidationRulesCommand = "-v";
+            const string validationRulesDefaultMode = "default", validationRulesCustomMode = "custom";
+            if (validationSettings[command] == validationRulesCommand || validationSettings[command] == shortValidationRulesCommand)
+            {
+                if (validationSettings[mode].Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    fileCabinetService = new FileCabinetDefaultService();
+                    Console.WriteLine("Using default validation rules.");
+                    return;
+                }
+
+                if (validationSettings[mode].Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    fileCabinetService = new FileCabinetCustomService();
+                    Console.WriteLine("Using custom validation rules.");
+                    return;
+                }
+            }
+
+            throw new ArgumentException($"Bad validation rules command");
         }
 
         private static void PrintMissedCommandInfo(string command)
@@ -124,14 +176,14 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            RecordWithoutId record = new ();
+            RecordWithoutId recordWithoutId = new ();
             bool isCorrectData = false;
             while (!isCorrectData)
             {
                 try
                 {
-                    CheckDataForRecord(record);
-                    var id = fileCabinetService.CreateRecord(record);
+                    CheckDataForRecord(recordWithoutId);
+                    var id = fileCabinetService.CreateRecord(recordWithoutId);
                     Console.WriteLine($"Record #{id} is created");
                     isCorrectData = true;
                 }
@@ -194,11 +246,13 @@ namespace FileCabinetApp
         private static void Find(string parameters)
         {
             var findParameters = parameters.Split(' ');
-            var records = findParameters[0].ToUpper(CultureInfo.InvariantCulture) switch
+            const int property = 0;
+            const int searchText = 1;
+            var records = findParameters[property].ToUpper(CultureInfo.InvariantCulture) switch
             {
-                "FIRSTNAME" => fileCabinetService.FindByFirstName(findParameters[1]),
-                "LASTNAME" => fileCabinetService.FindByLastName(findParameters[1]),
-                "DATEOFBIRTH" => fileCabinetService.FindByDateOfBirth(findParameters[1]),
+                "FIRSTNAME" => fileCabinetService.FindByFirstName(findParameters[searchText]),
+                "LASTNAME" => fileCabinetService.FindByLastName(findParameters[searchText]),
+                "DATEOFBIRTH" => fileCabinetService.FindByDateOfBirth(findParameters[searchText]),
                 _ => null,
             };
 
@@ -215,13 +269,13 @@ namespace FileCabinetApp
             }
         }
 
-        private static void CheckDataForRecord(RecordWithoutId record)
+        private static void CheckDataForRecord(RecordWithoutId recordWithoutId)
         {
             Console.Write("First name: ");
-            record.FirstName = Console.ReadLine();
+            recordWithoutId.FirstName = Console.ReadLine();
 
             Console.Write("Last name: ");
-            record.LastName = Console.ReadLine();
+            recordWithoutId.LastName = Console.ReadLine();
 
             Console.Write("Date of birth: ");
             DateTime date;
@@ -231,7 +285,7 @@ namespace FileCabinetApp
                 throw new ArgumentException($"Invalid date format");
             }
 
-            record.DateOfBirth = date;
+            recordWithoutId.DateOfBirth = date;
 
             Console.Write("Height: ");
             short height;
@@ -241,7 +295,7 @@ namespace FileCabinetApp
                 throw new ArgumentException($"Invalid height format");
             }
 
-            record.Height = height;
+            recordWithoutId.Height = height;
 
             Console.Write("Weight: ");
             decimal weight;
@@ -251,7 +305,7 @@ namespace FileCabinetApp
                 throw new ArgumentException($"Invalid weight format");
             }
 
-            record.Weight = weight;
+            recordWithoutId.Weight = weight;
 
             Console.Write("Favorite Charachter: ");
             char favoriteCharacter;
@@ -262,7 +316,7 @@ namespace FileCabinetApp
                 throw new ArgumentException($"Invalid char format");
             }
 
-            record.FavoriteCharacter = favoriteCharacter;
+            recordWithoutId.FavoriteCharacter = favoriteCharacter;
         }
     }
 }
