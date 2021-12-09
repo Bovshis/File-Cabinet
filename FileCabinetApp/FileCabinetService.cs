@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace FileCabinetApp
@@ -15,7 +16,7 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new ();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new ();
 
-        private IRecordValidator validator;
+        private readonly IRecordValidator validator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
@@ -46,9 +47,9 @@ namespace FileCabinetApp
         /// Get records from the file cabinet list.
         /// </summary>
         /// <returns>Array of records.</returns>
-        public FileCabinetRecord[] GetRecords()
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            return this.list.ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.list);
         }
 
         /// <summary>
@@ -83,15 +84,15 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="firstName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public FileCabinetRecord[] FindByFirstName(string firstName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var key = firstName.ToUpper(CultureInfo.InvariantCulture);
             if (this.firstNameDictionary.ContainsKey(key))
             {
-                return this.firstNameDictionary[firstName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
+                return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName.ToUpper(CultureInfo.InvariantCulture)]);
             }
 
-            return Array.Empty<FileCabinetRecord>();
+            return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -99,15 +100,15 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="lastName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public FileCabinetRecord[] FindByLastName(string lastName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             var key = lastName.ToUpper(CultureInfo.InvariantCulture);
             if (this.firstNameDictionary.ContainsKey(key))
             {
-                return this.firstNameDictionary[lastName.ToUpper(CultureInfo.InvariantCulture)].ToArray();
+                return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[lastName.ToUpper(CultureInfo.InvariantCulture)]);
             }
 
-            return Array.Empty<FileCabinetRecord>();
+            return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -115,16 +116,15 @@ namespace FileCabinetApp
         /// </summary>
         /// <param name="dateOfBirth">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public FileCabinetRecord[] FindByDateOfBirth(string dateOfBirth)
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
-            DateTime dateOfBirthDate;
-            var dateParsed = DateTime.TryParse(dateOfBirth, out dateOfBirthDate);
+            var dateParsed = DateTime.TryParse(dateOfBirth, out var dateOfBirthDate);
             if (dateParsed && this.dateOfBirthDictionary.ContainsKey(dateOfBirthDate))
             {
-                return this.dateOfBirthDictionary[dateOfBirthDate].ToArray();
+                return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirthDate]);
             }
 
-            return Array.Empty<FileCabinetRecord>();
+            return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
         private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
