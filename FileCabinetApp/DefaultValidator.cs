@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    /// Class for validation parameters (default validation).
+    /// </summary>
     public class DefaultValidator : IRecordValidator
     {
+        /// <summary>
+        /// Method that validats parameters (default validation).
+        /// </summary>
+        /// <param name="recordWithoutId">parameters.</param>
         public void ValidateParameters(RecordWithoutId recordWithoutId)
         {
             if (recordWithoutId.FirstName == null)

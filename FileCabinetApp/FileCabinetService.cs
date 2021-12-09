@@ -7,7 +7,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Сlass for working with a list of records.
     /// </summary>
-    public abstract class FileCabinetService
+    public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new ();
 
@@ -17,7 +17,12 @@ namespace FileCabinetApp
 
         private IRecordValidator validator;
 
-        public FileCabinetService (IRecordValidator recordValidator)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// validation rules.
+        /// </summary>
+        /// <param name="recordValidator">parameters validator.</param>
+        public FileCabinetService(IRecordValidator recordValidator)
         {
             this.validator = recordValidator;
         }

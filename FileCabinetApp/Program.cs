@@ -99,7 +99,7 @@ namespace FileCabinetApp
         {
             if (settings.Length == 0 || string.IsNullOrWhiteSpace(settings))
             {
-                fileCabinetService = new FileCabinetDefaultService();
+                fileCabinetService = new FileCabinetService(new DefaultValidator());
                 Console.WriteLine("Using default validation rules.");
                 return;
             }
@@ -113,14 +113,14 @@ namespace FileCabinetApp
             {
                 if (validationSettings[mode].Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetDefaultService();
+                    fileCabinetService = new FileCabinetService(new DefaultValidator());
                     Console.WriteLine("Using default validation rules.");
                     return;
                 }
 
                 if (validationSettings[mode].Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetCustomService();
+                    fileCabinetService = new FileCabinetService(new CustomValidator());
                     Console.WriteLine("Using custom validation rules.");
                     return;
                 }

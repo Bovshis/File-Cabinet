@@ -4,27 +4,27 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.FileCabinetCustomService">
+        <member name="T:FileCabinetApp.CustomValidator">
             <summary>
-            File cabinet with custom settings.
+            Class for validation parameters (custom validation).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetCustomService.ValidateParameters(FileCabinetApp.RecordWithoutId)">
+        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.RecordWithoutId)">
             <summary>
-            Method that validates parameters.
+            Method that validats parameters (custom validation).
             </summary>
-            <param name="recordWithoutId">Parameters.</param>
+            <param name="recordWithoutId">parameters.</param>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetDefaultService">
+        <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
-            File cabinet with default settings.
+            Class for validation parameters (default validation).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.RecordWithoutId)">
+        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.RecordWithoutId)">
             <summary>
-            Method that validates parameters.
+            Method that validats parameters (default validation).
             </summary>
-            <param name="recordWithoutId">Parameters.</param>
+            <param name="recordWithoutId">parameters.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -79,6 +79,13 @@
             Сlass for working with a list of records.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
+            validation rules.
+            </summary>
+            <param name="recordValidator">parameters validator.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.RecordWithoutId)">
             <summary>
             Method that creates record, adds to list and dictionaries.
@@ -126,9 +133,14 @@
             <param name="dateOfBirth">value to search.</param>
             <returns>List of the searched records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.ValidateParameters(FileCabinetApp.RecordWithoutId)">
+        <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
-            Abstract method for validation paramenters.
+            Inteface for validation parameters.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Method for validation parameters.
             </summary>
             <param name="recordWithoutId">parameters.</param>
         </member>
