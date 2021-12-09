@@ -3,7 +3,7 @@
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Class for storing record in the file cabinet.
+    /// Record in the file cabinet.
     /// </summary>
     public class FileCabinetRecord
     {

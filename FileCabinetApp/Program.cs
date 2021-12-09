@@ -4,7 +4,7 @@ using System.Globalization;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Сonsole application for executing commands in the file cabinet.
+    /// Console application for executing commands in the file cabinet.
     /// </summary>
     public static class Program
     {
@@ -38,7 +38,7 @@ namespace FileCabinetApp
             new string[] { "find", "find records", "The 'find' command find records." },
         };
 
-        private static FileCabinetService fileCabinetService;
+        private static IFileCabinetService fileCabinetService;
 
         /// <summary>
         /// Main method that determines which command to execute.
@@ -51,9 +51,9 @@ namespace FileCabinetApp
                 try
                 {
                     Console.Write("$ FileCabinetApp.exe ");
-                    var settings = Console.ReadLine().Split(' ');
+                    var settings = Console.ReadLine()?.Split(' ');
                     const int validationSettingIndex = 0;
-                    SetValidationMode(settings[validationSettingIndex]);
+                    SetValidationMode(settings?[validationSettingIndex]);
 
                     isCorrectSettings = true;
                 }
@@ -70,9 +70,9 @@ namespace FileCabinetApp
             do
             {
                 Console.Write("> ");
-                var inputs = Console.ReadLine().Split(' ', 2);
+                var inputs = Console.ReadLine()?.Split(' ', 2);
                 const int commandIndex = 0;
-                var command = inputs[commandIndex];
+                var command = inputs?[commandIndex];
 
                 if (string.IsNullOrEmpty(command))
                 {
@@ -113,14 +113,14 @@ namespace FileCabinetApp
             {
                 if (validationSettings[mode].Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetService(new DefaultValidator());
+                    fileCabinetService = new FileCabinetService(new DefaultValidator()) as IFileCabinetService;
                     Console.WriteLine("Using default validation rules.");
                     return;
                 }
 
                 if (validationSettings[mode].Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetService(new CustomValidator());
+                    fileCabinetService = new FileCabinetService(new CustomValidator()) as IFileCabinetService;
                     Console.WriteLine("Using custom validation rules.");
                     return;
                 }
@@ -177,7 +177,7 @@ namespace FileCabinetApp
         private static void Create(string parameters)
         {
             RecordWithoutId recordWithoutId = new ();
-            bool isCorrectData = false;
+            var isCorrectData = false;
             while (!isCorrectData)
             {
                 try
@@ -210,7 +210,7 @@ namespace FileCabinetApp
         {
             RecordWithoutId recordWithoutId = new ();
 
-            bool isCorrectData = false;
+            var isCorrectData = false;
             while (!isCorrectData)
             {
                 try
@@ -256,7 +256,7 @@ namespace FileCabinetApp
                 _ => null,
             };
 
-            if (records == null || records.Length == 0)
+            if (records == null || records.Count == 0)
             {
                 Console.WriteLine($"There is no record for '{parameters}' parameters.");
             }
@@ -307,7 +307,7 @@ namespace FileCabinetApp
 
             recordWithoutId.Weight = weight;
 
-            Console.Write("Favorite Charachter: ");
+            Console.Write("Favorite Character: ");
             char favoriteCharacter;
             var charParsed = char.TryParse(Console.ReadLine(), out favoriteCharacter);
 

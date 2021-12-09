@@ -8,7 +8,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Сlass for working with a list of records.
     /// </summary>
-    public class FileCabinetService
+    public class FileCabinetService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new ();
 
@@ -29,7 +29,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Method that creates record, adds to list and dictionaries.
+        /// Create record, adds to list and dictionaries.
         /// </summary>
         /// <param name="recordWithoutId">Person's data without id.</param>
         /// <returns>record number.</returns>
@@ -62,7 +62,7 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        /// Method that edit record.
+        /// Edit record.
         /// </summary>
         /// <param name="id">number of the edited record.</param>
         /// <param name="recordWithoutId">data of the edited record without id.</param>

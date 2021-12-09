@@ -146,7 +146,7 @@
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
-            Сonsole application for executing commands in the file cabinet.
+            Console application for executing commands in the file cabinet.
             </summary>
         </member>
         <member name="M:FileCabinetApp.Program.Main">
