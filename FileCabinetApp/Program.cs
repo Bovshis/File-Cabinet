@@ -113,14 +113,14 @@ namespace FileCabinetApp
             {
                 if (validationSettings[mode].Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetService(new DefaultValidator()) as IFileCabinetService;
+                    fileCabinetService = new FileCabinetService(new DefaultValidator());
                     Console.WriteLine("Using default validation rules.");
                     return;
                 }
 
                 if (validationSettings[mode].Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetService(new CustomValidator()) as IFileCabinetService;
+                    fileCabinetService = new FileCabinetService(new CustomValidator());
                     Console.WriteLine("Using custom validation rules.");
                     return;
                 }
@@ -176,24 +176,8 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            RecordWithoutId recordWithoutId = new ();
-            var isCorrectData = false;
-            while (!isCorrectData)
-            {
-                try
-                {
-                    CheckDataForRecord(recordWithoutId);
-                    var id = fileCabinetService.CreateRecord(recordWithoutId);
-                    Console.WriteLine($"Record #{id} is created");
-                    isCorrectData = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.Write("Bad data format: ");
-                    Console.WriteLine(ex.Message);
-                    Console.WriteLine("Enter correct data :");
-                }
-            }
+            var id = fileCabinetService.CreateRecord();
+            Console.WriteLine($"Record #{id} is created");
         }
 
         private static void List(string parameters)
@@ -208,39 +192,18 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
-            RecordWithoutId recordWithoutId = new ();
+            int id;
+            var idParsed = int.TryParse(parameters, out id);
 
-            var isCorrectData = false;
-            while (!isCorrectData)
+            if (!idParsed || id < 0 || id > fileCabinetService.GetStat())
             {
-                try
-                {
-                    int id;
-                    var idParsed = int.TryParse(parameters, out id);
-                    if (!idParsed || id < 0)
-                    {
-                        throw new ArgumentException($"Invalid parameters format", nameof(parameters));
-                    }
-
-                    if (id > fileCabinetService.GetStat())
-                    {
-                        Console.WriteLine($"#{id} record is not found.");
-                        return;
-                    }
-
-                    CheckDataForRecord(recordWithoutId);
-                    fileCabinetService.EditRecord(id, recordWithoutId);
-
-                    Console.WriteLine($"Record #{id} is updated");
-                    isCorrectData = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.Write("Bad data format: ");
-                    Console.WriteLine(ex.Message);
-                    Console.WriteLine("Enter correct data :");
-                }
+                Console.WriteLine($"#{id} record is not found.");
+                return;
             }
+
+            fileCabinetService.EditRecord(id);
+
+            Console.WriteLine($"Record #{id} is updated");
         }
 
         private static void Find(string parameters)
@@ -267,56 +230,6 @@ namespace FileCabinetApp
                     Console.WriteLine(record.ToString());
                 }
             }
-        }
-
-        private static void CheckDataForRecord(RecordWithoutId recordWithoutId)
-        {
-            Console.Write("First name: ");
-            recordWithoutId.FirstName = Console.ReadLine();
-
-            Console.Write("Last name: ");
-            recordWithoutId.LastName = Console.ReadLine();
-
-            Console.Write("Date of birth: ");
-            DateTime date;
-            var dateParsed = DateTime.TryParse(Console.ReadLine(), out date);
-            if (!dateParsed)
-            {
-                throw new ArgumentException($"Invalid date format");
-            }
-
-            recordWithoutId.DateOfBirth = date;
-
-            Console.Write("Height: ");
-            short height;
-            var heightParsed = short.TryParse(Console.ReadLine(), out height);
-            if (!heightParsed)
-            {
-                throw new ArgumentException($"Invalid height format");
-            }
-
-            recordWithoutId.Height = height;
-
-            Console.Write("Weight: ");
-            decimal weight;
-            var weightParsed = decimal.TryParse(Console.ReadLine(), out weight);
-            if (!weightParsed)
-            {
-                throw new ArgumentException($"Invalid weight format");
-            }
-
-            recordWithoutId.Weight = weight;
-
-            Console.Write("Favorite Character: ");
-            char favoriteCharacter;
-            var charParsed = char.TryParse(Console.ReadLine(), out favoriteCharacter);
-
-            if (!charParsed)
-            {
-                throw new ArgumentException($"Invalid char format");
-            }
-
-            recordWithoutId.FavoriteCharacter = favoriteCharacter;
         }
     }
 }

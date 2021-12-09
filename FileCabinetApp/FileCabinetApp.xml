@@ -9,26 +9,14 @@
             Class for validation parameters (custom validation).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CustomValidator.ValidateParameters(FileCabinetApp.RecordWithoutId)">
-            <summary>
-            Method that validats parameters (custom validation).
-            </summary>
-            <param name="recordWithoutId">parameters.</param>
-        </member>
         <member name="T:FileCabinetApp.DefaultValidator">
             <summary>
             Class for validation parameters (default validation).
             </summary>
         </member>
-        <member name="M:FileCabinetApp.DefaultValidator.ValidateParameters(FileCabinetApp.RecordWithoutId)">
-            <summary>
-            Method that validats parameters (default validation).
-            </summary>
-            <param name="recordWithoutId">parameters.</param>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
-            Class for storing record in the file cabinet.
+            Record in the file cabinet.
             </summary>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.Id">
@@ -86,11 +74,10 @@
             </summary>
             <param name="recordValidator">parameters validator.</param>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.RecordWithoutId)">
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord">
             <summary>
-            Method that creates record, adds to list and dictionaries.
+            Create record, adds to list and dictionaries.
             </summary>
-            <param name="recordWithoutId">Person's data without id.</param>
             <returns>record number.</returns>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
@@ -105,12 +92,11 @@
             </summary>
             <returns>count of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,FileCabinetApp.RecordWithoutId)">
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32)">
             <summary>
-            Method that edit record.
+            Edit record.
             </summary>
             <param name="id">number of the edited record.</param>
-            <param name="recordWithoutId">data of the edited record without id.</param>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
             <summary>
@@ -133,16 +119,60 @@
             <param name="dateOfBirth">value to search.</param>
             <returns>List of the searched records.</returns>
         </member>
+        <member name="T:FileCabinetApp.IFileCabinetService">
+            <summary>
+            File cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord">
+            <summary>
+            Create record.
+            </summary>
+            <returns>record id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
+            <summary>
+            Get list of the records.
+            </summary>
+            <returns>lis of the records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+            <summary>
+            Get count records.
+            </summary>
+            <returns>count records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(System.Int32)">
+            <summary>
+            Edit record.
+            </summary>
+            <param name="id">number of the edited record.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Find list of the records by first name.
+            </summary>
+            <param name="firstName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Find list of the records by last Name.
+            </summary>
+            <param name="lastName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Find list of the records by date Of Birth.
+            </summary>
+            <param name="dateOfBirth">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
             Inteface for validation parameters.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.RecordWithoutId)">
-            <summary>
-            Method for validation parameters.
-            </summary>
-            <param name="recordWithoutId">parameters.</param>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>

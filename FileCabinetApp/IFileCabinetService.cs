@@ -10,9 +10,8 @@ namespace FileCabinetApp
         /// <summary>
         /// Create record.
         /// </summary>
-        /// <param name="recordWithoutId">parameters.</param>
         /// <returns>record id.</returns>
-        public int CreateRecord(RecordWithoutId recordWithoutId);
+        public int CreateRecord();
 
         /// <summary>
         /// Get list of the records.
@@ -30,8 +29,7 @@ namespace FileCabinetApp
         /// Edit record.
         /// </summary>
         /// <param name="id">number of the edited record.</param>
-        /// <param name="recordWithoutId">data of the edited record without id.</param>
-        public void EditRecord(int id, RecordWithoutId recordWithoutId);
+        public void EditRecord(int id);
 
         /// <summary>
         /// Find list of the records by first name.

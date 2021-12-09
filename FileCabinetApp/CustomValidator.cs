@@ -11,56 +11,89 @@ namespace FileCabinetApp
     /// </summary>
     public class CustomValidator : IRecordValidator
     {
-        /// <summary>
-        /// Method that validats parameters (custom validation).
-        /// </summary>
-        /// <param name="recordWithoutId">parameters.</param>
-        public void ValidateParameters(RecordWithoutId recordWithoutId)
+        public Tuple<bool, string> ValidateFirstName(string firstname)
         {
-            if (recordWithoutId.FirstName == null)
+            if (firstname == null)
             {
-                throw new ArgumentNullException(nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "first name is null");
             }
 
-            if (string.IsNullOrWhiteSpace(recordWithoutId.FirstName))
+            if (string.IsNullOrWhiteSpace(firstname))
             {
-                throw new ArgumentException($"first name is WhiteSpace", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "first name is WhiteSpace");
             }
 
-            if (!char.IsUpper(recordWithoutId.FirstName[0]))
+            if (firstname.Length is < 2 or > 60)
             {
-                throw new ArgumentException($"first name doesn't start with upper letter", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "first name length less than 2 or greater than 60");
             }
 
-            if (recordWithoutId.LastName == null)
+            if (!char.IsUpper(firstname[0]))
             {
-                throw new ArgumentNullException(nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "first name doesn't start with upper letter");
             }
 
-            if (string.IsNullOrWhiteSpace(recordWithoutId.FirstName))
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateLastName(string lastName)
+        {
+            if (lastName == null)
             {
-                throw new ArgumentException($"last name is WhiteSpace", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "last name is null");
             }
 
-            if (!char.IsUpper(recordWithoutId.LastName[0]))
+            if (string.IsNullOrWhiteSpace(lastName))
             {
-                throw new ArgumentException($"last name doesn't start with upper letter", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "last name is WhiteSpace");
             }
 
-            if (recordWithoutId.DateOfBirth < new DateTime(1899, 1, 1))
+            if (lastName.Length is < 2 or > 60)
             {
-                throw new ArgumentException($"date of birth is less than 1 Jan 1899", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "last name length less than 2 or greater than 60");
             }
 
-            if (recordWithoutId.Height < 50 || recordWithoutId.Height > 300)
+            if (!char.IsUpper(lastName[0]))
             {
-                throw new ArgumentException($"height is less than 50 or greater than 300", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "last name doesn't start with upper letter");
             }
 
-            if (recordWithoutId.Weight < 10 || recordWithoutId.Weight > 200)
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
+        {
+            if (dateOfBirth < new DateTime(1899, 1, 1))
             {
-                throw new ArgumentException($"weight is less than 10 or greater than 200", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "date of birth is less than 1 Jan 1899");
             }
+
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateHeight(short height)
+        {
+            if (height < 50 || height > 300)
+            {
+                return new Tuple<bool, string>(false, "height is less than 50 or greater than 300");
+            }
+
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateWeight(decimal weight)
+        {
+            if (weight < 10 || weight > 200)
+            {
+                return new Tuple<bool, string>(false, "weight is less than 10 or greater than 200");
+            }
+
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateFavoriteCharacter(char favoriteCharacter)
+        {
+            return new Tuple<bool, string>(true, "Done");
         }
     }
 }

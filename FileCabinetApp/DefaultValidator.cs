@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileCabinetApp
 {
@@ -11,56 +7,79 @@ namespace FileCabinetApp
     /// </summary>
     public class DefaultValidator : IRecordValidator
     {
-        /// <summary>
-        /// Method that validats parameters (default validation).
-        /// </summary>
-        /// <param name="recordWithoutId">parameters.</param>
-        public void ValidateParameters(RecordWithoutId recordWithoutId)
+        public Tuple<bool, string> ValidateFirstName(string firstname)
         {
-            if (recordWithoutId.FirstName == null)
+            if (firstname == null)
             {
-                throw new ArgumentNullException(nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "first name is null");
             }
 
-            if (string.IsNullOrWhiteSpace(recordWithoutId.FirstName))
+            if (string.IsNullOrWhiteSpace(firstname))
             {
-                throw new ArgumentException($"first name is WhiteSpace", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "first name is WhiteSpace");
             }
 
-            if (recordWithoutId.FirstName.Length < 2 || recordWithoutId.FirstName.Length > 60)
+            if (firstname.Length is < 2 or > 60)
             {
-                throw new ArgumentException($"first name lenght less than 2 or greater than 60", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "first name length less than 2 or greater than 60");
             }
 
-            if (recordWithoutId.LastName == null)
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateLastName(string lastName)
+        {
+            if (lastName == null)
             {
-                throw new ArgumentNullException(nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "last name is null");
             }
 
-            if (string.IsNullOrWhiteSpace(recordWithoutId.FirstName))
+            if (string.IsNullOrWhiteSpace(lastName))
             {
-                throw new ArgumentException($"last name is WhiteSpace", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "last name is WhiteSpace");
             }
 
-            if (recordWithoutId.LastName.Length < 2 || recordWithoutId.LastName.Length > 60)
+            if (lastName.Length is < 2 or > 60)
             {
-                throw new ArgumentException($"last name lenght less than 2 or greater than 60", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "last name length less than 2 or greater than 60");
             }
 
-            if (recordWithoutId.DateOfBirth < new DateTime(1950, 1, 1) || recordWithoutId.DateOfBirth > DateTime.Now)
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateDateOfBirth(DateTime dateOfBirth)
+        {
+            if (dateOfBirth < new DateTime(1950, 1, 1) || dateOfBirth > DateTime.Now)
             {
-                throw new ArgumentException($"date of birth is less than 1 Jan 1950 or greater than current time", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "date of birth is less than 1 Jan 1950 or greater than current time");
             }
 
-            if (recordWithoutId.Height < 0)
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateHeight(short height)
+        {
+            if (height < 0)
             {
-                throw new ArgumentException($"height is less than 0", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "Height is less than 0");
             }
 
-            if (recordWithoutId.Weight < 0)
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateWeight(decimal weight)
+        {
+            if (weight < 0)
             {
-                throw new ArgumentException($"weight is less than 0", nameof(recordWithoutId));
+                return new Tuple<bool, string>(false, "weight is less than 0");
             }
+
+            return new Tuple<bool, string>(true, "Done");
+        }
+
+        public Tuple<bool, string> ValidateFavoriteCharacter(char favoriteCharacter)
+        {
+            return new Tuple<bool, string>(true, "Done");
         }
     }
 }
