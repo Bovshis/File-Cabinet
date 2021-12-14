@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Net.Mime;
 
 namespace FileCabinetApp
 {
@@ -263,11 +262,11 @@ namespace FileCabinetApp
                 var answer = Console.ReadLine() ?? throw new ArgumentNullException();
                 if (answer.Equals("y", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    rewrite = true;
+                    rewrite = false;
                 }
                 else if (answer.Equals("n", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    rewrite = false;
+                    rewrite = true;
                 }
                 else
                 {
@@ -282,19 +281,20 @@ namespace FileCabinetApp
             if (exportParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
                 fileCabinetService.MakeSnapshot().SaveToCsv(streamWriter);
+                streamWriter.Flush();
+                streamWriter.Close();
+                Console.WriteLine($"All records are exported to file {exportParameters[filePath]}");
             }
             else if (exportParameters[fileType].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
             {
-
+                fileCabinetService.MakeSnapshot().SaveToXml(streamWriter);
+                Console.WriteLine($"All records are exported to file {exportParameters[filePath]}");
             }
             else
             {
                 Console.WriteLine("Wrong type format!");
                 return;
             }
-
-            streamWriter.Flush();
-            streamWriter.Close();
         }
     }
 }

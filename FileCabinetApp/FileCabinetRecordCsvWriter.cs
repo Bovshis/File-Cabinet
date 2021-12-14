@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace FileCabinetApp
 {
@@ -12,7 +7,6 @@ namespace FileCabinetApp
     /// </summary>
     public class FileCabinetRecordCsvWriter
     {
-        private const string NameString = "Id,First Name,Last Name,Date of Birth,Height,Weight,Favorite Character";
         private readonly TextWriter writer;
 
         /// <summary>
@@ -21,12 +15,11 @@ namespace FileCabinetApp
         /// <param name="writer">Writer.</param>
         public FileCabinetRecordCsvWriter(TextWriter writer)
         {
-            writer.WriteLine(NameString);
             this.writer = writer;
         }
 
         /// <summary>
-        /// Write record
+        /// Write record.
         /// </summary>
         /// <param name="record">Record for write.</param>
         public void Write(FileCabinetRecord record)

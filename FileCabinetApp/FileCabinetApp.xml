@@ -62,6 +62,35 @@
             return record in string format.
             </returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Csv Writer for FileCabinetService.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write record.
+            </summary>
+            <param name="record">Record for write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write record.
+            </summary>
+            <param name="record">Record for write.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
             Сlass for working with a list of records.
@@ -119,6 +148,29 @@
             <param name="dateOfBirth">value to search.</param>
             <returns>List of the searched records.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
+            <summary>
+            Make snapshot.
+            </summary>
+            <returns>FileCabinetService snapshot.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            Snapshot FileCabinetService.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="records">Records for initializing.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Save records to csv file.
+            </summary>
+            <param name="streamWriter">Stream writer to write.</param>
+        </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
             File cabinet.
@@ -168,6 +220,12 @@
             </summary>
             <param name="dateOfBirth">value to search.</param>
             <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Make Snapshot FileCabinetService.
+            </summary>
+            <returns>Snapshot FileCabinetService.</returns>
         </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
