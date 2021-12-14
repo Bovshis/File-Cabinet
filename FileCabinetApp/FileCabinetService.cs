@@ -124,6 +124,15 @@ namespace FileCabinetApp
             return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
+        /// <summary>
+        /// Make snapshot.
+        /// </summary>
+        /// <returns>FileCabinetService snapshot.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            return new FileCabinetServiceSnapshot(this.GetRecords());
+        }
+
         private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
         {
             if (dictionary.ContainsKey(key))
@@ -148,6 +157,35 @@ namespace FileCabinetApp
                 Weight = recordWithoutId.Weight,
                 FavoriteCharacter = recordWithoutId.FavoriteCharacter,
             };
+        }
+
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
         }
 
         private void AddElementToDictionaries(FileCabinetRecord record)
@@ -179,35 +217,6 @@ namespace FileCabinetApp
             recordWithoutId.FavoriteCharacter = ReadInput(this.converter.ConvertChar, this.validator.ValidateFavoriteCharacter);
 
             return recordWithoutId;
-        }
-
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
-        {
-            do
-            {
-                T value;
-
-                var input = Console.ReadLine();
-                var conversionResult = converter(input);
-
-                if (!conversionResult.Item1)
-                {
-                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                value = conversionResult.Item3;
-
-                var validationResult = validator(value);
-                if (!validationResult.Item1)
-                {
-                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                return value;
-            }
-            while (true);
         }
     }
 }

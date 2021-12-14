@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Net.Mime;
 
 namespace FileCabinetApp
 {
@@ -25,6 +27,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -36,6 +39,7 @@ namespace FileCabinetApp
             new string[] { "list", "Write the list of records", "The 'list' command write the list of records." },
             new string[] { "edit", "edit record", "The 'edit' command edit record." },
             new string[] { "find", "find records", "The 'find' command find records." },
+            new string[] { "export", "export records", "The 'export' command export records." },
         };
 
         private static IFileCabinetService fileCabinetService;
@@ -192,8 +196,7 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
-            int id;
-            var idParsed = int.TryParse(parameters, out id);
+            var idParsed = int.TryParse(parameters, out var id);
 
             if (!idParsed || id < 0 || id > fileCabinetService.GetStat())
             {
@@ -208,7 +211,7 @@ namespace FileCabinetApp
 
         private static void Find(string parameters)
         {
-            var findParameters = parameters.Split(' ');
+            var findParameters = parameters.Split(' ', 2);
             const int property = 0;
             const int searchText = 1;
             var records = findParameters[property].ToUpper(CultureInfo.InvariantCulture) switch
@@ -230,6 +233,68 @@ namespace FileCabinetApp
                     Console.WriteLine(record.ToString());
                 }
             }
+        }
+
+        private static void Export(string parameters)
+        {
+            var exportParameters = parameters.Split(' ');
+            const int amountParameters = 2;
+            if (exportParameters.Length != amountParameters)
+            {
+                Console.WriteLine("Parameters amount is wrong");
+                return;
+            }
+
+            const int fileType = 0;
+            const int filePath = 1;
+
+            // check file
+            var fileInfo = new FileInfo(exportParameters[filePath]);
+            if (!Directory.Exists(fileInfo.DirectoryName))
+            {
+                Console.WriteLine($"Export failed: can't open file {exportParameters[filePath]}");
+                return;
+            }
+
+            var rewrite = false;
+            if (fileInfo.Exists)
+            {
+                Console.Write($"File is exist - rewrite {exportParameters[filePath]} [Y/n] ");
+                var answer = Console.ReadLine() ?? throw new ArgumentNullException();
+                if (answer.Equals("y", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    rewrite = true;
+                }
+                else if (answer.Equals("n", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    rewrite = false;
+                }
+                else
+                {
+                    Console.WriteLine("What's your problem?");
+                    return;
+                }
+            }
+
+            // recording
+            var streamWriter =
+                new StreamWriter(exportParameters[filePath], rewrite, System.Text.Encoding.Default);
+            if (exportParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+            {
+                fileCabinetService.MakeSnapshot().SaveToCsv(streamWriter);
+            }
+            else if (exportParameters[fileType].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("Wrong type format!");
+                return;
+            }
+
+            streamWriter.Flush();
+            streamWriter.Close();
         }
     }
 }
