@@ -8,7 +8,7 @@ namespace FileCabinetApp
     /// <summary>
     /// Сlass for working with a list of records.
     /// </summary>
-    public class FileCabinetService : IFileCabinetService
+    public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new ();
 
@@ -20,11 +20,11 @@ namespace FileCabinetApp
         private readonly IConverter converter = new Converter();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// validation rules.
         /// </summary>
         /// <param name="recordValidator">parameters validator.</param>
-        public FileCabinetService(IRecordValidator recordValidator)
+        public FileCabinetMemoryService(IRecordValidator recordValidator)
         {
             this.validator = recordValidator;
         }

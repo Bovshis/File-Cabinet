@@ -41,7 +41,7 @@ namespace FileCabinetApp
             new string[] { "export", "export records", "The 'export' command export records." },
         };
 
-        private static IFileCabinetService fileCabinetService;
+        private static FileCabinetMemoryService fileCabinetMemoryService;
 
         /// <summary>
         /// Main method that determines which command to execute.
@@ -102,7 +102,7 @@ namespace FileCabinetApp
         {
             if (settings.Length == 0 || string.IsNullOrWhiteSpace(settings))
             {
-                fileCabinetService = new FileCabinetService(new DefaultValidator());
+                fileCabinetMemoryService = new FileCabinetMemoryService(new DefaultValidator());
                 Console.WriteLine("Using default validation rules.");
                 return;
             }
@@ -116,14 +116,14 @@ namespace FileCabinetApp
             {
                 if (validationSettings[mode].Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetService(new DefaultValidator());
+                    fileCabinetMemoryService = new FileCabinetMemoryService(new DefaultValidator());
                     Console.WriteLine("Using default validation rules.");
                     return;
                 }
 
                 if (validationSettings[mode].Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    fileCabinetService = new FileCabinetService(new CustomValidator());
+                    fileCabinetMemoryService = new FileCabinetMemoryService(new CustomValidator());
                     Console.WriteLine("Using custom validation rules.");
                     return;
                 }
@@ -173,19 +173,19 @@ namespace FileCabinetApp
 
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.fileCabinetService.GetStat();
+            var recordsCount = Program.fileCabinetMemoryService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
         }
 
         private static void Create(string parameters)
         {
-            var id = fileCabinetService.CreateRecord();
+            var id = fileCabinetMemoryService.CreateRecord();
             Console.WriteLine($"Record #{id} is created");
         }
 
         private static void List(string parameters)
         {
-            var recordsList = fileCabinetService.GetRecords();
+            var recordsList = fileCabinetMemoryService.GetRecords();
 
             foreach (var record in recordsList)
             {
@@ -197,13 +197,13 @@ namespace FileCabinetApp
         {
             var idParsed = int.TryParse(parameters, out var id);
 
-            if (!idParsed || id < 0 || id > fileCabinetService.GetStat())
+            if (!idParsed || id < 0 || id > fileCabinetMemoryService.GetStat())
             {
                 Console.WriteLine($"#{id} record is not found.");
                 return;
             }
 
-            fileCabinetService.EditRecord(id);
+            fileCabinetMemoryService.EditRecord(id);
 
             Console.WriteLine($"Record #{id} is updated");
         }
@@ -215,9 +215,9 @@ namespace FileCabinetApp
             const int searchText = 1;
             var records = findParameters[property].ToUpper(CultureInfo.InvariantCulture) switch
             {
-                "FIRSTNAME" => fileCabinetService.FindByFirstName(findParameters[searchText]),
-                "LASTNAME" => fileCabinetService.FindByLastName(findParameters[searchText]),
-                "DATEOFBIRTH" => fileCabinetService.FindByDateOfBirth(findParameters[searchText]),
+                "FIRSTNAME" => fileCabinetMemoryService.FindByFirstName(findParameters[searchText]),
+                "LASTNAME" => fileCabinetMemoryService.FindByLastName(findParameters[searchText]),
+                "DATEOFBIRTH" => fileCabinetMemoryService.FindByDateOfBirth(findParameters[searchText]),
                 _ => null,
             };
 
@@ -280,14 +280,14 @@ namespace FileCabinetApp
                 new StreamWriter(exportParameters[filePath], rewrite, System.Text.Encoding.Default);
             if (exportParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
-                fileCabinetService.MakeSnapshot().SaveToCsv(streamWriter);
+                fileCabinetMemoryService.MakeSnapshot().SaveToCsv(streamWriter);
                 streamWriter.Flush();
                 streamWriter.Close();
                 Console.WriteLine($"All records are exported to file {exportParameters[filePath]}");
             }
             else if (exportParameters[fileType].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
             {
-                fileCabinetService.MakeSnapshot().SaveToXml(streamWriter);
+                fileCabinetMemoryService.MakeSnapshot().SaveToXml(streamWriter);
                 Console.WriteLine($"All records are exported to file {exportParameters[filePath]}");
             }
             else
