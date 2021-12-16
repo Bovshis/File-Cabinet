@@ -12,12 +12,12 @@ namespace FileCabinetApp
             this.fileStream = fileStream;
         }
 
-        public int CreateRecord()
+        public int CreateRecord(RecordWithoutId recordWithoutId)
         {
             throw new System.NotImplementedException();
         }
 
-        public void EditRecord(int id)
+        public void EditRecord(int id, RecordWithoutId recordWithoutId)
         {
             throw new System.NotImplementedException();
         }
@@ -43,6 +43,11 @@ namespace FileCabinetApp
         }
 
         public int GetStat()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public FileCabinetServiceSnapshot MakeSnapshot()
         {
             throw new System.NotImplementedException();
         }

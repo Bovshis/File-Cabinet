@@ -41,7 +41,8 @@ namespace FileCabinetApp
             new string[] { "export", "export records", "The 'export' command export records." },
         };
 
-        private static FileCabinetMemoryService fileCabinetMemoryService;
+        private static IRecordValidator validator = new DefaultValidator();
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService();
 
         /// <summary>
         /// Main method that determines which command to execute.
@@ -55,9 +56,7 @@ namespace FileCabinetApp
                 {
                     Console.Write("$ FileCabinetApp.exe ");
                     var settings = Console.ReadLine()?.Split(' ');
-                    const int validationSettingIndex = 0;
-                    SetValidationMode(settings?[validationSettingIndex]);
-
+                    SetSettings(settings);
                     isCorrectSettings = true;
                 }
                 catch (Exception ex)
@@ -98,35 +97,63 @@ namespace FileCabinetApp
             while (isRunning);
         }
 
-        private static void SetValidationMode(string settings)
+        private static void SetSettings(string[] settings)
         {
-            if (settings.Length == 0 || string.IsNullOrWhiteSpace(settings))
+            if (settings.Length % 2 != 0)
             {
-                fileCabinetMemoryService = new FileCabinetMemoryService(new DefaultValidator());
+                throw new ArgumentException("Bad settings format!");
+            }
+
+            var validationModeIndex = Array.FindIndex(settings, x => x == "--validation-rules" || x == "-v") + 1;
+            if (validationModeIndex != 0)
+            {
+                SetValidationMode(settings[validationModeIndex]);
+            }
+
+            var storageModeIndex = Array.FindIndex(settings, x => x == "--storage" || x == "-s") + 1;
+            if (validationModeIndex != 0)
+            {
+                SetStorageMode(settings[storageModeIndex]);
+            }
+        }
+
+        private static void SetValidationMode(string validationMode)
+        {
+            const string validationRulesDefaultMode = "default", validationRulesCustomMode = "custom";
+
+            if (validationMode.Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
+            {
+                validator = new DefaultValidator();
                 Console.WriteLine("Using default validation rules.");
                 return;
             }
 
-            var validationSettings = settings.Split('=');
-            const int command = 0;
-            const int mode = 1;
-            const string validationRulesCommand = "--validation-rules", shortValidationRulesCommand = "-v";
-            const string validationRulesDefaultMode = "default", validationRulesCustomMode = "custom";
-            if (validationSettings[command] == validationRulesCommand || validationSettings[command] == shortValidationRulesCommand)
+            if (validationMode.Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
             {
-                if (validationSettings[mode].Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    fileCabinetMemoryService = new FileCabinetMemoryService(new DefaultValidator());
-                    Console.WriteLine("Using default validation rules.");
-                    return;
-                }
+                validator = new CustomValidator();
+                Console.WriteLine("Using custom validation rules.");
+                return;
+            }
 
-                if (validationSettings[mode].Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    fileCabinetMemoryService = new FileCabinetMemoryService(new CustomValidator());
-                    Console.WriteLine("Using custom validation rules.");
-                    return;
-                }
+            throw new ArgumentException($"Bad validation rules command");
+        }
+
+        private static void SetStorageMode(string storageMode)
+        {
+            const string memoryMode = "memory", fileMode = "file";
+
+            if (storageMode.Equals(memoryMode, StringComparison.InvariantCultureIgnoreCase))
+            {
+                fileCabinetService = new FileCabinetMemoryService();
+                Console.WriteLine("Using default validation rules.");
+                return;
+            }
+
+            if (storageMode.Equals(fileMode, StringComparison.InvariantCultureIgnoreCase))
+            {
+                fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create));
+                Console.WriteLine("Using custom validation rules.");
+                return;
             }
 
             throw new ArgumentException($"Bad validation rules command");
@@ -173,19 +200,19 @@ namespace FileCabinetApp
 
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.fileCabinetMemoryService.GetStat();
+            var recordsCount = Program.fileCabinetService.GetStat();
             Console.WriteLine($"{recordsCount} record(s).");
         }
 
         private static void Create(string parameters)
         {
-            var id = fileCabinetMemoryService.CreateRecord();
+            var id = fileCabinetService.CreateRecord(ReadRecordFromConsole());
             Console.WriteLine($"Record #{id} is created");
         }
 
         private static void List(string parameters)
         {
-            var recordsList = fileCabinetMemoryService.GetRecords();
+            var recordsList = fileCabinetService.GetRecords();
 
             foreach (var record in recordsList)
             {
@@ -197,13 +224,13 @@ namespace FileCabinetApp
         {
             var idParsed = int.TryParse(parameters, out var id);
 
-            if (!idParsed || id < 0 || id > fileCabinetMemoryService.GetStat())
+            if (!idParsed || id < 0 || id > fileCabinetService.GetStat())
             {
                 Console.WriteLine($"#{id} record is not found.");
                 return;
             }
 
-            fileCabinetMemoryService.EditRecord(id);
+            fileCabinetService.EditRecord(id, ReadRecordFromConsole());
 
             Console.WriteLine($"Record #{id} is updated");
         }
@@ -215,9 +242,9 @@ namespace FileCabinetApp
             const int searchText = 1;
             var records = findParameters[property].ToUpper(CultureInfo.InvariantCulture) switch
             {
-                "FIRSTNAME" => fileCabinetMemoryService.FindByFirstName(findParameters[searchText]),
-                "LASTNAME" => fileCabinetMemoryService.FindByLastName(findParameters[searchText]),
-                "DATEOFBIRTH" => fileCabinetMemoryService.FindByDateOfBirth(findParameters[searchText]),
+                "FIRSTNAME" => fileCabinetService.FindByFirstName(findParameters[searchText]),
+                "LASTNAME" => fileCabinetService.FindByLastName(findParameters[searchText]),
+                "DATEOFBIRTH" => fileCabinetService.FindByDateOfBirth(findParameters[searchText]),
                 _ => null,
             };
 
@@ -280,14 +307,14 @@ namespace FileCabinetApp
                 new StreamWriter(exportParameters[filePath], rewrite, System.Text.Encoding.Default);
             if (exportParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
-                fileCabinetMemoryService.MakeSnapshot().SaveToCsv(streamWriter);
+                fileCabinetService.MakeSnapshot().SaveToCsv(streamWriter);
                 streamWriter.Flush();
                 streamWriter.Close();
                 Console.WriteLine($"All records are exported to file {exportParameters[filePath]}");
             }
             else if (exportParameters[fileType].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
             {
-                fileCabinetMemoryService.MakeSnapshot().SaveToXml(streamWriter);
+                fileCabinetService.MakeSnapshot().SaveToXml(streamWriter);
                 Console.WriteLine($"All records are exported to file {exportParameters[filePath]}");
             }
             else
@@ -295,6 +322,59 @@ namespace FileCabinetApp
                 Console.WriteLine("Wrong type format!");
                 return;
             }
+        }
+
+        private static RecordWithoutId ReadRecordFromConsole()
+        {
+            RecordWithoutId recordWithoutId = new ();
+            Console.Write("First name: ");
+            recordWithoutId.FirstName = ReadInput(Converter.ConvertString, validator.ValidateFirstName);
+
+            Console.Write("Last name: ");
+            recordWithoutId.LastName = ReadInput(Converter.ConvertString, validator.ValidateLastName);
+
+            Console.Write("Date of birth: ");
+            recordWithoutId.DateOfBirth = ReadInput(Converter.ConvertDate, validator.ValidateDateOfBirth);
+
+            Console.Write("Height: ");
+            recordWithoutId.Height = ReadInput(Converter.ConvertShort, validator.ValidateHeight);
+
+            Console.Write("Weight: ");
+            recordWithoutId.Weight = ReadInput(Converter.ConvertDecimal, validator.ValidateWeight);
+
+            Console.Write("Favorite Character: ");
+            recordWithoutId.FavoriteCharacter = ReadInput(Converter.ConvertChar, validator.ValidateFavoriteCharacter);
+
+            return recordWithoutId;
+        }
+
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        {
+            do
+            {
+                T value;
+
+                var input = Console.ReadLine();
+                var conversionResult = converter(input);
+
+                if (!conversionResult.Item1)
+                {
+                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                value = conversionResult.Item3;
+
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
+                {
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
+                    continue;
+                }
+
+                return value;
+            }
+            while (true);
         }
     }
 }

@@ -2,14 +2,14 @@
 
 namespace FileCabinetApp
 {
-    public class Converter : IConverter
+    public static class Converter
     {
-        public Tuple<bool, string, string> ConvertString(string str)
+        public static Tuple<bool, string, string> ConvertString(string str)
         {
             return new Tuple<bool, string, string>(true, "Done", str);
         }
 
-        public Tuple<bool, string, DateTime> ConvertDate(string date)
+        public static Tuple<bool, string, DateTime> ConvertDate(string date)
         {
             var dateParsed = DateTime.TryParse(date, out var dateTime);
             if (!dateParsed)
@@ -20,7 +20,7 @@ namespace FileCabinetApp
             return new Tuple<bool, string, DateTime>(true, "Done", dateTime);
         }
 
-        public Tuple<bool, string, short> ConvertShort(string str)
+        public static Tuple<bool, string, short> ConvertShort(string str)
         {
             var heightParsed = short.TryParse(str, out var height);
             if (!heightParsed)
@@ -31,7 +31,7 @@ namespace FileCabinetApp
             return new Tuple<bool, string, short>(true, "Done", height);
         }
 
-        public Tuple<bool, string, decimal> ConvertDecimal(string str)
+        public static Tuple<bool, string, decimal> ConvertDecimal(string str)
         {
             var weightParsed = decimal.TryParse(str, out var weight);
             if (!weightParsed)
@@ -42,7 +42,7 @@ namespace FileCabinetApp
             return new Tuple<bool, string, decimal>(true, "Done", weight);
         }
 
-        public Tuple<bool, string, char> ConvertChar(string str)
+        public static Tuple<bool, string, char> ConvertChar(string str)
         {
             var charParsed = char.TryParse(str, out var favoriteCharacter);
             if (!charParsed)
