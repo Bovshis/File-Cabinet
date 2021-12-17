@@ -109,11 +109,19 @@ namespace FileCabinetApp
             {
                 SetValidationMode(settings[validationModeIndex]);
             }
+            else
+            {
+                Console.WriteLine("Using default validation rules.");
+            }
 
             var storageModeIndex = Array.FindIndex(settings, x => x == "--storage" || x == "-s") + 1;
-            if (validationModeIndex != 0)
+            if (storageModeIndex != 0)
             {
                 SetStorageMode(settings[storageModeIndex]);
+            }
+            else
+            {
+                Console.WriteLine("Using memory cabinet.");
             }
         }
 
@@ -145,14 +153,14 @@ namespace FileCabinetApp
             if (storageMode.Equals(memoryMode, StringComparison.InvariantCultureIgnoreCase))
             {
                 fileCabinetService = new FileCabinetMemoryService();
-                Console.WriteLine("Using default validation rules.");
+                Console.WriteLine("Using memory cabinet.");
                 return;
             }
 
             if (storageMode.Equals(fileMode, StringComparison.InvariantCultureIgnoreCase))
             {
                 fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create));
-                Console.WriteLine("Using custom validation rules.");
+                Console.WriteLine("Using file cabinet.");
                 return;
             }
 

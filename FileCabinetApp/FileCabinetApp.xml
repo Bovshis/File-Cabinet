@@ -4,14 +4,112 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.CustomValidator">
+        <member name="T:FileCabinetApp.Program">
             <summary>
-            Class for validation parameters (custom validation).
+            Console application for executing commands in the file cabinet.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
+        <member name="M:FileCabinetApp.Program.Main">
             <summary>
-            Class for validation parameters (default validation).
+            Main method that determines which command to execute.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecord">
+            <summary>
+            Record in the file cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor(System.Int32,FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
+            Create FileCabinetRecord from RecordWithoutId.
+            </summary>
+            <param name="id">record id.</param>
+            <param name="recordWithoutId">record data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+            <summary>
+            Gets or sets record number in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+            <summary>
+            Gets or sets first name in the record in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+            <summary>
+            Gets or sets last name in the record in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+            <summary>
+            Gets or sets date of birth in the record in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Height">
+            <summary>
+            Gets or sets height in the record in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Weight">
+            <summary>
+            Gets or sets weight in the record in the file cabinet.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FavoriteCharacter">
+            <summary>
+            Gets or sets favorite character in the record in the file cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
+            <summary>
+            Get record in string format.
+            </summary>
+            <returns>
+            return record in string format.
+            </returns>
+        </member>
+        <member name="T:FileCabinetApp.RecordWithoutId">
+            <summary>
+            Introduce Parameter Object.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.FirstName">
+            <summary>
+            Gets or sets first name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.LastName">
+            <summary>
+            Gets or sets last name.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.DateOfBirth">
+            <summary>
+            Gets or sets date of birth.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.Height">
+            <summary>
+            Gets or sets height.
+            </summary>
+            <value>not less than 0.</value>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.Weight">
+            <summary>
+            Gets or sets weightt.
+            </summary>
+            <value>not less than 0.</value>
+        </member>
+        <member name="P:FileCabinetApp.RecordWithoutId.FavoriteCharacter">
+            <summary>
+            Gets or sets favorite character.
             </summary>
         </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
@@ -71,88 +169,6 @@
             Make snapshot.
             </summary>
             <returns>FileCabinetService snapshot.</returns>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecord">
-            <summary>
-            Record in the file cabinet.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
-            <summary>
-            Gets or sets record number in the file cabinet.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
-            <summary>
-            Gets or sets first name in the record in the file cabinet.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
-            <summary>
-            Gets or sets last name in the record in the file cabinet.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
-            <summary>
-            Gets or sets date of birth in the record in the file cabinet.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.Height">
-            <summary>
-            Gets or sets height in the record in the file cabinet.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.Weight">
-            <summary>
-            Gets or sets weight in the record in the file cabinet.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.FileCabinetRecord.FavoriteCharacter">
-            <summary>
-            Gets or sets favorite character in the record in the file cabinet.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
-            <summary>
-            Get record in string format.
-            </summary>
-            <returns>
-            return record in string format.
-            </returns>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
-            <summary>
-            Csv Writer for FileCabinetService.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
-            </summary>
-            <param name="writer">Writer.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write record.
-            </summary>
-            <param name="record">Record for write.</param>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
-            <summary>
-            Xml Writer for FileCabinetService.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
-            </summary>
-            <param name="writer">Writer.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write record.
-            </summary>
-            <param name="record">Record for write.</param>
         </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
@@ -235,57 +251,71 @@
             </summary>
             <returns>FileCabinetService snapshot.</returns>
         </member>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            Class for validation parameters (custom validation).
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Class for validation parameters (default validation).
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.IRecordValidator">
             <summary>
             Inteface for validation parameters.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.Program">
+        <member name="T:FileCabinetApp.Writers.FileCabinetByteRecordWriter">
             <summary>
-            Console application for executing commands in the file cabinet.
+            Byte Writer for FileCabinetService.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Program.Main">
+        <member name="M:FileCabinetApp.Writers.FileCabinetByteRecordWriter.#ctor(System.IO.FileStream)">
             <summary>
-            Main method that determines which command to execute.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Writers.FileCabinetByteRecordWriter"/> class.
+            </summary>
+            <param name="fileStream">Writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.Writers.FileCabinetByteRecordWriter.Write(FileCabinetApp.Records.ByteRecord)">
+            <summary>
+            Write record.
+            </summary>
+            <param name="record">Record for write.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Csv Writer for FileCabinetService.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.RecordWithoutId">
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
             <summary>
-            Introduce Parameter Object.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write record.
+            </summary>
+            <param name="record">Record for write.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Xml Writer for FileCabinetService.
             </summary>
         </member>
-        <member name="P:FileCabinetApp.RecordWithoutId.FirstName">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
             <summary>
-            Gets or sets first name.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
             </summary>
+            <param name="writer">Writer.</param>
         </member>
-        <member name="P:FileCabinetApp.RecordWithoutId.LastName">
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
             <summary>
-            Gets or sets last name.
+            Write record.
             </summary>
-        </member>
-        <member name="P:FileCabinetApp.RecordWithoutId.DateOfBirth">
-            <summary>
-            Gets or sets date of birth.
-            </summary>
-        </member>
-        <member name="P:FileCabinetApp.RecordWithoutId.Height">
-            <summary>
-            Gets or sets height.
-            </summary>
-            <value>not less than 0.</value>
-        </member>
-        <member name="P:FileCabinetApp.RecordWithoutId.Weight">
-            <summary>
-            Gets or sets weightt.
-            </summary>
-            <value>not less than 0.</value>
-        </member>
-        <member name="P:FileCabinetApp.RecordWithoutId.FavoriteCharacter">
-            <summary>
-            Gets or sets favorite character.
-            </summary>
+            <param name="record">Record for write.</param>
         </member>
     </members>
 </doc>

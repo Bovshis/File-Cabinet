@@ -23,7 +23,7 @@ namespace FileCabinetApp
         /// <returns>record number.</returns>
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
-            var record = CreateRecord(this.list.Count + 1, recordWithoutId);
+            var record = new FileCabinetRecord(this.list.Count + 1, recordWithoutId);
             this.list.Add(record);
             this.AddElementToDictionaries(record);
 
@@ -60,7 +60,7 @@ namespace FileCabinetApp
             this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
 
-            var record = CreateRecord(id, recordWithoutId);
+            var record = new FileCabinetRecord(id, recordWithoutId);
             this.list[id - 1] = record;
             this.AddElementToDictionaries(record);
         }
@@ -132,20 +132,6 @@ namespace FileCabinetApp
             {
                 dictionary[key] = new List<FileCabinetRecord>() { record };
             }
-        }
-
-        private static FileCabinetRecord CreateRecord(int id, RecordWithoutId recordWithoutId)
-        {
-            return new FileCabinetRecord
-            {
-                Id = id,
-                FirstName = recordWithoutId.FirstName,
-                LastName = recordWithoutId.LastName,
-                DateOfBirth = recordWithoutId.DateOfBirth,
-                Height = recordWithoutId.Height,
-                Weight = recordWithoutId.Weight,
-                FavoriteCharacter = recordWithoutId.FavoriteCharacter,
-            };
         }
 
         private void AddElementToDictionaries(FileCabinetRecord record)

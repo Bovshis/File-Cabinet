@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
+using FileCabinetApp.Records;
+using FileCabinetApp.Writers;
 
 namespace FileCabinetApp
 {
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private int recordsAmount = 0;
         private FileStream fileStream;
 
         public FileCabinetFilesystemService(FileStream fileStream)
@@ -14,7 +17,11 @@ namespace FileCabinetApp
 
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
-            throw new System.NotImplementedException();
+            this.recordsAmount++;
+            var byteRecord = new ByteRecord(new FileCabinetRecord(this.recordsAmount, recordWithoutId));
+            var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
+            byteWriter.Write(byteRecord);
+            return this.recordsAmount;
         }
 
         public void EditRecord(int id, RecordWithoutId recordWithoutId)
