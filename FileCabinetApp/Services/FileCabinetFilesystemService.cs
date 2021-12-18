@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using FileCabinetApp.Records;
 using FileCabinetApp.Writers;
@@ -7,6 +9,7 @@ namespace FileCabinetApp
 {
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private const ushort ByteRecordSize = 270;
         private int recordsAmount = 0;
         private FileStream fileStream;
 
@@ -46,12 +49,26 @@ namespace FileCabinetApp
 
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            throw new System.NotImplementedException();
+            var records = new List<FileCabinetRecord>();
+
+            var currentIndex = 0;
+            this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
+
+            while (currentIndex < this.fileStream.Length)
+            {
+                var buffer = new byte[ByteRecordSize];
+                this.fileStream.Read(buffer, 0, buffer.Length);
+                var byteRecord = new ByteRecord(buffer);
+                records.Add(byteRecord.ToFileCabinetRecord());
+                currentIndex += ByteRecordSize;
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(records.ToArray());
         }
 
         public int GetStat()
         {
-            throw new System.NotImplementedException();
+            return this.recordsAmount;
         }
 
         public FileCabinetServiceSnapshot MakeSnapshot()

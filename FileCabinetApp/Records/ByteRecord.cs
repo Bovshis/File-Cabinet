@@ -6,7 +6,6 @@ namespace FileCabinetApp.Records
     public class ByteRecord : FileCabinetRecord
     {
         private const ushort NameCapacity = 120;
-        private const ushort TotalSize = 270;
         private const ushort StatusOffset = 0;
         private const ushort IdOffset = 2;
         private const ushort FirstNameOffset = 6;
@@ -33,6 +32,20 @@ namespace FileCabinetApp.Records
             this.FavoriteCharacter = BitConverter.GetBytes(fileCabinetRecord.FavoriteCharacter);
         }
 
+        public ByteRecord(byte[] buffer)
+        {
+            this.Status = buffer[StatusOffset..IdOffset];
+            this.Id = buffer[IdOffset..FirstNameOffset];
+            this.FirstName = buffer[FirstNameOffset..LastNameOffset];
+            this.LastName = buffer[LastNameOffset..YearOffset];
+            this.Year = buffer[YearOffset..MonthOffset];
+            this.Month = buffer[MonthOffset..DayOffset];
+            this.Day = buffer[DayOffset..HeightOffset];
+            this.Height = buffer[HeightOffset..WeightOffset];
+            this.Weight = buffer[WeightOffset..FavoriteCharacterOffset];
+            this.FavoriteCharacter = buffer[FavoriteCharacterOffset..];
+        }
+
         public byte[] Status { get; set; }
 
         public byte[] Id { get; set; }
@@ -52,6 +65,24 @@ namespace FileCabinetApp.Records
         public byte[] Weight { get; set; }
 
         public byte[] FavoriteCharacter { get; set; }
+
+        public FileCabinetRecord ToFileCabinetRecord()
+        {
+            return new FileCabinetRecord
+            {
+                Id = BitConverter.ToInt32(this.Id),
+                FirstName = Encoding.UTF8.GetString(this.FirstName),
+                LastName = Encoding.UTF8.GetString(this.LastName),
+                DateOfBirth = new DateTime(
+                    BitConverter.ToInt32(this.Year),
+                    BitConverter.ToInt32(this.Month),
+                    BitConverter.ToInt32(this.Day)
+                ),
+                Height = BitConverter.ToInt16(this.Height),
+                Weight = new decimal(BitConverter.ToDouble(this.Weight)),
+                FavoriteCharacter = Encoding.UTF8.GetString(this.FavoriteCharacter)[0],
+            };
+        }
 
         private static byte[] ToBytes(string value, int capacity)
         {
