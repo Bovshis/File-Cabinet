@@ -3,7 +3,7 @@ using System.Text;
 
 namespace FileCabinetApp.Records
 {
-    public class ByteRecord : FileCabinetRecord
+    public class ByteRecord
     {
         private const ushort NameCapacity = 120;
         private const ushort StatusOffset = 0;
@@ -34,7 +34,7 @@ namespace FileCabinetApp.Records
 
         public ByteRecord(byte[] buffer)
         {
-            this.Status = buffer[StatusOffset..IdOffset];
+            this.Status = buffer[..IdOffset];
             this.Id = buffer[IdOffset..FirstNameOffset];
             this.FirstName = buffer[FirstNameOffset..LastNameOffset];
             this.LastName = buffer[LastNameOffset..YearOffset];
@@ -76,8 +76,7 @@ namespace FileCabinetApp.Records
                 DateOfBirth = new DateTime(
                     BitConverter.ToInt32(this.Year),
                     BitConverter.ToInt32(this.Month),
-                    BitConverter.ToInt32(this.Day)
-                ),
+                    BitConverter.ToInt32(this.Day)),
                 Height = BitConverter.ToInt16(this.Height),
                 Weight = new decimal(BitConverter.ToDouble(this.Weight)),
                 FavoriteCharacter = Encoding.UTF8.GetString(this.FavoriteCharacter)[0],

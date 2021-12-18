@@ -11,7 +11,7 @@ namespace FileCabinetApp
     {
         private const ushort ByteRecordSize = 270;
         private int recordsAmount = 0;
-        private FileStream fileStream;
+        private readonly FileStream fileStream;
 
         public FileCabinetFilesystemService(FileStream fileStream)
         {
@@ -29,12 +29,16 @@ namespace FileCabinetApp
 
         public void EditRecord(int id, RecordWithoutId recordWithoutId)
         {
-            throw new System.NotImplementedException();
+            long offset = ByteRecordSize * (id - 1);
+            this.fileStream.Seek(offset, SeekOrigin.Begin);
+            var byteRecord = new ByteRecord(new FileCabinetRecord(id, recordWithoutId));
+            var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
+            byteWriter.Write(byteRecord);
         }
 
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
-            throw new System.NotImplementedException();
+
         }
 
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
