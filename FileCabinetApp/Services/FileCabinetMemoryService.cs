@@ -6,7 +6,7 @@ using System.Globalization;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Сlass for working with a list of records.
+    /// File cabinet with memory storage.
     /// </summary>
     public class FileCabinetMemoryService : IFileCabinetService
     {

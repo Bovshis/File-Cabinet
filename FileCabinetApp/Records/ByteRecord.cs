@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Text;
+using FileCabinetApp.Constants;
 
 namespace FileCabinetApp.Records
 {
+    /// <summary>
+    /// Byte File Cabinet Record.
+    /// </summary>
     public class ByteRecord
     {
-        private const ushort NameCapacity = 120;
-        private const ushort StatusOffset = 0;
-        private const ushort IdOffset = 2;
-        private const ushort FirstNameOffset = 6;
-        private const ushort LastNameOffset = 126;
-        private const ushort YearOffset = 246;
-        private const ushort MonthOffset = 250;
-        private const ushort DayOffset = 254;
-        private const ushort HeightOffset = 258;
-        private const ushort WeightOffset = 260;
-        private const ushort FavoriteCharacterOffset = 268;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ByteRecord"/> class.
+        /// </summary>
+        /// <param name="fileCabinetRecord">file cabinet record for byte writing.</param>
         public ByteRecord(FileCabinetRecord fileCabinetRecord)
         {
             const short status = 1;
             this.Status = BitConverter.GetBytes(status);
             this.Id = BitConverter.GetBytes(fileCabinetRecord.Id);
-            this.FirstName = ToBytes(fileCabinetRecord.FirstName, NameCapacity);
-            this.LastName = ToBytes(fileCabinetRecord.LastName, NameCapacity);
+            this.FirstName = Converter.StringToBytes(fileCabinetRecord.FirstName, ByteOffsetConstants.NameCapacity);
+            this.LastName = Converter.StringToBytes(fileCabinetRecord.LastName, ByteOffsetConstants.NameCapacity);
             this.Year = BitConverter.GetBytes(fileCabinetRecord.DateOfBirth.Year);
             this.Month = BitConverter.GetBytes(fileCabinetRecord.DateOfBirth.Month);
             this.Day = BitConverter.GetBytes(fileCabinetRecord.DateOfBirth.Day);
@@ -32,18 +28,22 @@ namespace FileCabinetApp.Records
             this.FavoriteCharacter = BitConverter.GetBytes(fileCabinetRecord.FavoriteCharacter);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ByteRecord"/> class.
+        /// </summary>
+        /// <param name="buffer">byte array that contains data for byte record.</param>
         public ByteRecord(byte[] buffer)
         {
-            this.Status = buffer[..IdOffset];
-            this.Id = buffer[IdOffset..FirstNameOffset];
-            this.FirstName = buffer[FirstNameOffset..LastNameOffset];
-            this.LastName = buffer[LastNameOffset..YearOffset];
-            this.Year = buffer[YearOffset..MonthOffset];
-            this.Month = buffer[MonthOffset..DayOffset];
-            this.Day = buffer[DayOffset..HeightOffset];
-            this.Height = buffer[HeightOffset..WeightOffset];
-            this.Weight = buffer[WeightOffset..FavoriteCharacterOffset];
-            this.FavoriteCharacter = buffer[FavoriteCharacterOffset..];
+            this.Status = buffer[..ByteOffsetConstants.IdOffset];
+            this.Id = buffer[ByteOffsetConstants.IdOffset..ByteOffsetConstants.FirstNameOffset];
+            this.FirstName = buffer[ByteOffsetConstants.FirstNameOffset..ByteOffsetConstants.LastNameOffset];
+            this.LastName = buffer[ByteOffsetConstants.LastNameOffset..ByteOffsetConstants.YearOffset];
+            this.Year = buffer[ByteOffsetConstants.YearOffset..ByteOffsetConstants.MonthOffset];
+            this.Month = buffer[ByteOffsetConstants.MonthOffset..ByteOffsetConstants.DayOffset];
+            this.Day = buffer[ByteOffsetConstants.DayOffset..ByteOffsetConstants.HeightOffset];
+            this.Height = buffer[ByteOffsetConstants.HeightOffset..ByteOffsetConstants.WeightOffset];
+            this.Weight = buffer[ByteOffsetConstants.WeightOffset..ByteOffsetConstants.FavoriteCharacterOffset];
+            this.FavoriteCharacter = buffer[ByteOffsetConstants.FavoriteCharacterOffset..];
         }
 
         public byte[] Status { get; set; }
@@ -66,6 +66,10 @@ namespace FileCabinetApp.Records
 
         public byte[] FavoriteCharacter { get; set; }
 
+        /// <summary>
+        /// Convert ByteRecord to FileCabinetRecord.
+        /// </summary>
+        /// <returns>file cabinet record.</returns>
         public FileCabinetRecord ToFileCabinetRecord()
         {
             return new FileCabinetRecord
@@ -81,18 +85,6 @@ namespace FileCabinetApp.Records
                 Weight = new decimal(BitConverter.ToDouble(this.Weight)),
                 FavoriteCharacter = Encoding.UTF8.GetString(this.FavoriteCharacter)[0],
             };
-        }
-
-        private static byte[] ToBytes(string value, int capacity)
-        {
-            var encoded = Encoding.UTF8.GetBytes(value);
-            var byteArray = new byte[capacity];
-            for (var i = 0; i < encoded.Length; i++)
-            {
-                byteArray[i] = encoded[i];
-            }
-
-            return byteArray;
         }
     }
 }

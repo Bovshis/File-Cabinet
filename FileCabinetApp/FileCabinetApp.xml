@@ -4,6 +4,54 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.Converter">
+            <summary>
+            Converter.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertString(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, string-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertDate(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="date">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, DateTime-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertShort(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, short-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertDecimal(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, decimal-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertChar(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, char-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.StringToBytes(System.String,System.Int32)">
+            <summary>
+            Convert string to byte array.
+            </summary>
+            <param name="value">Converted string.</param>
+            <param name="capacity">Capacity of byte array</param>
+            <returns>byte array.</returns>
+        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             Console application for executing commands in the file cabinet.
