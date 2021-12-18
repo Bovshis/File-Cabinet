@@ -4,19 +4,80 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
-        <member name="T:FileCabinetApp.CustomValidator">
+        <member name="T:FileCabinetApp.Converter">
             <summary>
-            Class for validation parameters (custom validation).
+            Converter.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.DefaultValidator">
+        <member name="M:FileCabinetApp.Converter.ConvertString(System.String)">
             <summary>
-            Class for validation parameters (default validation).
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, string-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertDate(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="date">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, DateTime-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertShort(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, short-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertDecimal(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, decimal-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.ConvertChar(System.String)">
+            <summary>
+            Convert str to char.
+            </summary>
+            <param name="str">Converted string.</param>
+            <returns>bool-is converted, string-conversion message, char-result.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Converter.StringToBytes(System.String,System.Int32)">
+            <summary>
+            Convert string to byte array.
+            </summary>
+            <param name="value">Converted string.</param>
+            <param name="capacity">Capacity of byte array</param>
+            <returns>byte array.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+            Console application for executing commands in the file cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main">
+            <summary>
+            Main method that determines which command to execute.
             </summary>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
             Record in the file cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor(System.Int32,FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
+            Create FileCabinetRecord from RecordWithoutId.
+            </summary>
+            <param name="id">record id.</param>
+            <param name="recordWithoutId">record data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
             </summary>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.Id">
@@ -62,186 +123,6 @@
             return record in string format.
             </returns>
         </member>
-        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
-            <summary>
-            Csv Writer for FileCabinetService.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
-            </summary>
-            <param name="writer">Writer.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write record.
-            </summary>
-            <param name="record">Record for write.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
-            </summary>
-            <param name="writer">Writer.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
-            <summary>
-            Write record.
-            </summary>
-            <param name="record">Record for write.</param>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetService">
-            <summary>
-            Сlass for working with a list of records.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetService"/> class.
-            validation rules.
-            </summary>
-            <param name="recordValidator">parameters validator.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord">
-            <summary>
-            Create record, adds to list and dictionaries.
-            </summary>
-            <returns>record number.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
-            <summary>
-            Get records from the file cabinet list.
-            </summary>
-            <returns>Array of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
-            <summary>
-            Get count records from the file cabinet list..
-            </summary>
-            <returns>count of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32)">
-            <summary>
-            Edit record.
-            </summary>
-            <param name="id">number of the edited record.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.MakeSnapshot">
-            <summary>
-            Make snapshot.
-            </summary>
-            <returns>FileCabinetService snapshot.</returns>
-        </member>
-        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
-            <summary>
-            Snapshot FileCabinetService.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
-            <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
-            </summary>
-            <param name="records">Records for initializing.</param>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
-            <summary>
-            Save records to csv file.
-            </summary>
-            <param name="streamWriter">Stream writer to write.</param>
-        </member>
-        <member name="T:FileCabinetApp.IFileCabinetService">
-            <summary>
-            File cabinet.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord">
-            <summary>
-            Create record.
-            </summary>
-            <returns>record id.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
-            <summary>
-            Get list of the records.
-            </summary>
-            <returns>lis of the records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
-            <summary>
-            Get count records.
-            </summary>
-            <returns>count records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(System.Int32)">
-            <summary>
-            Edit record.
-            </summary>
-            <param name="id">number of the edited record.</param>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
-            <summary>
-            Make Snapshot FileCabinetService.
-            </summary>
-            <returns>Snapshot FileCabinetService.</returns>
-        </member>
-        <member name="T:FileCabinetApp.IRecordValidator">
-            <summary>
-            Inteface for validation parameters.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.Program">
-            <summary>
-            Console application for executing commands in the file cabinet.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Program.Main">
-            <summary>
-            Main method that determines which command to execute.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.RecordWithoutId">
             <summary>
             Introduce Parameter Object.
@@ -278,6 +159,211 @@
             <summary>
             Gets or sets favorite character.
             </summary>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetMemoryService">
+            <summary>
+            Сlass for working with a list of records.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Create record, adds to list and dictionaries.
+            </summary>
+            <param name="recordWithoutId">record data.</param>
+            <returns>record number.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetRecords">
+            <summary>
+            Get records from the file cabinet list.
+            </summary>
+            <returns>Array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.GetStat">
+            <summary>
+            Get count records from the file cabinet list..
+            </summary>
+            <returns>count of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.EditRecord(System.Int32,FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Edit record.
+            </summary>
+            <param name="id">number of the edited record.</param>
+            <param name="recordWithoutId">record data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByFirstName(System.String)">
+            <summary>
+            Find list of the records by first name.
+            </summary>
+            <param name="firstName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByLastName(System.String)">
+            <summary>
+            Find list of the records by last Name.
+            </summary>
+            <param name="lastName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
+            <summary>
+            Find list of the records by date Of Birth.
+            </summary>
+            <param name="dateOfBirth">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.MakeSnapshot">
+            <summary>
+            Make snapshot.
+            </summary>
+            <returns>FileCabinetService snapshot.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+            Snapshot FileCabinetService.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(System.Collections.ObjectModel.ReadOnlyCollection{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="records">Records for initializing.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+            Save records to csv file.
+            </summary>
+            <param name="streamWriter">Stream writer to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+            Save records to xml file.
+            </summary>
+            <param name="streamWriter">Stream writer to write.</param>
+        </member>
+        <member name="T:FileCabinetApp.IFileCabinetService">
+            <summary>
+            File cabinet.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.CreateRecord(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Create record.
+            </summary>
+            <param name="recordWithoutId">record data.</param>
+            <returns>record id.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetRecords">
+            <summary>
+            Get list of the records.
+            </summary>
+            <returns>lis of the records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.GetStat">
+            <summary>
+            Get count records.
+            </summary>
+            <returns>count records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.EditRecord(System.Int32,FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Edit record.
+            </summary>
+            <param name="id">number of the edited record.</param>
+            <param name="recordWithoutId">record data.</param>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByFirstName(System.String)">
+            <summary>
+            Find list of the records by first name.
+            </summary>
+            <param name="firstName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByLastName(System.String)">
+            <summary>
+            Find list of the records by last Name.
+            </summary>
+            <param name="lastName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.FindByDateOfBirth(System.String)">
+            <summary>
+            Find list of the records by date Of Birth.
+            </summary>
+            <param name="dateOfBirth">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.MakeSnapshot">
+            <summary>
+            Make snapshot.
+            </summary>
+            <returns>FileCabinetService snapshot.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CustomValidator">
+            <summary>
+            Class for validation parameters (custom validation).
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.DefaultValidator">
+            <summary>
+            Class for validation parameters (default validation).
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+            Inteface for validation parameters.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Writers.FileCabinetByteRecordWriter">
+            <summary>
+            Byte Writer for FileCabinetService.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Writers.FileCabinetByteRecordWriter.#ctor(System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Writers.FileCabinetByteRecordWriter"/> class.
+            </summary>
+            <param name="fileStream">Writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.Writers.FileCabinetByteRecordWriter.Write(FileCabinetApp.Records.ByteRecord)">
+            <summary>
+            Write record.
+            </summary>
+            <param name="record">Record for write.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordCsvWriter">
+            <summary>
+            Csv Writer for FileCabinetService.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer">Writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write record.
+            </summary>
+            <param name="record">Record for write.</param>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordXmlWriter">
+            <summary>
+            Xml Writer for FileCabinetService.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer">Writer.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Write record.
+            </summary>
+            <param name="record">Record for write.</param>
         </member>
     </members>
 </doc>

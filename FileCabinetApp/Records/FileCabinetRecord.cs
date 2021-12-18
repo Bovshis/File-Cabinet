@@ -8,6 +8,28 @@ namespace FileCabinetApp
     public class FileCabinetRecord
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
+        /// Create FileCabinetRecord from RecordWithoutId.
+        /// </summary>
+        /// <param name="id">record id.</param>
+        /// <param name="recordWithoutId">record data.</param>
+        public FileCabinetRecord(int id, RecordWithoutId recordWithoutId)
+        {
+            this.Id = id;
+            this.FirstName = recordWithoutId.FirstName;
+            this.LastName = recordWithoutId.LastName;
+            this.DateOfBirth = recordWithoutId.DateOfBirth;
+            this.Height = recordWithoutId.Height;
+            this.Weight = recordWithoutId.Weight;
+            this.FavoriteCharacter = recordWithoutId.FavoriteCharacter;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
+        /// </summary>
+        public FileCabinetRecord() {}
+
+        /// <summary>
         /// Gets or sets record number in the file cabinet.
         /// </summary>
         public int Id { get; set; }

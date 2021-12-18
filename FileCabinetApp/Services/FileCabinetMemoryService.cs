@@ -6,9 +6,9 @@ using System.Globalization;
 namespace FileCabinetApp
 {
     /// <summary>
-    /// Сlass for working with a list of records.
+    /// File cabinet with memory storage.
     /// </summary>
-    public class FileCabinetService : IFileCabinetService
+    public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new ();
 
@@ -16,26 +16,14 @@ namespace FileCabinetApp
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new ();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new ();
 
-        private readonly IRecordValidator validator;
-        private readonly IConverter converter = new Converter();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
-        /// validation rules.
-        /// </summary>
-        /// <param name="recordValidator">parameters validator.</param>
-        public FileCabinetService(IRecordValidator recordValidator)
-        {
-            this.validator = recordValidator;
-        }
-
         /// <summary>
         /// Create record, adds to list and dictionaries.
         /// </summary>
+        /// <param name="recordWithoutId">record data.</param>
         /// <returns>record number.</returns>
-        public int CreateRecord()
+        public int CreateRecord(RecordWithoutId recordWithoutId)
         {
-            var record = CreateRecord(this.list.Count + 1, this.ReadRecordFromConsole());
+            var record = new FileCabinetRecord(this.list.Count + 1, recordWithoutId);
             this.list.Add(record);
             this.AddElementToDictionaries(record);
 
@@ -64,14 +52,15 @@ namespace FileCabinetApp
         /// Edit record.
         /// </summary>
         /// <param name="id">number of the edited record.</param>
-        public void EditRecord(int id)
+        /// <param name="recordWithoutId">record data.</param>
+        public void EditRecord(int id, RecordWithoutId recordWithoutId)
         {
             var oldRecord = this.list[id - 1];
             this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
             this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
 
-            var record = CreateRecord(id, this.ReadRecordFromConsole());
+            var record = new FileCabinetRecord(id, recordWithoutId);
             this.list[id - 1] = record;
             this.AddElementToDictionaries(record);
         }
@@ -145,78 +134,11 @@ namespace FileCabinetApp
             }
         }
 
-        private static FileCabinetRecord CreateRecord(int id, RecordWithoutId recordWithoutId)
-        {
-            return new FileCabinetRecord
-            {
-                Id = id,
-                FirstName = recordWithoutId.FirstName,
-                LastName = recordWithoutId.LastName,
-                DateOfBirth = recordWithoutId.DateOfBirth,
-                Height = recordWithoutId.Height,
-                Weight = recordWithoutId.Weight,
-                FavoriteCharacter = recordWithoutId.FavoriteCharacter,
-            };
-        }
-
-        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
-        {
-            do
-            {
-                T value;
-
-                var input = Console.ReadLine();
-                var conversionResult = converter(input);
-
-                if (!conversionResult.Item1)
-                {
-                    Console.WriteLine($"Conversion failed: {conversionResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                value = conversionResult.Item3;
-
-                var validationResult = validator(value);
-                if (!validationResult.Item1)
-                {
-                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                return value;
-            }
-            while (true);
-        }
-
         private void AddElementToDictionaries(FileCabinetRecord record)
         {
             AddElementToDictionary(record.FirstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
             AddElementToDictionary(record.LastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
             AddElementToDictionary(record.DateOfBirth, record, this.dateOfBirthDictionary);
-        }
-
-        private RecordWithoutId ReadRecordFromConsole()
-        {
-            RecordWithoutId recordWithoutId = new ();
-            Console.Write("First name: ");
-            recordWithoutId.FirstName = ReadInput(this.converter.ConvertString, this.validator.ValidateFirstName);
-
-            Console.Write("Last name: ");
-            recordWithoutId.LastName = ReadInput(this.converter.ConvertString, this.validator.ValidateLastName);
-
-            Console.Write("Date of birth: ");
-            recordWithoutId.DateOfBirth = ReadInput(this.converter.ConvertDate, this.validator.ValidateDateOfBirth);
-
-            Console.Write("Height: ");
-            recordWithoutId.Height = ReadInput(this.converter.ConvertShort, this.validator.ValidateHeight);
-
-            Console.Write("Weight: ");
-            recordWithoutId.Weight = ReadInput(this.converter.ConvertDecimal, this.validator.ValidateWeight);
-
-            Console.Write("Favorite Character: ");
-            recordWithoutId.FavoriteCharacter = ReadInput(this.converter.ConvertChar, this.validator.ValidateFavoriteCharacter);
-
-            return recordWithoutId;
         }
     }
 }

@@ -10,8 +10,9 @@ namespace FileCabinetApp
         /// <summary>
         /// Create record.
         /// </summary>
+        /// <param name="recordWithoutId">record data.</param>
         /// <returns>record id.</returns>
-        public int CreateRecord();
+        public int CreateRecord(RecordWithoutId recordWithoutId);
 
         /// <summary>
         /// Get list of the records.
@@ -29,7 +30,8 @@ namespace FileCabinetApp
         /// Edit record.
         /// </summary>
         /// <param name="id">number of the edited record.</param>
-        public void EditRecord(int id);
+        /// <param name="recordWithoutId">record data.</param>
+        public void EditRecord(int id, RecordWithoutId recordWithoutId);
 
         /// <summary>
         /// Find list of the records by first name.
@@ -53,9 +55,9 @@ namespace FileCabinetApp
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
 
         /// <summary>
-        /// Make Snapshot FileCabinetService.
+        /// Make snapshot.
         /// </summary>
-        /// <returns>Snapshot FileCabinetService.</returns>
+        /// <returns>FileCabinetService snapshot.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot();
     }
 }
