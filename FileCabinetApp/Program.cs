@@ -311,8 +311,7 @@ namespace FileCabinetApp
             }
 
             // recording
-            var streamWriter =
-                new StreamWriter(exportParameters[filePath], rewrite, System.Text.Encoding.Default);
+            var streamWriter = new StreamWriter(exportParameters[filePath], rewrite, System.Text.Encoding.Default);
             if (exportParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
                 fileCabinetService.MakeSnapshot().SaveToCsv(streamWriter);

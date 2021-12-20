@@ -4,6 +4,11 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.Constants.ByteOffsetConstants">
+            <summary>
+            Constants for ByteRecord.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.Converter">
             <summary>
             Converter.
@@ -61,6 +66,29 @@
             <summary>
             Main method that determines which command to execute.
             </summary>
+        </member>
+        <member name="T:FileCabinetApp.Records.ByteRecord">
+            <summary>
+            Byte File Cabinet Record.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Records.ByteRecord.#ctor(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Records.ByteRecord"/> class.
+            </summary>
+            <param name="fileCabinetRecord">file cabinet record for byte writing.</param>
+        </member>
+        <member name="M:FileCabinetApp.Records.ByteRecord.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Records.ByteRecord"/> class.
+            </summary>
+            <param name="buffer">byte array that contains data for byte record.</param>
+        </member>
+        <member name="M:FileCabinetApp.Records.ByteRecord.ToFileCabinetRecord">
+            <summary>
+            Convert ByteRecord to FileCabinetRecord.
+            </summary>
+            <returns>file cabinet record.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
@@ -160,9 +188,73 @@
             Gets or sets favorite character.
             </summary>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetFilesystemService">
+            <summary>
+            File cabinet with file storage.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetFilesystemService"/> class.
+            </summary>
+            <param name="fileStream">file stream to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Create record, adds to file.
+            </summary>
+            <param name="recordWithoutId">record data.</param>
+            <returns>record number.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.RecordWithoutId)">
+            <summary>
+            Edit record.
+            </summary>
+            <param name="id">number of the edited record.</param>
+            <param name="recordWithoutId">record data.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
+            <summary>
+            Find list of the records by date Of Birth.
+            </summary>
+            <param name="dateOfBirth">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByFirstName(System.String)">
+            <summary>
+            Find list of the records by first name.
+            </summary>
+            <param name="firstName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.FindByLastName(System.String)">
+            <summary>
+            Find list of the records by last Name.
+            </summary>
+            <param name="lastName">value to search.</param>
+            <returns>List of the searched records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetRecords">
+            <summary>
+            Get records from the file.
+            </summary>
+            <returns>Array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.GetStat">
+            <summary>
+            Get count records from the file.
+            </summary>
+            <returns>count of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.MakeSnapshot">
+            <summary>
+            Make snapshot.
+            </summary>
+            <returns>FileCabinetService snapshot.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
-            Сlass for working with a list of records.
+            File cabinet with memory storage.
             </summary>
         </member>
         <member name="M:FileCabinetApp.FileCabinetMemoryService.CreateRecord(FileCabinetApp.RecordWithoutId)">
