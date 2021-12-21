@@ -259,6 +259,20 @@
             </summary>
             <returns>FileCabinetService snapshot.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,FileCabinetApp.IRecordValidator)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+            <param name="validator">for validating data.</param>
+            <returns>amount imported records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetFilesystemService.AddRecord(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+            Add record to file.
+            </summary>
+            <param name="record">record for writing.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetMemoryService">
             <summary>
             File cabinet with memory storage.

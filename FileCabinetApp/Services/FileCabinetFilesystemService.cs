@@ -34,9 +34,7 @@ namespace FileCabinetApp
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
             this.recordsAmount++;
-            var byteRecord = new ByteRecord(new FileCabinetRecord(this.recordsAmount, recordWithoutId));
-            var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
-            byteWriter.Write(byteRecord);
+            this.AddRecord(new FileCabinetRecord(this.recordsAmount, recordWithoutId));
             return this.recordsAmount;
         }
 
@@ -204,9 +202,40 @@ namespace FileCabinetApp
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Restore records.
+        /// </summary>
+        /// <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+        /// <param name="validator">for validating data.</param>
+        /// <returns>amount imported records.</returns>
         public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator)
         {
-            throw new NotImplementedException();
+            var amount = 0;
+            foreach (var record in fileCabinetServiceSnapshot.Records)
+            {
+                if (validator.ValidateRecord(record))
+                {
+                    amount++;
+                    this.AddRecord(record);
+                }
+                else
+                {
+                    Console.WriteLine($"Validation failed: {record.Id}.");
+                }
+            }
+
+            return amount;
+        }
+
+        /// <summary>
+        /// Add record to file.
+        /// </summary>
+        /// <param name="record">record for writing.</param>
+        public void AddRecord(FileCabinetRecord record)
+        {
+            var byteRecord = new ByteRecord(record);
+            var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
+            byteWriter.Write(byteRecord);
         }
     }
 }
