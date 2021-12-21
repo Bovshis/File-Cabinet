@@ -322,6 +322,8 @@
             Restore records.
             </summary>
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+            <param name="validator">for validating data.</param>
+            <returns>amount imported records.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
@@ -356,6 +358,12 @@
             load data from csv file.
             </summary>
             <param name="streamReader">file for reading.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromXml(System.IO.FileStream)">
+            <summary>
+            load data from xml file.
+            </summary>
+            <param name="fileStream">file stream for reading.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -421,6 +429,7 @@
             </summary>
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
             <param name="validator">for validating data.</param>
+            <returns>amount imported records.</returns>
         </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>

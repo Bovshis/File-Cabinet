@@ -358,23 +358,25 @@ namespace FileCabinetApp
                 return;
             }
 
-            var fileStream = new FileStream(importParameters[filePath], FileMode.Open);
+            using var fileStream = new FileStream(importParameters[filePath], FileMode.Open);
+            var fileCabinetServiceSnapshot = new FileCabinetServiceSnapshot(
+                new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()));
             if (importParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
-                var fileCabinetServiceSnapshot = new FileCabinetServiceSnapshot(
-                    new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()));
                 fileCabinetServiceSnapshot.LoadFromCsv(new StreamReader(fileStream));
-                var importedAmount = fileCabinetService.Restore(fileCabinetServiceSnapshot, validator);
-                Console.WriteLine($"{importedAmount} records were imported from {importParameters[filePath]}.");
             }
             else if (importParameters[fileType].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
             {
+                fileCabinetServiceSnapshot.LoadFromXml(fileStream);
             }
             else
             {
                 Console.WriteLine("Wrong type format!");
                 return;
             }
+
+            var importedAmount = fileCabinetService.Restore(fileCabinetServiceSnapshot, validator);
+            Console.WriteLine($"{importedAmount} records were imported from {importParameters[filePath]}.");
         }
 
         private static RecordWithoutId ReadRecordFromConsole()

@@ -76,5 +76,15 @@ namespace FileCabinetApp
             var reader = new FileCabinetRecordCsvReader(streamReader);
             this.records = new ReadOnlyCollection<FileCabinetRecord>(reader.ReadAll());
         }
+
+        /// <summary>
+        /// load data from xml file.
+        /// </summary>
+        /// <param name="fileStream">file stream for reading.</param>
+        public void LoadFromXml(FileStream fileStream)
+        {
+            var reader = new FileCabinetRecordXmlReader(fileStream);
+            this.records = new ReadOnlyCollection<FileCabinetRecord>(reader.ReadAll());
+        }
     }
 }

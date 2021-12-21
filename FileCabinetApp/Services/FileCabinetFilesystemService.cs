@@ -204,7 +204,7 @@ namespace FileCabinetApp
             throw new System.NotImplementedException();
         }
 
-        public void Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator)
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator)
         {
             throw new NotImplementedException();
         }
