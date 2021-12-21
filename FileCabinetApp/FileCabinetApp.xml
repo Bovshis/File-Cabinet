@@ -57,6 +57,21 @@
             <param name="capacity">Capacity of byte array.</param>
             <returns>byte array.</returns>
         </member>
+        <member name="T:FileCabinetApp.Enums.ByteRecordStatus">
+            <summary>
+            Enum for ByteRecord statuses.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Enums.ByteRecordStatus.Normal">
+            <summary>
+            record contains in file
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Enums.ByteRecordStatus.Deleted">
+            <summary>
+            record was delete
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             Console application for executing commands in the file cabinet.

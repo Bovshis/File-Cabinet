@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using FileCabinetApp.Constants;
+using FileCabinetApp.Enums;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
 using FileCabinetApp.Writers;
@@ -234,7 +235,19 @@ namespace FileCabinetApp.Services
         /// <param name="id">id removed record.</param>
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            long offset = ByteOffsetConstants.Size * (id - 1);
+            const int shortSize = 2;
+            var statusBuffer = new byte[shortSize];
+            this.fileStream.Read(statusBuffer, 0, statusBuffer.Length);
+            if (BitConverter.ToInt16(statusBuffer) == (short)ByteRecordStatus.Deleted)
+            {
+                Console.WriteLine("records has already been deleted");
+            }
+            else
+            {
+                this.fileStream.Seek(offset, SeekOrigin.Begin);
+                this.fileStream.Write(BitConverter.GetBytes((short)ByteRecordStatus.Deleted));
+            }
         }
 
         private void AddRecord(FileCabinetRecord record)
