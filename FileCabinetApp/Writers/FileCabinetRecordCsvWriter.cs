@@ -1,6 +1,7 @@
 ﻿using System.IO;
+using FileCabinetApp.Records;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Writers
 {
     /// <summary>
     /// Csv Writer for FileCabinetService.

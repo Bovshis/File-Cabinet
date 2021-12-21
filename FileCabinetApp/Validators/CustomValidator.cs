@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FileCabinetApp.Records;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Validators
 {
     /// <summary>
     /// Class for validation parameters (custom validation).
@@ -94,6 +91,41 @@ namespace FileCabinetApp
         public Tuple<bool, string> ValidateFavoriteCharacter(char favoriteCharacter)
         {
             return new Tuple<bool, string>(true, "Done");
+        }
+
+        public bool ValidateRecord(FileCabinetRecord record)
+        {
+            if (!this.ValidateFirstName(record.FirstName).Item1)
+            {
+                return false;
+            }
+
+            if (!this.ValidateLastName(record.LastName).Item1)
+            {
+                return false;
+            }
+
+            if (!this.ValidateDateOfBirth(record.DateOfBirth).Item1)
+            {
+                return false;
+            }
+
+            if (!this.ValidateHeight(record.Height).Item1)
+            {
+                return false;
+            }
+
+            if (!this.ValidateWeight(record.Weight).Item1)
+            {
+                return false;
+            }
+
+            if (!this.ValidateFavoriteCharacter(record.FavoriteCharacter).Item1)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

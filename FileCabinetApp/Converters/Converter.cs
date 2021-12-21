@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Converters
 {
     /// <summary>
     /// Converter.
@@ -86,7 +86,7 @@ namespace FileCabinetApp
         /// Convert string to byte array.
         /// </summary>
         /// <param name="value">Converted string.</param>
-        /// <param name="capacity">Capacity of byte array</param>
+        /// <param name="capacity">Capacity of byte array.</param>
         /// <returns>byte array.</returns>
         public static byte[] StringToBytes(string value, int capacity)
         {

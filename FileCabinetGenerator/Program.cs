@@ -3,7 +3,7 @@ namespace FileCabinetGenerator
 {
     public static class Program
     {
-        private static Generator _generator = new ();
+        private static readonly Generator generator = new ();
         public static void Main()
         {
             var isCorrectSettings = false;
@@ -13,8 +13,8 @@ namespace FileCabinetGenerator
                 {
                     Console.Write("$ FileCabinetGenerator.exe ");
                     var settings = Console.ReadLine()?.Split(' ');
-                    _generator.SetSettings(settings);
-                    _generator.Generate();
+                    generator.SetSettings(settings);
+                    generator.Generate();
                     isCorrectSettings = true;
                 }
                 catch (Exception ex)

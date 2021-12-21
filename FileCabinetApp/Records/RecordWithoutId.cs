@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Records
 {
     /// <summary>
     /// Introduce Parameter Object.
@@ -29,7 +29,7 @@ namespace FileCabinetApp
         public short Height { get; set; }
 
         /// <summary>
-        /// Gets or sets weightt.
+        /// Gets or sets weight.
         /// </summary>
         /// <value>not less than 0.</value>
         public decimal Weight { get; set; }

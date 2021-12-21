@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using FileCabinetApp.Converters;
+using FileCabinetApp.Records;
+using FileCabinetApp.Services;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp
 {
@@ -27,6 +33,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -39,6 +46,7 @@ namespace FileCabinetApp
             new string[] { "edit", "edit record", "The 'edit' command edit record." },
             new string[] { "find", "find records", "The 'find' command find records." },
             new string[] { "export", "export records", "The 'export' command export records." },
+            new string[] { "import", "import records", "The 'import' command import records." },
         };
 
         private static IRecordValidator validator = new DefaultValidator();
@@ -329,6 +337,48 @@ namespace FileCabinetApp
                 Console.WriteLine("Wrong type format!");
                 return;
             }
+        }
+
+        private static void Import(string parameters)
+        {
+            var importParameters = parameters.Split(' ');
+            const int amountParameters = 2;
+            if (importParameters.Length != amountParameters)
+            {
+                Console.WriteLine("Parameters amount is wrong");
+                return;
+            }
+
+            const int fileType = 0;
+            const int filePath = 1;
+
+            // check file
+            var fileInfo = new FileInfo(importParameters[filePath]);
+            if (!Directory.Exists(fileInfo.DirectoryName))
+            {
+                Console.WriteLine($"Export failed: can't open file {importParameters[filePath]}");
+                return;
+            }
+
+            using var fileStream = new FileStream(importParameters[filePath], FileMode.Open);
+            var fileCabinetServiceSnapshot = new FileCabinetServiceSnapshot(
+                new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()));
+            if (importParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+            {
+                fileCabinetServiceSnapshot.LoadFromCsv(new StreamReader(fileStream));
+            }
+            else if (importParameters[fileType].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
+                fileCabinetServiceSnapshot.LoadFromXml(fileStream);
+            }
+            else
+            {
+                Console.WriteLine("Wrong type format!");
+                return;
+            }
+
+            var importedAmount = fileCabinetService.Restore(fileCabinetServiceSnapshot, validator);
+            Console.WriteLine($"{importedAmount} records were imported from {importParameters[filePath]}.");
         }
 
         private static RecordWithoutId ReadRecordFromConsole()

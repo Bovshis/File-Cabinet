@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using FileCabinetApp.Records;
+using FileCabinetApp.Validators;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// File cabinet.
@@ -59,5 +61,13 @@ namespace FileCabinetApp
         /// </summary>
         /// <returns>FileCabinetService snapshot.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot();
+
+        /// <summary>
+        /// Restore records.
+        /// </summary>
+        /// <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+        /// <param name="validator">for validating data.</param>
+        /// <returns>amount imported records.</returns>
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator);
     }
 }
