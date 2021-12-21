@@ -5,9 +5,10 @@ using System.IO;
 using System.Text;
 using FileCabinetApp.Constants;
 using FileCabinetApp.Records;
+using FileCabinetApp.Validators;
 using FileCabinetApp.Writers;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// File cabinet with file storage.

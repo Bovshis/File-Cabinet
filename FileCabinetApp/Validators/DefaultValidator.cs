@@ -1,6 +1,7 @@
 ﻿using System;
+using FileCabinetApp.Records;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Validators
 {
     /// <summary>
     /// Class for validation parameters (default validation).

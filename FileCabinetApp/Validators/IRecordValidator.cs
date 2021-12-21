@@ -1,9 +1,10 @@
 ﻿using System;
+using FileCabinetApp.Records;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Validators
 {
     /// <summary>
-    /// Inteface for validation parameters.
+    /// Validation parameters.
     /// </summary>
     public interface IRecordValidator
     {

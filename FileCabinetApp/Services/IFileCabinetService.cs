@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using FileCabinetApp.Records;
+using FileCabinetApp.Validators;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// File cabinet.

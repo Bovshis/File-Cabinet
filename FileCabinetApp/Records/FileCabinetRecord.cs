@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Xml.Serialization;
+using FileCabinetApp.Converters;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Records
 {
     /// <summary>
     /// Record in the file cabinet.

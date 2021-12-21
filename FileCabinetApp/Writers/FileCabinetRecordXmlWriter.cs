@@ -1,6 +1,7 @@
 ﻿using System.Xml;
+using FileCabinetApp.Records;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Writers
 {
     /// <summary>
     /// Xml Writer for FileCabinetService.

@@ -4,6 +4,8 @@ namespace FileCabinetGenerator
 {
     public class Generator
     {
+        private const string AllowedChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
         private string _formatType;
         private string _fileName;
         private int _amount;
@@ -63,18 +65,17 @@ namespace FileCabinetGenerator
             xmlSerializer.Serialize(fStream, records);
         }
 
-        private FileCabinetRecord GenerateFileCabinetRecord(int i)
+        private static FileCabinetRecord GenerateFileCabinetRecord(int i)
         {
-            var allowedChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
             return new FileCabinetRecord()
             {
                 Id = i,
-                FirstName = RandomStrings(allowedChars, 2, 60),
-                LastName = RandomStrings(allowedChars, 2, 60),
+                FirstName = RandomStrings(AllowedChars, 2, 60),
+                LastName = RandomStrings(AllowedChars, 2, 60),
                 DateOfBirth = RandomDate(new DateTime(1950, 1, 1), DateTime.Now),
                 Height = (short)new Random().Next(0, 1000),
                 Weight = new Random().Next(0, 1000),
-                FavoriteCharacter = RandomChar(allowedChars),
+                FavoriteCharacter = RandomChar(AllowedChars),
             };
         }
 

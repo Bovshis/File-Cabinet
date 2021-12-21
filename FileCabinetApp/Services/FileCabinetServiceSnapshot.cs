@@ -1,9 +1,11 @@
-﻿using FileCabinetApp.Readers;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
+using FileCabinetApp.Readers;
+using FileCabinetApp.Records;
+using FileCabinetApp.Writers;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Services
 {
     /// <summary>
     /// Snapshot FileCabinetService.
