@@ -35,6 +35,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
         private static readonly string[][] helpMessages = new string[][]
@@ -48,6 +49,8 @@ namespace FileCabinetApp
             new string[] { "find", "find records", "The 'find' command find records." },
             new string[] { "export", "export records", "The 'export' command export records." },
             new string[] { "import", "import records", "The 'import' command import records." },
+            new string[] { "remove", "remove record", "The 'remove' command remove record." },
+            new string[] { "purge", "purge records", "The 'purge' command purge records." },
         };
 
         private static IRecordValidator validator = new DefaultValidator();
@@ -239,17 +242,15 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
-            var idParsed = int.TryParse(parameters, out var id);
+            var isParsed = int.TryParse(parameters, out var id);
 
-            if (!idParsed || id < 0 || id > fileCabinetService.GetStat())
+            if (!isParsed || id < 0)
             {
                 Console.WriteLine($"#{id} record is not found.");
                 return;
             }
 
             fileCabinetService.EditRecord(id, ReadRecordFromConsole());
-
-            Console.WriteLine($"Record #{id} is updated");
         }
 
         private static void Find(string parameters)
@@ -392,7 +393,18 @@ namespace FileCabinetApp
             }
 
             fileCabinetService.Remove(id);
-            Console.WriteLine($"Record #{parameters} is removed.");
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (fileCabinetService is FileCabinetFilesystemService service)
+            {
+                service.Purge();
+            }
+            else
+            {
+                Console.WriteLine("It is not Filesystem storage");
+            }
         }
 
         private static RecordWithoutId ReadRecordFromConsole()

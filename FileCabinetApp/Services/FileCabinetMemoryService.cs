@@ -55,14 +55,22 @@ namespace FileCabinetApp.Services
         /// <param name="recordWithoutId">record data.</param>
         public void EditRecord(int id, RecordWithoutId recordWithoutId)
         {
-            var oldRecord = this.list[id - 1];
-            this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
-            this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
-            this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
+            var position = this.list.FindIndex(x => x.Id == id);
+            if (position != -1)
+            {
+                var oldRecord = this.list[id - 1];
+                this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
+                this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
+                this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
 
-            var record = new FileCabinetRecord(id, recordWithoutId);
-            this.list[id - 1] = record;
-            this.AddElementToDictionaries(record);
+                var record = new FileCabinetRecord(id, recordWithoutId);
+                this.list[id - 1] = record;
+                this.AddElementToDictionaries(record);
+            }
+            else
+            {
+                Console.WriteLine($"#{id} record is not found.");
+            }
         }
 
         /// <summary>

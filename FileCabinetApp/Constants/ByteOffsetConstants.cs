@@ -7,6 +7,7 @@
     {
         public const ushort NameCapacity = 120;
         public const ushort DateCapacity = 12;
+
         public const ushort StatusOffset = 0;
         public const ushort IdOffset = 2;
         public const ushort FirstNameOffset = 6;

@@ -322,6 +322,11 @@
             </summary>
             <param name="id">id removed record.</param>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Purge">
+            <summary>
+            Purge deleted records.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
             <summary>
             File cabinet with memory storage.
