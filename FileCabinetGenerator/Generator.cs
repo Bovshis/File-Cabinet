@@ -32,10 +32,12 @@ namespace FileCabinetGenerator
             if (_formatType.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
             {
                 GenerateToCsv();
+                Console.WriteLine("generate data to csv");
             }
             else if (_formatType.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
             {
                 GenerateToXml();
+                Console.WriteLine("generate data to xml");
             }
         }
 

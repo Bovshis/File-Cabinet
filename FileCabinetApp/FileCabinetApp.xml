@@ -103,6 +103,13 @@
             <param name="id">record id.</param>
             <param name="recordWithoutId">record data.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
+            Create FileCabinetRecord from RecordWithoutId.
+            </summary>
+            <param name="record">string tht contains record.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetRecord.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecord"/> class.
@@ -310,6 +317,12 @@
             </summary>
             <returns>FileCabinetService snapshot.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,FileCabinetApp.IRecordValidator)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
             Snapshot FileCabinetService.
@@ -320,6 +333,11 @@
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
             </summary>
             <param name="records">Records for initializing.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetServiceSnapshot.Records">
+            <summary>
+            Gets records.
+            </summary>
         </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
@@ -332,6 +350,12 @@
             Save records to xml file.
             </summary>
             <param name="streamWriter">Stream writer to write.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>
+            load data from csv file.
+            </summary>
+            <param name="streamReader">file for reading.</param>
         </member>
         <member name="T:FileCabinetApp.IFileCabinetService">
             <summary>
@@ -390,6 +414,13 @@
             Make snapshot.
             </summary>
             <returns>FileCabinetService snapshot.</returns>
+        </member>
+        <member name="M:FileCabinetApp.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,FileCabinetApp.IRecordValidator)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+            <param name="validator">for validating data.</param>
         </member>
         <member name="T:FileCabinetApp.CustomValidator">
             <summary>

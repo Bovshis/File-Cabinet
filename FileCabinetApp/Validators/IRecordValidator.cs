@@ -18,5 +18,7 @@ namespace FileCabinetApp
         Tuple<bool, string> ValidateWeight(decimal weight);
 
         Tuple<bool, string> ValidateFavoriteCharacter(char favoriteCharacter);
+
+        bool ValidateRecord(FileCabinetRecord record);
     }
 }

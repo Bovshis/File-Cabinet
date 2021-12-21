@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace FileCabinetApp
 {
@@ -27,6 +31,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -39,6 +44,7 @@ namespace FileCabinetApp
             new string[] { "edit", "edit record", "The 'edit' command edit record." },
             new string[] { "find", "find records", "The 'find' command find records." },
             new string[] { "export", "export records", "The 'export' command export records." },
+            new string[] { "import", "import records", "The 'import' command import records." },
         };
 
         private static IRecordValidator validator = new DefaultValidator();
@@ -323,6 +329,46 @@ namespace FileCabinetApp
             {
                 fileCabinetService.MakeSnapshot().SaveToXml(streamWriter);
                 Console.WriteLine($"All records are exported to file {exportParameters[filePath]}");
+            }
+            else
+            {
+                Console.WriteLine("Wrong type format!");
+                return;
+            }
+        }
+
+        private static void Import(string parameters)
+        {
+            var importParameters = parameters.Split(' ');
+            const int amountParameters = 2;
+            if (importParameters.Length != amountParameters)
+            {
+                Console.WriteLine("Parameters amount is wrong");
+                return;
+            }
+
+            const int fileType = 0;
+            const int filePath = 1;
+
+            // check file
+            var fileInfo = new FileInfo(importParameters[filePath]);
+            if (!Directory.Exists(fileInfo.DirectoryName))
+            {
+                Console.WriteLine($"Export failed: can't open file {importParameters[filePath]}");
+                return;
+            }
+
+            var fileStream = new FileStream(importParameters[filePath], FileMode.Open);
+            if (importParameters[fileType].Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var fileCabinetServiceSnapshot = new FileCabinetServiceSnapshot(
+                    new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>()));
+                fileCabinetServiceSnapshot.LoadFromCsv(new StreamReader(fileStream));
+                var importedAmount = fileCabinetService.Restore(fileCabinetServiceSnapshot, validator);
+                Console.WriteLine($"{importedAmount} records were imported from {importParameters[filePath]}.");
+            }
+            else if (importParameters[fileType].Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
             }
             else
             {

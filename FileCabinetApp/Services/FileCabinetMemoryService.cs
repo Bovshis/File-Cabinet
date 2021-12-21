@@ -24,9 +24,7 @@ namespace FileCabinetApp
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
             var record = new FileCabinetRecord(this.list.Count + 1, recordWithoutId);
-            this.list.Add(record);
-            this.AddElementToDictionaries(record);
-
+            this.AddRecord(record);
             return record.Id;
         }
 
@@ -122,6 +120,31 @@ namespace FileCabinetApp
             return new FileCabinetServiceSnapshot(this.GetRecords());
         }
 
+        /// <summary>
+        /// Restore records.
+        /// </summary>
+        /// <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+        /// <param name="validator">for validating data.</param>
+        /// <returns>amount imported records.</returns>
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator)
+        {
+            var amount = 0;
+            foreach (var record in fileCabinetServiceSnapshot.Records)
+            {
+                if (validator.ValidateRecord(record))
+                {
+                    amount++;
+                    this.AddRecord(record);
+                }
+                else
+                {
+                    Console.WriteLine($"Validation failed: {record.Id}.");
+                }
+            }
+
+            return amount;
+        }
+
         private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
         {
             if (dictionary.ContainsKey(key))
@@ -132,6 +155,12 @@ namespace FileCabinetApp
             {
                 dictionary[key] = new List<FileCabinetRecord>() { record };
             }
+        }
+
+        private void AddRecord(FileCabinetRecord record)
+        {
+            this.list.Add(record);
+            this.AddElementToDictionaries(record);
         }
 
         private void AddElementToDictionaries(FileCabinetRecord record)
