@@ -23,7 +23,7 @@ namespace FileCabinetApp
 
         private static bool isRunning = true;
 
-        private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
+        private static readonly Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
@@ -34,9 +34,10 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
         };
 
-        private static string[][] helpMessages = new string[][]
+        private static readonly string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
@@ -379,6 +380,19 @@ namespace FileCabinetApp
 
             var importedAmount = fileCabinetService.Restore(fileCabinetServiceSnapshot, validator);
             Console.WriteLine($"{importedAmount} records were imported from {importParameters[filePath]}.");
+        }
+
+        private static void Remove(string parameters)
+        {
+            var isParsed = int.TryParse(parameters, out var id);
+            if (!isParsed)
+            {
+                Console.WriteLine($"Record #{parameters} doesn't exists.");
+                return;
+            }
+
+            fileCabinetService.Remove(id);
+            Console.WriteLine($"Record #{parameters} is removed.");
         }
 
         private static RecordWithoutId ReadRecordFromConsole()

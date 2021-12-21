@@ -147,7 +147,18 @@ namespace FileCabinetApp.Services
             return amount;
         }
 
-        private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, Dictionary<T, List<FileCabinetRecord>> dictionary)
+        /// <summary>
+        /// remove record.
+        /// </summary>
+        /// <param name="id">id removed record.</param>
+        public void Remove(int id)
+        {
+            var record = this.list.Find(x => x.Id == id);
+            this.list.Remove(record);
+            this.RemoveElementFromDictionaries(record);
+        }
+
+        private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, IDictionary<T, List<FileCabinetRecord>> dictionary)
         {
             if (dictionary.ContainsKey(key))
             {
@@ -170,6 +181,13 @@ namespace FileCabinetApp.Services
             AddElementToDictionary(record.FirstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
             AddElementToDictionary(record.LastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
             AddElementToDictionary(record.DateOfBirth, record, this.dateOfBirthDictionary);
+        }
+
+        private void RemoveElementFromDictionaries(FileCabinetRecord record)
+        {
+            this.firstNameDictionary[record.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(record);
+            this.lastNameDictionary[record.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(record);
+            this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
         }
     }
 }

@@ -229,10 +229,15 @@ namespace FileCabinetApp.Services
         }
 
         /// <summary>
-        /// Add record to file.
+        /// remove record.
         /// </summary>
-        /// <param name="record">record for writing.</param>
-        public void AddRecord(FileCabinetRecord record)
+        /// <param name="id">id removed record.</param>
+        public void Remove(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddRecord(FileCabinetRecord record)
         {
             var byteRecord = new ByteRecord(record);
             var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
