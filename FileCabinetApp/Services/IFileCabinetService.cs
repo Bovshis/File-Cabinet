@@ -69,5 +69,11 @@ namespace FileCabinetApp.Services
         /// <param name="validator">for validating data.</param>
         /// <returns>amount imported records.</returns>
         public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator);
+
+        /// <summary>
+        /// remove record.
+        /// </summary>
+        /// <param name="id">id removed record.</param>
+        public void Remove(int id);
     }
 }

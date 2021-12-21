@@ -2,6 +2,7 @@
 using System.Text;
 using FileCabinetApp.Constants;
 using FileCabinetApp.Converters;
+using FileCabinetApp.Enums;
 
 namespace FileCabinetApp.Records
 {
@@ -16,8 +17,7 @@ namespace FileCabinetApp.Records
         /// <param name="fileCabinetRecord">file cabinet record for byte writing.</param>
         public ByteRecord(FileCabinetRecord fileCabinetRecord)
         {
-            const short status = 1;
-            this.Status = BitConverter.GetBytes(status);
+            this.Status = BitConverter.GetBytes((short)ByteRecordStatus.Normal);
             this.Id = BitConverter.GetBytes(fileCabinetRecord.Id);
             this.FirstName = Converter.StringToBytes(fileCabinetRecord.FirstName, ByteOffsetConstants.NameCapacity);
             this.LastName = Converter.StringToBytes(fileCabinetRecord.LastName, ByteOffsetConstants.NameCapacity);

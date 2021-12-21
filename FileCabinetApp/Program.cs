@@ -23,7 +23,7 @@ namespace FileCabinetApp
 
         private static bool isRunning = true;
 
-        private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
+        private static readonly Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
@@ -34,9 +34,11 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
-        private static string[][] helpMessages = new string[][]
+        private static readonly string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
@@ -47,6 +49,8 @@ namespace FileCabinetApp
             new string[] { "find", "find records", "The 'find' command find records." },
             new string[] { "export", "export records", "The 'export' command export records." },
             new string[] { "import", "import records", "The 'import' command import records." },
+            new string[] { "remove", "remove record", "The 'remove' command remove record." },
+            new string[] { "purge", "purge records", "The 'purge' command purge records." },
         };
 
         private static IRecordValidator validator = new DefaultValidator();
@@ -238,17 +242,15 @@ namespace FileCabinetApp
 
         private static void Edit(string parameters)
         {
-            var idParsed = int.TryParse(parameters, out var id);
+            var isParsed = int.TryParse(parameters, out var id);
 
-            if (!idParsed || id < 0 || id > fileCabinetService.GetStat())
+            if (!isParsed || id < 0)
             {
                 Console.WriteLine($"#{id} record is not found.");
                 return;
             }
 
             fileCabinetService.EditRecord(id, ReadRecordFromConsole());
-
-            Console.WriteLine($"Record #{id} is updated");
         }
 
         private static void Find(string parameters)
@@ -379,6 +381,30 @@ namespace FileCabinetApp
 
             var importedAmount = fileCabinetService.Restore(fileCabinetServiceSnapshot, validator);
             Console.WriteLine($"{importedAmount} records were imported from {importParameters[filePath]}.");
+        }
+
+        private static void Remove(string parameters)
+        {
+            var isParsed = int.TryParse(parameters, out var id);
+            if (!isParsed)
+            {
+                Console.WriteLine($"Record #{parameters} doesn't exists.");
+                return;
+            }
+
+            fileCabinetService.Remove(id);
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (fileCabinetService is FileCabinetFilesystemService service)
+            {
+                service.Purge();
+            }
+            else
+            {
+                Console.WriteLine("It is not Filesystem storage");
+            }
         }
 
         private static RecordWithoutId ReadRecordFromConsole()
