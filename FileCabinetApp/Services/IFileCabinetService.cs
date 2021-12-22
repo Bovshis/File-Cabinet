@@ -10,6 +10,12 @@ namespace FileCabinetApp.Services
     public interface IFileCabinetService
     {
         /// <summary>
+        /// Get validator.
+        /// </summary>
+        /// <returns>validator.</returns>
+        public IRecordValidator GetValidator();
+
+        /// <summary>
         /// Create record.
         /// </summary>
         /// <param name="recordWithoutId">record data.</param>
@@ -33,7 +39,8 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="id">number of the edited record.</param>
         /// <param name="recordWithoutId">record data.</param>
-        public void EditRecord(int id, RecordWithoutId recordWithoutId);
+        /// <returns>is record edited.</returns>
+        public bool EditRecord(int id, RecordWithoutId recordWithoutId);
 
         /// <summary>
         /// Find list of the records by first name.
@@ -66,9 +73,8 @@ namespace FileCabinetApp.Services
         /// Restore records.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
-        /// <param name="validator">for validating data.</param>
         /// <returns>amount imported records.</returns>
-        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator);
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
 
         /// <summary>
         /// remove record.

@@ -18,6 +18,26 @@ namespace FileCabinetApp.Services
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new ();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new ();
 
+        private readonly IRecordValidator validator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
+        /// </summary>
+        /// <param name="validator">validator.</param>
+        public FileCabinetMemoryService(IRecordValidator validator)
+        {
+            this.validator = validator;
+        }
+
+        /// <summary>
+        /// Get validator.
+        /// </summary>
+        /// <returns>validator.</returns>
+        public IRecordValidator GetValidator()
+        {
+            return this.validator;
+        }
+
         /// <summary>
         /// Create record, adds to list and dictionaries.
         /// </summary>
@@ -53,24 +73,24 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="id">number of the edited record.</param>
         /// <param name="recordWithoutId">record data.</param>
-        public void EditRecord(int id, RecordWithoutId recordWithoutId)
+        /// <returns>is record edited.</returns>
+        public bool EditRecord(int id, RecordWithoutId recordWithoutId)
         {
             var position = this.list.FindIndex(x => x.Id == id);
             if (position != -1)
             {
-                var oldRecord = this.list[id - 1];
+                var oldRecord = this.list[position];
                 this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
                 this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
                 this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
 
                 var record = new FileCabinetRecord(id, recordWithoutId);
-                this.list[id - 1] = record;
+                this.list[position] = record;
                 this.AddElementToDictionaries(record);
+                return true;
             }
-            else
-            {
-                Console.WriteLine($"#{id} record is not found.");
-            }
+
+            return false;
         }
 
         /// <summary>
@@ -134,14 +154,13 @@ namespace FileCabinetApp.Services
         /// Restore records.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
-        /// <param name="validator">for validating data.</param>
         /// <returns>amount imported records.</returns>
-        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator)
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
             var amount = 0;
             foreach (var record in fileCabinetServiceSnapshot.Records)
             {
-                if (validator.ValidateRecord(record))
+                if (this.validator.ValidateRecord(record))
                 {
                     amount++;
                     this.AddRecord(record);
@@ -162,8 +181,17 @@ namespace FileCabinetApp.Services
         public void Remove(int id)
         {
             var record = this.list.Find(x => x.Id == id);
-            this.list.Remove(record);
-            this.RemoveElementFromDictionaries(record);
+
+            if (record != null)
+            {
+                this.list.Remove(record);
+                this.RemoveElementFromDictionaries(record);
+                Console.WriteLine($"Record #{id} is removed");
+            }
+            else
+            {
+                Console.WriteLine($"Record #{id} doesn't consist");
+            }
         }
 
         private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, IDictionary<T, List<FileCabinetRecord>> dictionary)
