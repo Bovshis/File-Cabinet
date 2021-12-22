@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using FileCabinetApp.Printers;
+using FileCabinetApp.Records;
 using FileCabinetApp.Services;
 
 namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
 {
     public class FindCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IRecordPrinter printer;
+        private readonly Action<IEnumerable<FileCabinetRecord>> print;
 
-        public FindCommandHandler(IFileCabinetService service, IRecordPrinter printer)
+        public FindCommandHandler(IFileCabinetService service, Action<IEnumerable<FileCabinetRecord>> print)
             : base(service)
         {
-            this.printer = printer;
+            this.print = print;
         }
 
         public override object Handle(AppCommandRequest request)
@@ -35,7 +37,7 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
                     return $"There is no record for '{request.Parameters}' parameters.\n";
                 }
 
-                this.printer.Print(records);
+                this.print(records);
                 return string.Empty;
             }
 

@@ -169,9 +169,9 @@ namespace FileCabinetApp
             var exitHandler = new ExitCommandHandler(RunOrExit);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var createHandler = new CreateCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService, new DefaultRecordPrinter());
+            var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter.Print);
             var editHandler = new EditCommandHandler(fileCabinetService);
-            var findHandler = new FindCommandHandler(fileCabinetService, new DefaultRecordPrinter());
+            var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter.Print);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);

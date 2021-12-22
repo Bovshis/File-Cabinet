@@ -4,9 +4,9 @@ using FileCabinetApp.Records;
 
 namespace FileCabinetApp.Printers
 {
-    public class DefaultRecordPrinter : IRecordPrinter
+    public static class DefaultRecordPrinter
     {
-        public void Print(IEnumerable<FileCabinetRecord> records)
+        public static void Print(IEnumerable<FileCabinetRecord> records)
         {
             foreach (var fileCabinetRecord in records)
             {
