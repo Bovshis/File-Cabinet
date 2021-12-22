@@ -5,9 +5,7 @@ using System.Globalization;
 using System.IO;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.CommandHandlers.ConcreteHandlers;
-using FileCabinetApp.Converters;
 using FileCabinetApp.Printers;
-using FileCabinetApp.Records;
 using FileCabinetApp.Services;
 using FileCabinetApp.Validators;
 
@@ -65,11 +63,6 @@ namespace FileCabinetApp
             while (isRunning);
         }
 
-        private static void RunOrExit(bool flag)
-        {
-            isRunning = flag;
-        }
-
         private static void SetSettings()
         {
             var isCorrectSettings = false;
@@ -94,7 +87,7 @@ namespace FileCabinetApp
                     else
                     {
                         Console.WriteLine("Using default validation rules.");
-                        validator = new DefaultValidator();
+                        validator = new ValidatorBuilder().CreateDefault();
                     }
 
                     var storageModeIndex = Array.FindIndex(settings, x => x == "--storage" || x == "-s") + 1;
@@ -124,13 +117,13 @@ namespace FileCabinetApp
             if (validationMode.Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
             {
                 Console.WriteLine("Using default validation rules.");
-                return new DefaultValidator();
+                return new ValidatorBuilder().CreateDefault();
             }
 
             if (validationMode.Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
             {
                 Console.WriteLine("Using custom validation rules.");
-                return new CustomValidator();
+                return new ValidatorBuilder().CreateCustom();
             }
 
             throw new ArgumentException($"Bad validation rules command");
@@ -182,6 +175,11 @@ namespace FileCabinetApp
                 .SetNext(importHandler).SetNext(removeHandler).SetNext(purgeHandler);
 
             return helpHandler;
+        }
+
+        private static void RunOrExit(bool flag)
+        {
+            isRunning = flag;
         }
     }
 }

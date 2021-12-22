@@ -212,7 +212,7 @@ namespace FileCabinetApp.Services
             var amount = 0;
             foreach (var record in fileCabinetServiceSnapshot.Records)
             {
-                if (this.validator.ValidateRecord(record))
+                if (this.validator.ValidateParameter(record).Item1)
                 {
                     amount++;
                     this.AddRecord(record);

@@ -2,6 +2,7 @@
 using FileCabinetApp.Converters;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
+using FileCabinetApp.Validators.ConcreteValidators;
 
 namespace FileCabinetApp.Readers
 {
@@ -10,28 +11,34 @@ namespace FileCabinetApp.Readers
         public static RecordWithoutId ReadRecordFromConsole(IRecordValidator validator)
         {
             var recordWithoutId = new RecordWithoutId();
-            Console.Write("First name: ");
-            recordWithoutId.FirstName = ReadInput(Converter.ConvertString, validator.ValidateFirstName);
 
-            Console.Write("Last name: ");
-            recordWithoutId.LastName = ReadInput(Converter.ConvertString, validator.ValidateLastName);
+            do
+            {
+                Console.WriteLine("Write correct data: ");
+                Console.Write("First name: ");
+                recordWithoutId.FirstName = ReadInput(Converter.ConvertString);
 
-            Console.Write("Date of birth: ");
-            recordWithoutId.DateOfBirth = ReadInput(Converter.ConvertDate, validator.ValidateDateOfBirth);
+                Console.Write("Last name: ");
+                recordWithoutId.LastName = ReadInput(Converter.ConvertString);
 
-            Console.Write("Height: ");
-            recordWithoutId.Height = ReadInput(Converter.ConvertShort, validator.ValidateHeight);
+                Console.Write("Date of birth: ");
+                recordWithoutId.DateOfBirth = ReadInput(Converter.ConvertDate);
 
-            Console.Write("Weight: ");
-            recordWithoutId.Weight = ReadInput(Converter.ConvertDecimal, validator.ValidateWeight);
+                Console.Write("Height: ");
+                recordWithoutId.Height = ReadInput(Converter.ConvertShort);
 
-            Console.Write("Favorite Character: ");
-            recordWithoutId.FavoriteCharacter = ReadInput(Converter.ConvertChar, validator.ValidateFavoriteCharacter);
+                Console.Write("Weight: ");
+                recordWithoutId.Weight = ReadInput(Converter.ConvertDecimal);
+
+                Console.Write("Favorite Character: ");
+                recordWithoutId.FavoriteCharacter = ReadInput(Converter.ConvertChar);
+            }
+            while (!validator.ValidateParameter(new FileCabinetRecord(1, recordWithoutId)).Item1);
 
             return recordWithoutId;
         }
 
-        public static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
+        public static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter)
         {
             do
             {
@@ -46,16 +53,7 @@ namespace FileCabinetApp.Readers
                     continue;
                 }
 
-                value = conversionResult.Item3;
-
-                var validationResult = validator(value);
-                if (!validationResult.Item1)
-                {
-                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
-                    continue;
-                }
-
-                return value;
+                return conversionResult.Item3;
             }
             while (true);
         }

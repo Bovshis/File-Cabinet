@@ -536,16 +536,6 @@
             </summary>
             <param name="id">id removed record.</param>
         </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidator">
-            <summary>
-            Class for validation parameters (custom validation).
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidator">
-            <summary>
-            Class for validation parameters (default validation).
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.Validators.IRecordValidator">
             <summary>
             Validation parameters.
