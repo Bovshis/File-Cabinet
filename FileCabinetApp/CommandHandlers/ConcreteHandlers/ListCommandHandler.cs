@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Text;
+using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
 {
     public class ListCommandHandler : ServiceCommandHandlerBase
     {
-        public ListCommandHandler(IFileCabinetService service)
+        private readonly IRecordPrinter printer;
+
+        public ListCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            this.printer = printer;
         }
 
         public override object Handle(AppCommandRequest request)
@@ -16,14 +21,8 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
             if (request.Command.Equals("list", StringComparison.InvariantCultureIgnoreCase))
             {
                 var recordsList = this.service.GetRecords();
-                var sb = new StringBuilder();
-
-                foreach (var record in recordsList)
-                {
-                    sb.Append(record).Append('\n');
-                }
-
-                return sb.ToString();
+                this.printer.Print(recordsList);
+                return string.Empty;
             }
 
             return base.Handle(request);

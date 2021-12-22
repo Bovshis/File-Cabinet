@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Globalization;
-using System.Text;
+using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
 
 namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
 {
     public class FindCommandHandler : ServiceCommandHandlerBase
     {
-        public FindCommandHandler(IFileCabinetService service)
+        private readonly IRecordPrinter printer;
+
+        public FindCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            this.printer = printer;
         }
 
         public override object Handle(AppCommandRequest request)
@@ -32,13 +35,8 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
                     return $"There is no record for '{request.Parameters}' parameters.\n";
                 }
 
-                var sb = new StringBuilder();
-                foreach (var record in records)
-                {
-                    sb.Append(record).Append('\n');
-                }
-
-                return sb.ToString();
+                this.printer.Print(records);
+                return string.Empty;
             }
 
             return base.Handle(request);
