@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using FileCabinetApp.Readers;
 using FileCabinetApp.Validators.ConcreteValidators;
+using FileCabinetApp.Validators.Rules;
 
 namespace FileCabinetApp.Validators
 {
     public class ValidatorBuilder
     {
         private readonly List<IRecordValidator> validators = new ();
+
+        private readonly ValidationRules rules = ValidationRulesReader.ReadRulesFromConfig();
 
         public ValidatorBuilder ValidateFirstName(int minLength, int maxLength)
         {
@@ -45,16 +49,22 @@ namespace FileCabinetApp.Validators
 
         public CompositeValidator CreateDefault()
         {
-            return this.ValidateFirstName(2, 60).ValidateLastName(2, 60)
-                .ValidateDateOfBirth(new DateTime(1950, 1, 1), DateTime.Now).
-                ValidateHeight(0, 400).ValidateWeight(0, 1000).Create();
+            return this.ValidateFirstName(this.rules.Default.FirstName.MinValue, this.rules.Default.FirstName.MaxValue)
+                .ValidateLastName(this.rules.Default.LastName.MinValue, this.rules.Default.LastName.MaxValue)
+                .ValidateDateOfBirth(this.rules.Default.DateOfBirth.MinValue, this.rules.Default.DateOfBirth.MaxValue)
+                .ValidateHeight(this.rules.Default.Height.MinValue, this.rules.Default.Height.MaxValue)
+                .ValidateWeight(this.rules.Default.Weight.MinValue, this.rules.Default.Weight.MaxValue)
+                .Create();
         }
 
         public CompositeValidator CreateCustom()
         {
-            return this.ValidateFirstName(1, 20).ValidateLastName(1, 20)
-                .ValidateDateOfBirth(new DateTime(1900, 1, 1), new DateTime(2050, 1, 1)).
-                ValidateHeight(0, 300).ValidateWeight(0, 200).Create();
+            return this.ValidateFirstName(this.rules.Custom.FirstName.MinValue, this.rules.Custom.FirstName.MaxValue)
+                .ValidateLastName(this.rules.Custom.LastName.MinValue, this.rules.Custom.LastName.MaxValue)
+                .ValidateDateOfBirth(this.rules.Custom.DateOfBirth.MinValue, this.rules.Custom.DateOfBirth.MaxValue)
+                .ValidateHeight(this.rules.Custom.Height.MinValue, this.rules.Custom.Height.MaxValue)
+                .ValidateWeight(this.rules.Custom.Weight.MinValue, this.rules.Custom.Weight.MaxValue)
+                .Create();
         }
     }
 }
