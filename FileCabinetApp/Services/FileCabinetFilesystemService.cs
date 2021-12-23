@@ -21,13 +21,26 @@ namespace FileCabinetApp.Services
         private int recordsAmount = 0;
         private int deletedRecordsAmount = 0;
 
+        private readonly IRecordValidator validator;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
         /// </summary>
         /// <param name="fileStream">file stream to write.</param>
-        public FileCabinetFilesystemService(FileStream fileStream)
+        /// <param name="validator">validator.</param>
+        public FileCabinetFilesystemService(FileStream fileStream, IRecordValidator validator)
         {
             this.fileStream = fileStream;
+            this.validator = validator;
+        }
+
+        /// <summary>
+        /// Get validator.
+        /// </summary>
+        /// <returns>validator.</returns>
+        public IRecordValidator GetValidator()
+        {
+            return this.validator;
         }
 
         /// <summary>
@@ -47,19 +60,18 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="id">number of the edited record.</param>
         /// <param name="recordWithoutId">record data.</param>
-        public void EditRecord(int id, RecordWithoutId recordWithoutId)
+        /// <returns>is record edited.</returns>
+        public bool EditRecord(int id, RecordWithoutId recordWithoutId)
         {
             if (this.MoveCursorToRecord(id))
             {
                 var byteRecord = new ByteRecord(new FileCabinetRecord(id, recordWithoutId));
                 var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
                 byteWriter.Write(byteRecord);
-                Console.WriteLine($"Record #{id} is edited");
+                return true;
             }
-            else
-            {
-                Console.WriteLine($"Record #{id} is not found");
-            }
+
+            return false;
         }
 
         /// <summary>
@@ -194,14 +206,13 @@ namespace FileCabinetApp.Services
         /// Restore records.
         /// </summary>
         /// <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
-        /// <param name="validator">for validating data.</param>
         /// <returns>amount imported records.</returns>
-        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot, IRecordValidator validator)
+        public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
             var amount = 0;
             foreach (var record in fileCabinetServiceSnapshot.Records)
             {
-                if (validator.ValidateRecord(record))
+                if (this.validator.ValidateParameter(record).Item1)
                 {
                     amount++;
                     this.AddRecord(record);

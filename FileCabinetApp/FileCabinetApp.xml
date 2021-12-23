@@ -249,11 +249,18 @@
             File cabinet with file storage.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.#ctor(System.IO.FileStream)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.#ctor(System.IO.FileStream,FileCabinetApp.Validators.IRecordValidator)">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetFilesystemService"/> class.
             </summary>
             <param name="fileStream">file stream to write.</param>
+            <param name="validator">validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetValidator">
+            <summary>
+            Get validator.
+            </summary>
+            <returns>validator.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.Records.RecordWithoutId)">
             <summary>
@@ -268,6 +275,7 @@
             </summary>
             <param name="id">number of the edited record.</param>
             <param name="recordWithoutId">record data.</param>
+            <returns>is record edited.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
             <summary>
@@ -308,12 +316,11 @@
             </summary>
             <returns>FileCabinetService snapshot.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Restore(FileCabinetApp.Services.FileCabinetServiceSnapshot,FileCabinetApp.Validators.IRecordValidator)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Restore(FileCabinetApp.Services.FileCabinetServiceSnapshot)">
             <summary>
             Restore records.
             </summary>
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
-            <param name="validator">for validating data.</param>
             <returns>amount imported records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Remove(System.Int32)">
@@ -331,6 +338,18 @@
             <summary>
             File cabinet with memory storage.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.#ctor(FileCabinetApp.Validators.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetMemoryService"/> class.
+            </summary>
+            <param name="validator">validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetValidator">
+            <summary>
+            Get validator.
+            </summary>
+            <returns>validator.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.CreateRecord(FileCabinetApp.Records.RecordWithoutId)">
             <summary>
@@ -357,6 +376,7 @@
             </summary>
             <param name="id">number of the edited record.</param>
             <param name="recordWithoutId">record data.</param>
+            <returns>is record edited.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByFirstName(System.String)">
             <summary>
@@ -385,12 +405,11 @@
             </summary>
             <returns>FileCabinetService snapshot.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Restore(FileCabinetApp.Services.FileCabinetServiceSnapshot,FileCabinetApp.Validators.IRecordValidator)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Restore(FileCabinetApp.Services.FileCabinetServiceSnapshot)">
             <summary>
             Restore records.
             </summary>
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
-            <param name="validator">for validating data.</param>
             <returns>amount imported records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Remove(System.Int32)">
@@ -444,6 +463,12 @@
             File cabinet.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetValidator">
+            <summary>
+            Get validator.
+            </summary>
+            <returns>validator.</returns>
+        </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.Records.RecordWithoutId)">
             <summary>
             Create record.
@@ -469,6 +494,7 @@
             </summary>
             <param name="id">number of the edited record.</param>
             <param name="recordWithoutId">record data.</param>
+            <returns>is record edited.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
@@ -497,12 +523,11 @@
             </summary>
             <returns>FileCabinetService snapshot.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.Services.FileCabinetServiceSnapshot,FileCabinetApp.Validators.IRecordValidator)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.Services.FileCabinetServiceSnapshot)">
             <summary>
             Restore records.
             </summary>
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
-            <param name="validator">for validating data.</param>
             <returns>amount imported records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.Remove(System.Int32)">
@@ -510,16 +535,6 @@
             remove record.
             </summary>
             <param name="id">id removed record.</param>
-        </member>
-        <member name="T:FileCabinetApp.Validators.CustomValidator">
-            <summary>
-            Class for validation parameters (custom validation).
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultValidator">
-            <summary>
-            Class for validation parameters (default validation).
-            </summary>
         </member>
         <member name="T:FileCabinetApp.Validators.IRecordValidator">
             <summary>
