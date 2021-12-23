@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.IO;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.CommandHandlers.ConcreteHandlers;
@@ -28,39 +25,49 @@ namespace FileCabinetApp
         public static void Main()
         {
             SetSettings();
-
-            Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
-            Console.WriteLine(Program.HintMessage);
+            Console.WriteLine($"File Cabinet Application, developed by {DeveloperName}");
+            Console.WriteLine(HintMessage);
             Console.WriteLine();
 
             var commands = CreateCommandHandlers();
             do
             {
                 Console.Write("> ");
-                var inputs = Console.ReadLine()?.Split(' ', 2);
-
-                const int commandIndex = 0;
-                var command = inputs?[commandIndex];
-                if (string.IsNullOrEmpty(command))
+                var appCommandRequest = ReadCommandRequest();
+                if (appCommandRequest == null)
                 {
-                    Console.WriteLine(Program.HintMessage);
                     continue;
                 }
 
-                const int parametersIndex = 1;
-                var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
-
-                var result = commands.Handle(new AppCommandRequest(command, parameters));
+                var result = commands.Handle(appCommandRequest);
                 if (result != null)
                 {
                     Console.WriteLine(result.ToString());
                 }
                 else
                 {
-                    PrintMissedCommandInfo(command);
+                    PrintMissedCommandInfo(appCommandRequest.Command);
                 }
             }
             while (isRunning);
+        }
+
+        private static AppCommandRequest ReadCommandRequest()
+        {
+            var inputs = Console.ReadLine()?.Split(' ', 2);
+
+            const int commandIndex = 0;
+            var command = inputs?[commandIndex];
+            if (string.IsNullOrEmpty(command))
+            {
+                Console.WriteLine(HintMessage);
+                return null;
+            }
+
+            const int parametersIndex = 1;
+            var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
+
+            return new AppCommandRequest(command, parameters);
         }
 
         private static void SetSettings()
@@ -73,13 +80,18 @@ namespace FileCabinetApp
                     Console.Write("$ FileCabinetApp.exe ");
                     var settings = Console.ReadLine()?.Split(' ');
 
+                    if (settings == null)
+                    {
+                        throw new ArgumentNullException(nameof(settings));
+                    }
+
                     if (settings.Length % 2 != 0)
                     {
                         throw new ArgumentException("Bad settings format!");
                     }
 
                     IRecordValidator validator;
-                    var validationModeIndex = Array.FindIndex(settings, x => x == "--validation-rules" || x == "-v") + 1;
+                    var validationModeIndex = Array.FindIndex(settings, x => x is "--validation-rules" or "-v") + 1;
                     if (validationModeIndex != 0)
                     {
                         validator = GetValidationMode(settings[validationModeIndex]);
@@ -90,7 +102,7 @@ namespace FileCabinetApp
                         validator = new ValidatorBuilder().CreateDefault();
                     }
 
-                    var storageModeIndex = Array.FindIndex(settings, x => x == "--storage" || x == "-s") + 1;
+                    var storageModeIndex = Array.FindIndex(settings, x => x is "--storage" or "-s") + 1;
                     if (storageModeIndex != 0)
                     {
                         SetStorageMode(settings[storageModeIndex], validator);

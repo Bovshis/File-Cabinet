@@ -28,7 +28,7 @@ namespace FileCabinetApp.Validators.ConcreteValidators
                 return new Tuple<bool, string>(false, "first name is WhiteSpace");
             }
 
-            if (lastName.Length < this.maxLength || lastName.Length > this.maxLength)
+            if (lastName.Length < this.minLength || lastName.Length > this.maxLength)
             {
                 return new Tuple<bool, string>(false, $"first name length less than {this.minLength} or greater than {this.maxLength}");
             }

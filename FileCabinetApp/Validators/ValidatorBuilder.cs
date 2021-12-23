@@ -6,7 +6,7 @@ namespace FileCabinetApp.Validators
 {
     public class ValidatorBuilder
     {
-        private List<IRecordValidator> validators = new ();
+        private readonly List<IRecordValidator> validators = new ();
 
         public ValidatorBuilder ValidateFirstName(int minLength, int maxLength)
         {
@@ -47,7 +47,7 @@ namespace FileCabinetApp.Validators
         {
             return this.ValidateFirstName(2, 60).ValidateLastName(2, 60)
                 .ValidateDateOfBirth(new DateTime(1950, 1, 1), DateTime.Now).
-                ValidateHeight(0,400).ValidateWeight(0, 1000).Create();
+                ValidateHeight(0, 400).ValidateWeight(0, 1000).Create();
         }
 
         public CompositeValidator CreateCustom()
