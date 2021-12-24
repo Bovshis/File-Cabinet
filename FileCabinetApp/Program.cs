@@ -1,10 +1,9 @@
 ﻿using System;
-using System.IO;
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.CommandHandlers.ConcreteHandlers;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
-using FileCabinetApp.Validators;
+using FileCabinetApp.Settings;
 
 namespace FileCabinetApp
 {
@@ -24,11 +23,26 @@ namespace FileCabinetApp
         /// </summary>
         public static void Main()
         {
-            SetSettings();
+            Console.Write("$ FileCabinetApp.exe ");
+            var launcher = new Launcher();
+            do
+            {
+                var settings = Console.ReadLine()?.Split(' ');
+                if (settings == null)
+                {
+                    Console.WriteLine("Bad settings format!");
+                    continue;
+                }
+
+                var (service, message) = launcher.SetSettings(settings);
+                fileCabinetService = service;
+                Console.WriteLine(message);
+            }
+            while (fileCabinetService == null);
+
             Console.WriteLine($"File Cabinet Application, developed by {DeveloperName}");
             Console.WriteLine(HintMessage);
             Console.WriteLine();
-
             var commands = CreateCommandHandlers();
             do
             {
@@ -68,98 +82,6 @@ namespace FileCabinetApp
             var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
 
             return new AppCommandRequest(command, parameters);
-        }
-
-        private static void SetSettings()
-        {
-            var isCorrectSettings = false;
-            while (!isCorrectSettings)
-            {
-                try
-                {
-                    Console.Write("$ FileCabinetApp.exe ");
-                    var settings = Console.ReadLine()?.Split(' ');
-
-                    if (settings == null)
-                    {
-                        throw new ArgumentNullException(nameof(settings));
-                    }
-
-                    if (settings.Length % 2 != 0)
-                    {
-                        throw new ArgumentException("Bad settings format!");
-                    }
-
-                    IRecordValidator validator;
-                    var validationModeIndex = Array.FindIndex(settings, x => x is "--validation-rules" or "-v") + 1;
-                    if (validationModeIndex != 0)
-                    {
-                        validator = GetValidationMode(settings[validationModeIndex]);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Using default validation rules.");
-                        validator = new ValidatorBuilder().CreateDefault();
-                    }
-
-                    var storageModeIndex = Array.FindIndex(settings, x => x is "--storage" or "-s") + 1;
-                    if (storageModeIndex != 0)
-                    {
-                        SetStorageMode(settings[storageModeIndex], validator);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Using memory cabinet.");
-                        fileCabinetService = new FileCabinetMemoryService(validator);
-                    }
-
-                    isCorrectSettings = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
-        }
-
-        private static IRecordValidator GetValidationMode(string validationMode)
-        {
-            const string validationRulesDefaultMode = "default", validationRulesCustomMode = "custom";
-
-            if (validationMode.Equals(validationRulesDefaultMode, StringComparison.InvariantCultureIgnoreCase))
-            {
-                Console.WriteLine("Using default validation rules.");
-                return new ValidatorBuilder().CreateDefault();
-            }
-
-            if (validationMode.Equals(validationRulesCustomMode, StringComparison.InvariantCultureIgnoreCase))
-            {
-                Console.WriteLine("Using custom validation rules.");
-                return new ValidatorBuilder().CreateCustom();
-            }
-
-            throw new ArgumentException($"Bad validation rules command");
-        }
-
-        private static void SetStorageMode(string storageMode, IRecordValidator validator)
-        {
-            const string memoryMode = "memory", fileMode = "file";
-
-            if (storageMode.Equals(memoryMode, StringComparison.InvariantCultureIgnoreCase))
-            {
-                fileCabinetService = new FileCabinetMemoryService(validator);
-                Console.WriteLine("Using memory cabinet.");
-                return;
-            }
-
-            if (storageMode.Equals(fileMode, StringComparison.InvariantCultureIgnoreCase))
-            {
-                fileCabinetService = new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), validator);
-                Console.WriteLine("Using file cabinet.");
-                return;
-            }
-
-            throw new ArgumentException($"Bad validation rules command");
         }
 
         private static void PrintMissedCommandInfo(string command)
