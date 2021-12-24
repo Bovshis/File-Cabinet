@@ -18,7 +18,8 @@ namespace FileCabinetApp.Settings
                 var validator = this.SetValidationMode(settings);
                 var storageService = this.SetStorageMode(settings, validator);
                 var useStopWatch = this.UseStopWatch(settings, storageService);
-                return (useStopWatch, this.logsMessage.ToString());
+                var logger = this.UseLogger(settings, useStopWatch);
+                return (logger, this.logsMessage.ToString());
             }
             catch (Exception exception)
             {
@@ -87,6 +88,18 @@ namespace FileCabinetApp.Settings
             {
                 this.logsMessage.Append("Using stop watch.");
                 return new ServiceMeter(fileCabinetService);
+            }
+
+            return fileCabinetService;
+        }
+
+        private IFileCabinetService UseLogger(string[] settings, IFileCabinetService fileCabinetService)
+        {
+            var isUsed = Array.Exists(settings, x => x is "--use-logger");
+            if (isUsed)
+            {
+                this.logsMessage.Append("Using logger.");
+                return new ServiceLogger(fileCabinetService);
             }
 
             return fileCabinetService;
