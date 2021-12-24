@@ -333,6 +333,7 @@
             <summary>
             Purge deleted records.
             </summary>
+            <returns>Amount deleted records.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
             <summary>
