@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
 
@@ -13,11 +12,6 @@ namespace FileCabinetApp.Services
     public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> list = new ();
-
-        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new ();
-        private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new ();
-        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new ();
-
         private readonly IRecordValidator validator;
 
         /// <summary>
@@ -46,8 +40,17 @@ namespace FileCabinetApp.Services
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
             var record = new FileCabinetRecord(this.list.Count + 1, recordWithoutId);
-            this.AddRecord(record);
+            this.list.Add(record);
             return record.Id;
+        }
+
+        /// <summary>
+        /// Insert record.
+        /// </summary>
+        /// <param name="record">record.</param>
+        public void Insert(FileCabinetRecord record)
+        {
+            this.list.Add(record);
         }
 
         /// <summary>
@@ -79,14 +82,7 @@ namespace FileCabinetApp.Services
             var position = this.list.FindIndex(x => x.Id == id);
             if (position != -1)
             {
-                var oldRecord = this.list[position];
-                this.firstNameDictionary[oldRecord.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
-                this.lastNameDictionary[oldRecord.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(oldRecord);
-                this.dateOfBirthDictionary[oldRecord.DateOfBirth].Remove(oldRecord);
-
-                var record = new FileCabinetRecord(id, recordWithoutId);
-                this.list[position] = record;
-                this.AddElementToDictionaries(record);
+                this.list[position] = new FileCabinetRecord(id, recordWithoutId);
                 return true;
             }
 
@@ -98,15 +94,15 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="firstName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            var key = firstName.ToUpper(CultureInfo.InvariantCulture);
-            if (this.firstNameDictionary.ContainsKey(key))
+            foreach (var record in this.list)
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[firstName.ToUpper(CultureInfo.InvariantCulture)]);
+                if (record.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return record;
+                }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -114,31 +110,31 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="lastName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            var key = lastName.ToUpper(CultureInfo.InvariantCulture);
-            if (this.firstNameDictionary.ContainsKey(key))
+            foreach (var record in this.list)
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameDictionary[lastName.ToUpper(CultureInfo.InvariantCulture)]);
+                if (record.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return record;
+                }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
         /// <summary>
         /// Find list of the records by date Of Birth.
         /// </summary>
         /// <param name="dateOfBirth">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        /// <returns>Searched records.</returns>
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
-            var dateParsed = DateTime.TryParse(dateOfBirth, out var dateOfBirthDate);
-            if (dateParsed && this.dateOfBirthDictionary.ContainsKey(dateOfBirthDate))
+            foreach (var record in this.list)
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthDictionary[dateOfBirthDate]);
+                if (record.DateOfBirth == DateTime.Parse(dateOfBirth))
+                {
+                    yield return record;
+                }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(new List<FileCabinetRecord>());
         }
 
         /// <summary>
@@ -163,7 +159,7 @@ namespace FileCabinetApp.Services
                 if (this.validator.ValidateParameter(record).Item1)
                 {
                     amount++;
-                    this.AddRecord(record);
+                    this.list.Add(record);
                 }
                 else
                 {
@@ -185,45 +181,12 @@ namespace FileCabinetApp.Services
             if (record != null)
             {
                 this.list.Remove(record);
-                this.RemoveElementFromDictionaries(record);
                 Console.WriteLine($"Record #{id} is removed");
             }
             else
             {
                 Console.WriteLine($"Record #{id} doesn't consist");
             }
-        }
-
-        private static void AddElementToDictionary<T>(T key, FileCabinetRecord record, IDictionary<T, List<FileCabinetRecord>> dictionary)
-        {
-            if (dictionary.ContainsKey(key))
-            {
-                dictionary[key].Add(record);
-            }
-            else
-            {
-                dictionary[key] = new List<FileCabinetRecord>() { record };
-            }
-        }
-
-        private void AddRecord(FileCabinetRecord record)
-        {
-            this.list.Add(record);
-            this.AddElementToDictionaries(record);
-        }
-
-        private void AddElementToDictionaries(FileCabinetRecord record)
-        {
-            AddElementToDictionary(record.FirstName.ToUpper(CultureInfo.InvariantCulture), record, this.firstNameDictionary);
-            AddElementToDictionary(record.LastName.ToUpper(CultureInfo.InvariantCulture), record, this.lastNameDictionary);
-            AddElementToDictionary(record.DateOfBirth, record, this.dateOfBirthDictionary);
-        }
-
-        private void RemoveElementFromDictionaries(FileCabinetRecord record)
-        {
-            this.firstNameDictionary[record.FirstName.ToUpper(CultureInfo.InvariantCulture)].Remove(record);
-            this.lastNameDictionary[record.LastName.ToUpper(CultureInfo.InvariantCulture)].Remove(record);
-            this.dateOfBirthDictionary[record.DateOfBirth].Remove(record);
         }
     }
 }

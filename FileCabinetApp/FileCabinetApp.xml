@@ -269,6 +269,12 @@
             <param name="recordWithoutId">record data.</param>
             <returns>record number.</returns>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Insert(FileCabinetApp.Records.FileCabinetRecord)">
+            <summary>
+            Insert record.
+            </summary>
+            <param name="record">record.</param>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Records.RecordWithoutId)">
             <summary>
             Edit record.
@@ -333,6 +339,7 @@
             <summary>
             Purge deleted records.
             </summary>
+            <returns>Amount deleted records.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
             <summary>
@@ -357,6 +364,12 @@
             </summary>
             <param name="recordWithoutId">record data.</param>
             <returns>record number.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Insert(FileCabinetApp.Records.FileCabinetRecord)">
+            <summary>
+            Insert record.
+            </summary>
+            <param name="record">record.</param>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetRecords">
             <summary>
@@ -397,7 +410,7 @@
             Find list of the records by date Of Birth.
             </summary>
             <param name="dateOfBirth">value to search.</param>
-            <returns>List of the searched records.</returns>
+            <returns>Searched records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
             <summary>
@@ -476,6 +489,12 @@
             <param name="recordWithoutId">record data.</param>
             <returns>record id.</returns>
         </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Insert(FileCabinetApp.Records.FileCabinetRecord)">
+            <summary>
+            Insert record.
+            </summary>
+            <param name="record">record.</param>
+        </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.GetRecords">
             <summary>
             Get list of the records.
@@ -501,21 +520,21 @@
             Find list of the records by first name.
             </summary>
             <param name="firstName">value to search.</param>
-            <returns>List of the searched records.</returns>
+            <returns>Searched records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)">
             <summary>
             Find list of the records by last Name.
             </summary>
             <param name="lastName">value to search.</param>
-            <returns>List of the searched records.</returns>
+            <returns>searched records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.String)">
             <summary>
             Find list of the records by date Of Birth.
             </summary>
             <param name="dateOfBirth">value to search.</param>
-            <returns>List of the searched records.</returns>
+            <returns>Searched records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
             <summary>

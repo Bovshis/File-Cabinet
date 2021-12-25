@@ -16,8 +16,8 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
             {
                 if (this.service is FileCabinetFilesystemService filesystemService)
                 {
-                    filesystemService.Purge();
-                    return string.Empty;
+                    var amount = filesystemService.Purge();
+                    return $"Data file processing is completed: {amount} records were purged.";
                 }
                 else
                 {

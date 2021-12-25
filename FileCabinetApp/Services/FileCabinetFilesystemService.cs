@@ -17,6 +17,7 @@ namespace FileCabinetApp.Services
     /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private SortedList<int, int> recordsOffsetList;
         private FileStream fileStream;
         private int recordsAmount = 0;
         private int deletedRecordsAmount = 0;
@@ -32,6 +33,7 @@ namespace FileCabinetApp.Services
         {
             this.fileStream = fileStream;
             this.validator = validator;
+            this.recordsOffsetList = new SortedList<int, int>();
         }
 
         /// <summary>
@@ -51,8 +53,17 @@ namespace FileCabinetApp.Services
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
             this.recordsAmount++;
-            this.AddRecord(new FileCabinetRecord(this.recordsAmount, recordWithoutId));
+            this.WriteRecord(new FileCabinetRecord(this.recordsAmount, recordWithoutId));
             return this.recordsAmount;
+        }
+
+        /// <summary>
+        /// Insert record.
+        /// </summary>
+        /// <param name="record">record.</param>
+        public void Insert(FileCabinetRecord record)
+        {
+            this.WriteRecord(record);
         }
 
         /// <summary>
@@ -63,11 +74,10 @@ namespace FileCabinetApp.Services
         /// <returns>is record edited.</returns>
         public bool EditRecord(int id, RecordWithoutId recordWithoutId)
         {
+            this.Purge();
             if (this.MoveCursorToRecord(id))
             {
-                var byteRecord = new ByteRecord(new FileCabinetRecord(id, recordWithoutId));
-                var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
-                byteWriter.Write(byteRecord);
+                this.WriteRecord(new FileCabinetRecord(id, recordWithoutId));
                 return true;
             }
 
@@ -79,9 +89,9 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="dateOfBirth">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
-            var records = new List<FileCabinetRecord>();
+            this.Purge();
 
             var currentIndex = ByteOffsetConstants.YearOffset;
             this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
@@ -94,11 +104,11 @@ namespace FileCabinetApp.Services
                 var date = new DateTime(
                     BitConverter.ToInt32(buffer[..4]),
                     BitConverter.ToInt32(buffer[4..8]),
-                    BitConverter.ToInt32(buffer[8..])).ToString("yyyy-MMM-dd");
-                if (dateOfBirth.Equals(date, StringComparison.InvariantCultureIgnoreCase))
+                    BitConverter.ToInt32(buffer[8..]));
+                if (date == DateTime.Parse(dateOfBirth))
                 {
                     this.fileStream.Seek(-1 * ByteOffsetConstants.HeightOffset, SeekOrigin.Current);
-                    records.Add(this.ReadRecord().ToFileCabinetRecord());
+                    yield return this.ReadRecord().ToFileCabinetRecord();
                     this.fileStream.Seek(ByteOffsetConstants.YearOffset, SeekOrigin.Current);
                 }
                 else
@@ -106,8 +116,6 @@ namespace FileCabinetApp.Services
                     this.fileStream.Seek(ByteOffsetConstants.Size - ByteOffsetConstants.DateCapacity, SeekOrigin.Current);
                 }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records.ToArray());
         }
 
         /// <summary>
@@ -115,9 +123,9 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="firstName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            var records = new List<FileCabinetRecord>();
+            this.Purge();
 
             var currentIndex = ByteOffsetConstants.FirstNameOffset;
             this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
@@ -130,7 +138,7 @@ namespace FileCabinetApp.Services
                 if (firstName.Equals(Encoding.UTF8.GetString(buffer), StringComparison.InvariantCultureIgnoreCase))
                 {
                     this.fileStream.Seek(-1 * ByteOffsetConstants.LastNameOffset, SeekOrigin.Current);
-                    records.Add(this.ReadRecord().ToFileCabinetRecord());
+                    yield return this.ReadRecord().ToFileCabinetRecord();
                     this.fileStream.Seek(ByteOffsetConstants.FirstNameOffset, SeekOrigin.Current);
                 }
                 else
@@ -138,8 +146,6 @@ namespace FileCabinetApp.Services
                     this.fileStream.Seek(ByteOffsetConstants.Size - ByteOffsetConstants.FirstNameOffset, SeekOrigin.Current);
                 }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records.ToArray());
         }
 
         /// <summary>
@@ -147,9 +153,9 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="lastName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            var records = new List<FileCabinetRecord>();
+            this.Purge();
 
             var currentIndex = ByteOffsetConstants.LastNameOffset;
             this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
@@ -162,7 +168,7 @@ namespace FileCabinetApp.Services
                 if (lastName.Equals(Encoding.UTF8.GetString(buffer), StringComparison.InvariantCultureIgnoreCase))
                 {
                     this.fileStream.Seek(-1 * ByteOffsetConstants.YearOffset, SeekOrigin.Current);
-                    records.Add(this.ReadRecord().ToFileCabinetRecord());
+                    yield return this.ReadRecord().ToFileCabinetRecord();
                     this.fileStream.Seek(ByteOffsetConstants.LastNameOffset, SeekOrigin.Current);
                 }
                 else
@@ -170,8 +176,6 @@ namespace FileCabinetApp.Services
                     this.fileStream.Seek(ByteOffsetConstants.Size - ByteOffsetConstants.LastNameOffset, SeekOrigin.Current);
                 }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records.ToArray());
         }
 
         /// <summary>
@@ -180,6 +184,7 @@ namespace FileCabinetApp.Services
         /// <returns>Array of records.</returns>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
+            this.Purge();
             return new ReadOnlyCollection<FileCabinetRecord>(
                 this.GetByteRecords().Select(byteRecord => byteRecord.ToFileCabinetRecord()).ToArray());
         }
@@ -215,7 +220,8 @@ namespace FileCabinetApp.Services
                 if (this.validator.ValidateParameter(record).Item1)
                 {
                     amount++;
-                    this.AddRecord(record);
+                    this.recordsAmount++;
+                    this.WriteRecord(record);
                 }
                 else
                 {
@@ -223,7 +229,6 @@ namespace FileCabinetApp.Services
                 }
             }
 
-            this.recordsAmount += amount;
             return amount;
         }
 
@@ -260,28 +265,44 @@ namespace FileCabinetApp.Services
         /// <summary>
         /// Purge deleted records.
         /// </summary>
-        public void Purge()
+        /// <returns>Amount deleted records.</returns>
+        public int Purge()
         {
-            var filePath = this.fileStream.Name;
-            var byteRecords = this.GetByteRecords();
-            this.fileStream.Close();
-            this.fileStream.Dispose();
-            this.fileStream = new FileStream(filePath, FileMode.Create);
-            foreach (var byteRecord in byteRecords)
+            if (this.deletedRecordsAmount > 0)
             {
-                if (BitConverter.ToInt16(byteRecord.Status) != (short)ByteRecordStatus.Deleted)
+                var filePath = this.fileStream.Name;
+                var byteRecords = this.GetByteRecords();
+
+                this.fileStream.Close();
+                this.fileStream.Dispose();
+                this.recordsOffsetList = new SortedList<int, int>();
+                this.recordsAmount = 0;
+
+                this.fileStream = new FileStream(filePath, FileMode.Create);
+
+                foreach (var byteRecord in byteRecords)
                 {
-                    this.AddRecord(byteRecord.ToFileCabinetRecord());
+                    if (BitConverter.ToInt16(byteRecord.Status) != (short)ByteRecordStatus.Deleted)
+                    {
+                        this.recordsAmount++;
+                        this.WriteRecord(byteRecord.ToFileCabinetRecord());
+                    }
                 }
+
+                Console.WriteLine($"Data file processing is completed: {this.deletedRecordsAmount} of {this.recordsAmount} records were purged.");
+                this.deletedRecordsAmount = 0;
             }
 
-            Console.WriteLine($"Data file processing is completed: {this.deletedRecordsAmount} of {this.recordsAmount} records were purged.");
-            this.recordsAmount -= this.deletedRecordsAmount;
-            this.deletedRecordsAmount = 0;
+            return 0;
         }
 
-        private void AddRecord(FileCabinetRecord record)
+        private void WriteRecord(FileCabinetRecord record)
         {
+            if (!this.recordsOffsetList.ContainsKey(record.Id))
+            {
+                this.recordsOffsetList.Add(record.Id, ByteOffsetConstants.Size * (this.recordsAmount - 1));
+            }
+
             var byteRecord = new ByteRecord(record);
             var byteWriter = new FileCabinetByteRecordWriter(this.fileStream);
             byteWriter.Write(byteRecord);
@@ -312,23 +333,10 @@ namespace FileCabinetApp.Services
 
         private bool MoveCursorToRecord(int id)
         {
-            var currentIndex = ByteOffsetConstants.IdOffset;
-            this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
-
-            const int sizeId = 4;
-            while (currentIndex < this.fileStream.Length)
+            if (this.recordsOffsetList.ContainsKey(id))
             {
-                currentIndex += ByteOffsetConstants.Size;
-                var buffer = new byte[sizeId];
-                this.fileStream.Read(buffer, 0, buffer.Length);
-                var currentId = BitConverter.ToInt32(buffer);
-                if (currentId == id)
-                {
-                    this.fileStream.Seek(-1 * ByteOffsetConstants.FirstNameOffset, SeekOrigin.Current);
-                    return true;
-                }
-
-                this.fileStream.Seek(ByteOffsetConstants.Size - sizeId, SeekOrigin.Current);
+                this.fileStream.Seek(this.recordsOffsetList[id], SeekOrigin.Begin);
+                return true;
             }
 
             return false;
