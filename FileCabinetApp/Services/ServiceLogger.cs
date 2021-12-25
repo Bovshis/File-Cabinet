@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
@@ -28,6 +29,11 @@ namespace FileCabinetApp.Services
             return id;
         }
 
+        public void Insert(FileCabinetRecord record)
+        {
+            this.service.Insert(record);
+        }
+
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             this.logWriter.Write(this.service.GetRecords, out var records);
@@ -46,19 +52,19 @@ namespace FileCabinetApp.Services
             return isEdited;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.logWriter.Write(this.service.FindByFirstName, firstName, out var records);
             return records;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             this.logWriter.Write(this.service.FindByLastName, lastName, out var records);
             return records;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
             this.logWriter.Write(this.service.FindByDateOfBirth, dateOfBirth, out var records);
             return records;

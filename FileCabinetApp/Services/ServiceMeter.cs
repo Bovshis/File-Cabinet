@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
@@ -21,6 +22,12 @@ namespace FileCabinetApp.Services
             return id;
         }
 
+        public void Insert(FileCabinetRecord record)
+        {
+            var ticks = TickCounterService.GetTicks(this.service.Insert, record);
+            Console.WriteLine($"Insert method execution duration is {ticks} ticks.");
+        }
+
         public bool EditRecord(int id, RecordWithoutId recordWithoutId)
         {
             var ticks = TickCounterService.GetTicks(this.service.EditRecord, id, recordWithoutId, out var isEdited);
@@ -28,21 +35,21 @@ namespace FileCabinetApp.Services
             return isEdited;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
             var ticks = TickCounterService.GetTicks(this.service.FindByDateOfBirth, dateOfBirth, out var records);
             Console.WriteLine($"FindByDateOfBirth method execution duration is {ticks} ticks.");
             return records;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             var ticks = TickCounterService.GetTicks(this.service.FindByFirstName, firstName, out var records);
             Console.WriteLine($"FindByFirstName method execution duration is {ticks} ticks.");
             return records;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             var ticks = TickCounterService.GetTicks(this.service.FindByLastName, lastName, out var records);
             Console.WriteLine($"FindByLastName method execution duration is {ticks} ticks.");

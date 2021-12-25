@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
 
@@ -21,6 +22,12 @@ namespace FileCabinetApp.Services
         /// <param name="recordWithoutId">record data.</param>
         /// <returns>record id.</returns>
         public int CreateRecord(RecordWithoutId recordWithoutId);
+
+        /// <summary>
+        /// Insert record.
+        /// </summary>
+        /// <param name="record">record.</param>
+        public void Insert(FileCabinetRecord record);
 
         /// <summary>
         /// Get list of the records.
@@ -46,22 +53,22 @@ namespace FileCabinetApp.Services
         /// Find list of the records by first name.
         /// </summary>
         /// <param name="firstName">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        /// <returns>Searched records.</returns>
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <summary>
         /// Find list of the records by last Name.
         /// </summary>
         /// <param name="lastName">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        /// <returns>searched records.</returns>
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <summary>
         /// Find list of the records by date Of Birth.
         /// </summary>
         /// <param name="dateOfBirth">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
+        /// <returns>Searched records.</returns>
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
 
         /// <summary>
         /// Make snapshot.

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using FileCabinetApp.Constants;
 using FileCabinetApp.Enums;
@@ -59,6 +58,15 @@ namespace FileCabinetApp.Services
         }
 
         /// <summary>
+        /// Insert record.
+        /// </summary>
+        /// <param name="record">record.</param>
+        public void Insert(FileCabinetRecord record)
+        {
+            this.WriteRecord(record);
+        }
+
+        /// <summary>
         /// Edit record.
         /// </summary>
         /// <param name="id">number of the edited record.</param>
@@ -81,10 +89,9 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="dateOfBirth">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
             this.Purge();
-            var records = new List<FileCabinetRecord>();
 
             var currentIndex = ByteOffsetConstants.YearOffset;
             this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
@@ -97,11 +104,11 @@ namespace FileCabinetApp.Services
                 var date = new DateTime(
                     BitConverter.ToInt32(buffer[..4]),
                     BitConverter.ToInt32(buffer[4..8]),
-                    BitConverter.ToInt32(buffer[8..])).ToString("yyyy-MMM-dd");
-                if (dateOfBirth.Equals(date, StringComparison.InvariantCultureIgnoreCase))
+                    BitConverter.ToInt32(buffer[8..]));
+                if (date == DateTime.Parse(dateOfBirth))
                 {
                     this.fileStream.Seek(-1 * ByteOffsetConstants.HeightOffset, SeekOrigin.Current);
-                    records.Add(this.ReadRecord().ToFileCabinetRecord());
+                    yield return this.ReadRecord().ToFileCabinetRecord();
                     this.fileStream.Seek(ByteOffsetConstants.YearOffset, SeekOrigin.Current);
                 }
                 else
@@ -109,8 +116,6 @@ namespace FileCabinetApp.Services
                     this.fileStream.Seek(ByteOffsetConstants.Size - ByteOffsetConstants.DateCapacity, SeekOrigin.Current);
                 }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records.ToArray());
         }
 
         /// <summary>
@@ -118,10 +123,9 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="firstName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.Purge();
-            var records = new List<FileCabinetRecord>();
 
             var currentIndex = ByteOffsetConstants.FirstNameOffset;
             this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
@@ -134,7 +138,7 @@ namespace FileCabinetApp.Services
                 if (firstName.Equals(Encoding.UTF8.GetString(buffer), StringComparison.InvariantCultureIgnoreCase))
                 {
                     this.fileStream.Seek(-1 * ByteOffsetConstants.LastNameOffset, SeekOrigin.Current);
-                    records.Add(this.ReadRecord().ToFileCabinetRecord());
+                    yield return this.ReadRecord().ToFileCabinetRecord();
                     this.fileStream.Seek(ByteOffsetConstants.FirstNameOffset, SeekOrigin.Current);
                 }
                 else
@@ -142,8 +146,6 @@ namespace FileCabinetApp.Services
                     this.fileStream.Seek(ByteOffsetConstants.Size - ByteOffsetConstants.FirstNameOffset, SeekOrigin.Current);
                 }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records.ToArray());
         }
 
         /// <summary>
@@ -151,10 +153,9 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="lastName">value to search.</param>
         /// <returns>List of the searched records.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             this.Purge();
-            var records = new List<FileCabinetRecord>();
 
             var currentIndex = ByteOffsetConstants.LastNameOffset;
             this.fileStream.Seek(currentIndex, SeekOrigin.Begin);
@@ -167,7 +168,7 @@ namespace FileCabinetApp.Services
                 if (lastName.Equals(Encoding.UTF8.GetString(buffer), StringComparison.InvariantCultureIgnoreCase))
                 {
                     this.fileStream.Seek(-1 * ByteOffsetConstants.YearOffset, SeekOrigin.Current);
-                    records.Add(this.ReadRecord().ToFileCabinetRecord());
+                    yield return this.ReadRecord().ToFileCabinetRecord();
                     this.fileStream.Seek(ByteOffsetConstants.LastNameOffset, SeekOrigin.Current);
                 }
                 else
@@ -175,8 +176,6 @@ namespace FileCabinetApp.Services
                     this.fileStream.Seek(ByteOffsetConstants.Size - ByteOffsetConstants.LastNameOffset, SeekOrigin.Current);
                 }
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(records.ToArray());
         }
 
         /// <summary>
