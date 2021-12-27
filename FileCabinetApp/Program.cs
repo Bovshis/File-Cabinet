@@ -86,8 +86,9 @@ namespace FileCabinetApp
 
         private static void PrintMissedCommandInfo(string command)
         {
-            Console.WriteLine($"There is no '{command}' command.");
-            Console.WriteLine();
+            var search = new AdvancedSearch(command);
+            var res = search.GetSimilarCommand();
+            Console.WriteLine($"there is no {command} command. Similar command:\n {string.Join("\n", res)}");
         }
 
         private static ICommandHandler CreateCommandHandlers()
@@ -97,26 +98,26 @@ namespace FileCabinetApp
             var statHandler = new StatCommandHandler(fileCabinetService);
             var createHandler = new CreateCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter.Print);
-            var editHandler = new EditCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter.Print);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var insertHandler = new InsertCommandHandler(fileCabinetService);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
 
             helpHandler
                 .SetNext(exitHandler)
                 .SetNext(statHandler)
                 .SetNext(createHandler)
                 .SetNext(listHandler)
-                .SetNext(editHandler)
+                .SetNext(updateHandler)
                 .SetNext(findHandler)
                 .SetNext(exportHandler)
                 .SetNext(importHandler)
-                .SetNext(removeHandler)
                 .SetNext(purgeHandler)
-                .SetNext(insertHandler);
+                .SetNext(insertHandler)
+                .SetNext(deleteHandler);
 
             return helpHandler;
         }

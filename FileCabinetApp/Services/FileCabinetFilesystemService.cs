@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,12 @@ namespace FileCabinetApp.Services
     /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private readonly IRecordValidator validator;
+
         private SortedList<int, int> recordsOffsetList;
         private FileStream fileStream;
         private int recordsAmount = 0;
         private int deletedRecordsAmount = 0;
-
-        private readonly IRecordValidator validator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
@@ -63,6 +64,7 @@ namespace FileCabinetApp.Services
         /// <param name="record">record.</param>
         public void Insert(FileCabinetRecord record)
         {
+            this.recordsAmount++;
             this.WriteRecord(record);
         }
 
@@ -233,33 +235,30 @@ namespace FileCabinetApp.Services
         }
 
         /// <summary>
-        /// remove record.
+        /// delete record with given parameter.
         /// </summary>
-        /// <param name="id">id removed record.</param>
-        public void Remove(int id)
+        /// <param name="where">parameters for deleting.</param>
+        /// <returns>List of deleted records.</returns>
+        public IList<int> Delete(params (string key, string value)[] where)
         {
+            var indices = this.GetIndicesWhere(where);
+            foreach (var index in indices)
+            {
+                this.Remove(index);
+            }
 
-            if (this.MoveCursorToRecord(id))
-            {
-                const int shortSize = 2;
-                var statusBuffer = new byte[shortSize];
-                this.fileStream.Read(statusBuffer, 0, statusBuffer.Length);
-                if (BitConverter.ToInt16(statusBuffer) == (short)ByteRecordStatus.Deleted)
-                {
-                    Console.WriteLine("records has already been deleted");
-                }
-                else
-                {
-                    this.deletedRecordsAmount++;
-                    this.fileStream.Seek(-1 * shortSize, SeekOrigin.Current);
-                    this.fileStream.Write(BitConverter.GetBytes((short)ByteRecordStatus.Deleted));
-                    Console.WriteLine($"Record #{id} is removed");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Record #{id} is not found");
-            }
+            return indices;
+        }
+
+        /// <summary>
+        /// Update records.
+        /// </summary>
+        /// <param name="replaceList">List with data for updating record.</param>
+        /// <param name="whereList">List with data for finding records.</param>
+        /// <returns>list of indices updated records.</returns>
+        public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -294,6 +293,76 @@ namespace FileCabinetApp.Services
             }
 
             return 0;
+        }
+
+        private IList<int> GetIndicesWhere(params (string key, string value)[] where)
+        {
+            var indices = this.GetAllIndices(where);
+            foreach (var parameter in where)
+            {
+                if (parameter.key.Equals("id", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                indices = this.FindIndicesWhere(parameter, indices);
+            }
+
+            return indices.ToList();
+        }
+
+        private IList<int> FindIndicesWhere((string, string) param, IList<int> indices)
+        {
+            var (key, value) = param;
+            switch (key.ToLower(CultureInfo.InvariantCulture))
+            {
+                case "firstname":
+                    return this.FindWhereFirstName(value, indices).ToList();
+                case "lastname":
+                    return this.FindWhereLastName(value, indices).ToList();
+                case "dateofbirth":
+                    return this.FindWhereDateOfBirth(value, indices).ToList();
+                case "height":
+                case "weight":
+                case "favoritecharacter":
+                    throw new ArgumentException($"Not Implemented for FilesystemService");
+                default:
+                    throw new ArgumentException($"There is no key: {key}");
+            }
+        }
+
+        private IList<int> GetAllIndices(params (string key, string value)[] where)
+        {
+            foreach (var (key, value) in where)
+            {
+                if (key.Equals("id", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return new List<int>() { Convert.ToInt32(value) };
+                }
+            }
+
+            return this.recordsOffsetList.Keys;
+        }
+
+        private void Remove(int id)
+        {
+            if (this.MoveCursorToRecord(id))
+            {
+                const int shortSize = 2;
+                var statusBuffer = new byte[shortSize];
+                this.fileStream.Read(statusBuffer, 0, statusBuffer.Length);
+                if (BitConverter.ToInt16(statusBuffer) == (short)ByteRecordStatus.Deleted)
+                {
+                    Console.WriteLine("records has already been deleted");
+                }
+                else
+                {
+                    this.deletedRecordsAmount++;
+                    this.recordsOffsetList.Remove(id);
+                    this.fileStream.Seek(-1 * shortSize, SeekOrigin.Current);
+                    this.fileStream.Write(BitConverter.GetBytes((short)ByteRecordStatus.Deleted));
+                }
+            }
         }
 
         private void WriteRecord(FileCabinetRecord record)
@@ -340,6 +409,52 @@ namespace FileCabinetApp.Services
             }
 
             return false;
+        }
+
+        private IEnumerable<int> FindWhereDateOfBirth(string dateOfBirth, IList<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                this.fileStream.Seek(this.recordsOffsetList[index] + ByteOffsetConstants.YearOffset, SeekOrigin.Begin);
+                var buffer = new byte[ByteOffsetConstants.DateCapacity];
+                this.fileStream.Read(buffer, 0, buffer.Length);
+                var date = new DateTime(
+                    BitConverter.ToInt32(buffer[..4]),
+                    BitConverter.ToInt32(buffer[4..8]),
+                    BitConverter.ToInt32(buffer[8..]));
+                if (date == DateTime.Parse(dateOfBirth))
+                {
+                    yield return index;
+                }
+            }
+        }
+
+        private IEnumerable<int> FindWhereFirstName(string firstName, IList<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                this.fileStream.Seek(this.recordsOffsetList[index] + ByteOffsetConstants.FirstNameOffset, SeekOrigin.Begin);
+                var buffer = new byte[ByteOffsetConstants.NameCapacity];
+                this.fileStream.Read(buffer, 0, buffer.Length);
+                if (firstName.Equals(Encoding.UTF8.GetString(buffer), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return index;
+                }
+            }
+        }
+
+        private IEnumerable<int> FindWhereLastName(string lastName, IList<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                this.fileStream.Seek(this.recordsOffsetList[index] + ByteOffsetConstants.LastNameOffset, SeekOrigin.Begin);
+                var buffer = new byte[ByteOffsetConstants.NameCapacity];
+                this.fileStream.Read(buffer, 0, buffer.Length);
+                if (lastName.Equals(Encoding.UTF8.GetString(buffer), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return index;
+                }
+            }
         }
     }
 }

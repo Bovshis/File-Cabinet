@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
 
@@ -171,22 +173,158 @@ namespace FileCabinetApp.Services
         }
 
         /// <summary>
-        /// remove record.
+        /// delete record with given parameter.
         /// </summary>
-        /// <param name="id">id removed record.</param>
-        public void Remove(int id)
+        /// <param name="where">parameters for deleting.</param>
+        /// <returns>List of deleted records.</returns>
+        public IList<int> Delete(params (string key, string value)[] where)
         {
-            var record = this.list.Find(x => x.Id == id);
+            var indices = this.GetIndicesWhere(where);
+            foreach (var index in indices)
+            {
+                this.list.RemoveAll(x => x.Id == index);
+            }
 
-            if (record != null)
+            return indices;
+        }
+
+        /// <summary>
+        /// Update records.
+        /// </summary>
+        /// <param name="replaceList">List with data for updating record.</param>
+        /// <param name="whereList">List with data for finding records.</param>
+        /// <returns>list of indices updated records.</returns>
+        public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList)
+        {
+            var indices = this.GetIndicesWhere(whereList.ToArray());
+            foreach (var index in indices)
             {
-                this.list.Remove(record);
-                Console.WriteLine($"Record #{id} is removed");
+                this.UpdateRecord(index, replaceList);
             }
-            else
+
+            return indices;
+        }
+
+        private void UpdateRecord(int index, IList<(string, string)> replaceList)
+        {
+            var id = this.list.FindIndex(x => x.Id == index);
+            if (id == -1)
             {
-                Console.WriteLine($"Record #{id} doesn't consist");
+                throw new ArgumentException(nameof(index));
             }
+
+            var oldRecord = this.list[id];
+            foreach (var (key, value) in replaceList)
+            {
+                switch (key.ToLower(CultureInfo.InvariantCulture))
+                {
+                    case "firstname":
+                        oldRecord.FirstName = value;
+                        break;
+                    case "lastname":
+                        oldRecord.LastName = value;
+                        break;
+                    case "dateofbirth":
+                        oldRecord.DateOfBirth = Convert.ToDateTime(value);
+                        break;
+                    case "height":
+                        oldRecord.Height = Convert.ToInt16(value);
+                        break;
+                    case "weight":
+                        oldRecord.Weight = Convert.ToChar(value);
+                        break;
+                    case "favoritecharacter":
+                        oldRecord.FavoriteCharacter = Convert.ToChar(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"There is no key: {key}");
+                }
+            }
+
+            this.list[id] = oldRecord;
+        }
+
+        private IList<int> GetIndicesWhere(params (string key, string value)[] where)
+        {
+            var indices = this.GetAllIndices(where);
+            foreach (var parameter in where)
+            {
+                if (parameter.key.Equals("id", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                indices = this.FindIndicesWhere(parameter, indices);
+            }
+
+            return indices;
+        }
+
+        private IList<int> FindIndicesWhere((string, string) param, IList<int> indices)
+        {
+            var (key, value) = param;
+            switch (key.ToLower(CultureInfo.InvariantCulture))
+            {
+                case "firstname":
+                    return this.list
+                        .Where(x => indices.Contains(x.Id))
+                        .ToList()
+                        .FindAll(x => x.FirstName.Equals(value, StringComparison.InvariantCultureIgnoreCase))
+                        .Select(x => x.Id)
+                        .ToList();
+                case "lastname":
+                    return this.list
+                        .Where(x => indices.Contains(x.Id))
+                        .ToList()
+                        .FindAll(x => x.LastName.Equals(value, StringComparison.InvariantCultureIgnoreCase))
+                        .Select(x => x.Id)
+                        .ToList();
+                case "dateofbirth":
+                    return this.list
+                        .Where(x => indices.Contains(x.Id))
+                        .ToList()
+                        .FindAll(x => x.DateOfBirth == Convert.ToDateTime(value))
+                        .Select(x => x.Id)
+                        .ToList();
+                case "height":
+                    return this.list
+                            .Where(x => indices.Contains(x.Id))
+                        .ToList()
+                        .FindAll(x => x.Height == Convert.ToInt16(value))
+                        .Select(x => x.Id)
+                        .ToList();
+                case "weight":
+                    return this.list
+                        .Where(x => indices.Contains(x.Id))
+                        .ToList()
+                        .FindAll(x => x.Weight == Convert.ToDecimal(value))
+                        .Select(x => x.Id)
+                        .ToList();
+                case "favoritecharacter":
+                    return this.list
+                        .Where(x => indices.Contains(x.Id))
+                        .ToList()
+                        .FindAll(x => x.FavoriteCharacter == Convert.ToChar(value))
+                        .Select(x => x.Id)
+                        .ToList();
+                default:
+                    throw new ArgumentException($"There is no key: {key}");
+            }
+        }
+
+        private IList<int> GetAllIndices(params (string key, string value)[] where)
+        {
+            foreach (var (key, value) in where)
+            {
+                if (key.Equals("id", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return new List<int>() { Convert.ToInt32(value) };
+                }
+            }
+
+            return this.list
+                .Select(item => item.Id)
+                .ToList();
         }
     }
 }

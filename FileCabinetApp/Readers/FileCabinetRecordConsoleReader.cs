@@ -42,8 +42,6 @@ namespace FileCabinetApp.Readers
         {
             do
             {
-                T value;
-
                 var input = Console.ReadLine();
                 var conversionResult = converter(input);
 

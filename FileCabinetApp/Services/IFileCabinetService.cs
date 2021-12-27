@@ -42,14 +42,6 @@ namespace FileCabinetApp.Services
         public int GetStat();
 
         /// <summary>
-        /// Edit record.
-        /// </summary>
-        /// <param name="id">number of the edited record.</param>
-        /// <param name="recordWithoutId">record data.</param>
-        /// <returns>is record edited.</returns>
-        public bool EditRecord(int id, RecordWithoutId recordWithoutId);
-
-        /// <summary>
         /// Find list of the records by first name.
         /// </summary>
         /// <param name="firstName">value to search.</param>
@@ -84,9 +76,18 @@ namespace FileCabinetApp.Services
         public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot);
 
         /// <summary>
-        /// remove record.
+        /// delete record with given parameter.
         /// </summary>
-        /// <param name="id">id removed record.</param>
-        public void Remove(int id);
+        /// <param name="where">parameters for deleting.</param>
+        /// <returns>List of deleted records.</returns>
+        public IList<int> Delete(params (string key, string value)[] where);
+
+        /// <summary>
+        /// Update records.
+        /// </summary>
+        /// <param name="replaceList">List with data for updating record.</param>
+        /// <param name="whereList">List with data for finding records.</param>
+        /// <returns>list of indices updated records.</returns>
+        public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList);
     }
 }
