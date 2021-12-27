@@ -47,7 +47,9 @@ namespace FileCabinetApp.Records
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetRecord"/> class.
         /// </summary>
-        public FileCabinetRecord() {}
+        public FileCabinetRecord()
+        {
+        }
 
         /// <summary>
         /// Gets or sets record number in the file cabinet.

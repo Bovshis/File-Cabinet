@@ -275,35 +275,6 @@
             </summary>
             <param name="record">record.</param>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Records.RecordWithoutId)">
-            <summary>
-            Edit record.
-            </summary>
-            <param name="id">number of the edited record.</param>
-            <param name="recordWithoutId">record data.</param>
-            <returns>is record edited.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecords">
             <summary>
             Get records from the file.
@@ -343,6 +314,13 @@
             <param name="replaceList">List with data for updating record.</param>
             <param name="whereList">List with data for finding records.</param>
             <returns>list of indices updated records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecordsWhere(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Get records with parameters that contain in whereList.
+            </summary>
+            <param name="whereList">contain parameters for searching.</param>
+            <returns>List of records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Purge">
             <summary>
@@ -392,35 +370,6 @@
             </summary>
             <returns>count of records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.EditRecord(System.Int32,FileCabinetApp.Records.RecordWithoutId)">
-            <summary>
-            Edit record.
-            </summary>
-            <param name="id">number of the edited record.</param>
-            <param name="recordWithoutId">record data.</param>
-            <returns>is record edited.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>Searched records.</returns>
-        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
             <summary>
             Make snapshot.
@@ -448,6 +397,13 @@
             <param name="replaceList">List with data for updating record.</param>
             <param name="whereList">List with data for finding records.</param>
             <returns>list of indices updated records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetRecordsWhere(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Get records with parameters that contain in whereList.
+            </summary>
+            <param name="whereList">contain parameters for searching.</param>
+            <returns>List of records.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetServiceSnapshot">
             <summary>
@@ -525,27 +481,6 @@
             </summary>
             <returns>count records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>Searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>Searched records.</returns>
-        </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
             <summary>
             Make snapshot.
@@ -573,6 +508,13 @@
             <param name="replaceList">List with data for updating record.</param>
             <param name="whereList">List with data for finding records.</param>
             <returns>list of indices updated records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetRecordsWhere(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Get records with parameters that contain in whereList.
+            </summary>
+            <param name="whereList">contain parameters for searching.</param>
+            <returns>List of records.</returns>
         </member>
         <member name="T:FileCabinetApp.Validators.IRecordValidator">
             <summary>

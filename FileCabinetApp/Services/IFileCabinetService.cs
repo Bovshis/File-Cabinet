@@ -42,27 +42,6 @@ namespace FileCabinetApp.Services
         public int GetStat();
 
         /// <summary>
-        /// Find list of the records by first name.
-        /// </summary>
-        /// <param name="firstName">value to search.</param>
-        /// <returns>Searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
-
-        /// <summary>
-        /// Find list of the records by last Name.
-        /// </summary>
-        /// <param name="lastName">value to search.</param>
-        /// <returns>searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
-
-        /// <summary>
-        /// Find list of the records by date Of Birth.
-        /// </summary>
-        /// <param name="dateOfBirth">value to search.</param>
-        /// <returns>Searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
-
-        /// <summary>
         /// Make snapshot.
         /// </summary>
         /// <returns>FileCabinetService snapshot.</returns>
@@ -89,5 +68,12 @@ namespace FileCabinetApp.Services
         /// <param name="whereList">List with data for finding records.</param>
         /// <returns>list of indices updated records.</returns>
         public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList);
+
+        /// <summary>
+        /// Get records with parameters that contain in whereList.
+        /// </summary>
+        /// <param name="whereList">contain parameters for searching.</param>
+        /// <returns>List of records.</returns>
+        public IList<FileCabinetRecord> GetRecordsWhere(IList<(string, string)> whereList);
     }
 }

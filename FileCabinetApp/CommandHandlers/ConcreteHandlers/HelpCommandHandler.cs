@@ -9,7 +9,7 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
-        private static readonly string[][] helpMessages = new string[][]
+        private static readonly string[][] HelpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
@@ -18,6 +18,10 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
             new string[] { "export", "export records", "The 'export' command export records." },
             new string[] { "import", "import records", "The 'import' command import records." },
             new string[] { "purge", "purge records", "The 'purge' command purge records." },
+            new string[] { "insert", "insert record", "The 'insert' command insert record." },
+            new string[] { "delete", "delete records", "The 'delete' command delete records." },
+            new string[] { "update", "update records", "The 'update' command update records." },
+            new string[] { "select", "select records", "The 'select' command select records." },
         };
 
         public override object Handle(AppCommandRequest request)
@@ -26,10 +30,10 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
             {
                 if (!string.IsNullOrEmpty(request.Parameters))
                 {
-                    var index = Array.FindIndex(helpMessages, 0, helpMessages.Length, i => string.Equals(i[CommandHelpIndex], request.Parameters, StringComparison.InvariantCultureIgnoreCase));
+                    var index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[CommandHelpIndex], request.Parameters, StringComparison.InvariantCultureIgnoreCase));
                     if (index >= 0)
                     {
-                        return helpMessages[index][ExplanationHelpIndex] + "\n";
+                        return HelpMessages[index][ExplanationHelpIndex] + "\n";
                     }
                     else
                     {
@@ -40,7 +44,7 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
                 {
                     var sb = new StringBuilder();
                     sb.Append("Available commands:\n");
-                    foreach (var helpMessage in helpMessages)
+                    foreach (var helpMessage in HelpMessages)
                     {
                         sb.Append(helpMessage[CommandHelpIndex]).Append(" - ").Append(helpMessage[DescriptionHelpIndex]).Append('\n');
                     }
