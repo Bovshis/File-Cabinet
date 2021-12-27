@@ -28,13 +28,6 @@ namespace FileCabinetApp.Services
             Console.WriteLine($"Insert method execution duration is {ticks} ticks.");
         }
 
-        public bool EditRecord(int id, RecordWithoutId recordWithoutId)
-        {
-            var ticks = TickCounterService.GetTicks(this.service.EditRecord, id, recordWithoutId, out var isEdited);
-            Console.WriteLine($"Edit method execution duration is {ticks} ticks.");
-            return isEdited;
-        }
-
         public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
         {
             var ticks = TickCounterService.GetTicks(this.service.FindByDateOfBirth, dateOfBirth, out var records);
@@ -84,17 +77,25 @@ namespace FileCabinetApp.Services
             return snapshot;
         }
 
-        public void Remove(int id)
-        {
-            var ticks = TickCounterService.GetTicks(this.service.Remove, id);
-            Console.WriteLine($"MakeSnapshot method execution duration is {ticks} ticks.");
-        }
-
         public int Restore(FileCabinetServiceSnapshot fileCabinetServiceSnapshot)
         {
             var ticks = TickCounterService.GetTicks(this.service.Restore, fileCabinetServiceSnapshot, out var amount);
             Console.WriteLine($"MakeSnapshot method execution duration is {ticks} ticks.");
             return amount;
+        }
+
+        public IList<int> Delete(params (string key, string value)[] @where)
+        {
+            var ticks = TickCounterService.GetTicks(this.service.Delete, @where, out var list);
+            Console.WriteLine($"Delete method execution duration is {ticks} ticks.");
+            return list;
+        }
+
+        public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList)
+        {
+            var ticks = TickCounterService.GetTicks(this.service.Update, replaceList, whereList, out var list);
+            Console.WriteLine($"Update method execution duration is {ticks} ticks.");
+            return list;
         }
     }
 }

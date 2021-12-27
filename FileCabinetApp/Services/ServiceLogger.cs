@@ -46,12 +46,6 @@ namespace FileCabinetApp.Services
             return stat;
         }
 
-        public bool EditRecord(int id, RecordWithoutId recordWithoutId)
-        {
-            this.logWriter.Write(this.service.EditRecord, id, recordWithoutId, out var isEdited);
-            return isEdited;
-        }
-
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.logWriter.Write(this.service.FindByFirstName, firstName, out var records);
@@ -82,9 +76,16 @@ namespace FileCabinetApp.Services
             return amount;
         }
 
-        public void Remove(int id)
+        public IList<int> Delete(params (string key, string value)[] @where)
         {
-            this.logWriter.Write(this.service.Remove, id);
+            this.logWriter.Write(this.service.Delete, @where, out var list);
+            return list;
+        }
+
+        public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList)
+        {
+            this.logWriter.Write(this.service.Update, replaceList, whereList, out var list);
+            return list;
         }
     }
 }

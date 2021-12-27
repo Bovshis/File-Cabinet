@@ -329,11 +329,20 @@
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
             <returns>amount imported records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Remove(System.Int32)">
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Delete(System.ValueTuple{System.String,System.String}[])">
             <summary>
-            remove record.
+            delete record with given parameter.
             </summary>
-            <param name="id">id removed record.</param>
+            <param name="where">parameters for deleting.</param>
+            <returns>List of deleted records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Update(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}},System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Update records.
+            </summary>
+            <param name="replaceList">List with data for updating record.</param>
+            <param name="whereList">List with data for finding records.</param>
+            <returns>list of indices updated records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Purge">
             <summary>
@@ -425,11 +434,20 @@
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
             <returns>amount imported records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Remove(System.Int32)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Delete(System.ValueTuple{System.String,System.String}[])">
             <summary>
-            remove record.
+            delete record with given parameter.
             </summary>
-            <param name="id">id removed record.</param>
+            <param name="where">parameters for deleting.</param>
+            <returns>List of deleted records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Update(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}},System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Update records.
+            </summary>
+            <param name="replaceList">List with data for updating record.</param>
+            <param name="whereList">List with data for finding records.</param>
+            <returns>list of indices updated records.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetServiceSnapshot">
             <summary>
@@ -507,14 +525,6 @@
             </summary>
             <returns>count records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(System.Int32,FileCabinetApp.Records.RecordWithoutId)">
-            <summary>
-            Edit record.
-            </summary>
-            <param name="id">number of the edited record.</param>
-            <param name="recordWithoutId">record data.</param>
-            <returns>is record edited.</returns>
-        </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
             Find list of the records by first name.
@@ -549,11 +559,20 @@
             <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
             <returns>amount imported records.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.Remove(System.Int32)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Delete(System.ValueTuple{System.String,System.String}[])">
             <summary>
-            remove record.
+            delete record with given parameter.
             </summary>
-            <param name="id">id removed record.</param>
+            <param name="where">parameters for deleting.</param>
+            <returns>List of deleted records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Update(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}},System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Update records.
+            </summary>
+            <param name="replaceList">List with data for updating record.</param>
+            <param name="whereList">List with data for finding records.</param>
+            <returns>list of indices updated records.</returns>
         </member>
         <member name="T:FileCabinetApp.Validators.IRecordValidator">
             <summary>

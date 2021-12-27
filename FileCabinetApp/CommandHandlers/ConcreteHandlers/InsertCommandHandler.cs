@@ -66,6 +66,8 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
                             case "favoritecharacter":
                                 record.FavoriteCharacter = Convert.ToChar(values[i]);
                                 break;
+                            default:
+                                throw new ArgumentException("Wrong key");
                         }
                     }
 
