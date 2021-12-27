@@ -44,7 +44,6 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
 
                     this.print(records, printList);
                     return "Completed";
-
                 }
                 catch (Exception exception)
                 {

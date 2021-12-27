@@ -69,39 +69,6 @@ namespace FileCabinetApp.Services
         }
 
         /// <summary>
-        /// Find list of the records by date Of Birth.
-        /// </summary>
-        /// <param name="dateOfBirth">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
-        {
-            var indices = this.FindWhereDateOfBirth(dateOfBirth, this.GetAllIndices());
-            return this.GetRecords(indices);
-        }
-
-        /// <summary>
-        /// Find list of the records by first name.
-        /// </summary>
-        /// <param name="firstName">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            var indices = this.FindWhereFirstName(firstName, this.GetAllIndices());
-            return this.GetRecords(indices);
-        }
-
-        /// <summary>
-        /// Find list of the records by last Name.
-        /// </summary>
-        /// <param name="lastName">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            var indices = this.FindWhereLastName(lastName, this.GetAllIndices());
-            return this.GetRecords(indices);
-        }
-
-        /// <summary>
         /// Get records from the file.
         /// </summary>
         /// <returns>Array of records.</returns>

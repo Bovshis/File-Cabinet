@@ -275,27 +275,6 @@
             </summary>
             <param name="record">record.</param>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecords">
             <summary>
             Get records from the file.
@@ -390,35 +369,6 @@
             Get count records from the file cabinet list..
             </summary>
             <returns>count of records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.EditRecord(System.Int32,FileCabinetApp.Records.RecordWithoutId)">
-            <summary>
-            Edit record.
-            </summary>
-            <param name="id">number of the edited record.</param>
-            <param name="recordWithoutId">record data.</param>
-            <returns>is record edited.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>List of the searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>Searched records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
             <summary>
@@ -530,27 +480,6 @@
             Get count records.
             </summary>
             <returns>count records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
-            <summary>
-            Find list of the records by first name.
-            </summary>
-            <param name="firstName">value to search.</param>
-            <returns>Searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)">
-            <summary>
-            Find list of the records by last Name.
-            </summary>
-            <param name="lastName">value to search.</param>
-            <returns>searched records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.String)">
-            <summary>
-            Find list of the records by date Of Birth.
-            </summary>
-            <param name="dateOfBirth">value to search.</param>
-            <returns>Searched records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
             <summary>

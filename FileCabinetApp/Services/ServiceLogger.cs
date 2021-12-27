@@ -46,24 +46,6 @@ namespace FileCabinetApp.Services
             return stat;
         }
 
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            this.logWriter.Write(this.service.FindByFirstName, firstName, out var records);
-            return records;
-        }
-
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            this.logWriter.Write(this.service.FindByLastName, lastName, out var records);
-            return records;
-        }
-
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
-        {
-            this.logWriter.Write(this.service.FindByDateOfBirth, dateOfBirth, out var records);
-            return records;
-        }
-
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             this.logWriter.Write(this.service.MakeSnapshot, out var fileCabinetService);

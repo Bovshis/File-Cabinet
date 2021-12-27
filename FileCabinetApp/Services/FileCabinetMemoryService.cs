@@ -13,6 +13,7 @@ namespace FileCabinetApp.Services
     /// </summary>
     public class FileCabinetMemoryService : IFileCabinetService
     {
+        private readonly Storage storage = new Storage();
         private readonly List<FileCabinetRecord> list = new ();
         private readonly IRecordValidator validator;
 
@@ -41,6 +42,7 @@ namespace FileCabinetApp.Services
         /// <returns>record number.</returns>
         public int CreateRecord(RecordWithoutId recordWithoutId)
         {
+            this.storage.Clear();
             var record = new FileCabinetRecord(this.list.Count + 1, recordWithoutId);
             this.list.Add(record);
             return record.Id;
@@ -52,6 +54,7 @@ namespace FileCabinetApp.Services
         /// <param name="record">record.</param>
         public void Insert(FileCabinetRecord record)
         {
+            this.storage.Clear();
             this.list.Add(record);
         }
 
@@ -71,72 +74,6 @@ namespace FileCabinetApp.Services
         public int GetStat()
         {
             return this.list.Count;
-        }
-
-        /// <summary>
-        /// Edit record.
-        /// </summary>
-        /// <param name="id">number of the edited record.</param>
-        /// <param name="recordWithoutId">record data.</param>
-        /// <returns>is record edited.</returns>
-        public bool EditRecord(int id, RecordWithoutId recordWithoutId)
-        {
-            var position = this.list.FindIndex(x => x.Id == id);
-            if (position != -1)
-            {
-                this.list[position] = new FileCabinetRecord(id, recordWithoutId);
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Find list of the records by first name.
-        /// </summary>
-        /// <param name="firstName">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            foreach (var record in this.list)
-            {
-                if (record.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    yield return record;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Find list of the records by last Name.
-        /// </summary>
-        /// <param name="lastName">value to search.</param>
-        /// <returns>List of the searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            foreach (var record in this.list)
-            {
-                if (record.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    yield return record;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Find list of the records by date Of Birth.
-        /// </summary>
-        /// <param name="dateOfBirth">value to search.</param>
-        /// <returns>Searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
-        {
-            foreach (var record in this.list)
-            {
-                if (record.DateOfBirth == DateTime.Parse(dateOfBirth))
-                {
-                    yield return record;
-                }
-            }
         }
 
         /// <summary>
@@ -179,6 +116,7 @@ namespace FileCabinetApp.Services
         /// <returns>List of deleted records.</returns>
         public IList<int> Delete(params (string key, string value)[] where)
         {
+            this.storage.Clear();
             var indices = this.GetIndicesWhere(where);
             foreach (var index in indices)
             {
@@ -196,6 +134,7 @@ namespace FileCabinetApp.Services
         /// <returns>list of indices updated records.</returns>
         public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList)
         {
+            this.storage.Clear();
             var indices = this.GetIndicesWhere(whereList.ToArray());
             foreach (var index in indices)
             {
@@ -259,6 +198,12 @@ namespace FileCabinetApp.Services
 
         private IList<int> GetIndicesWhere(params (string key, string value)[] where)
         {
+            var parameters = ParametersToString(where);
+            if (this.storage.Contains(parameters))
+            {
+                return this.storage.GetResult(parameters);
+            }
+
             var indices = this.GetAllIndices(where);
             foreach (var parameter in where)
             {
@@ -270,7 +215,16 @@ namespace FileCabinetApp.Services
                 indices = this.FindIndicesWhere(parameter, indices);
             }
 
+            this.storage.Add(parameters, indices);
             return indices;
+        }
+
+        private static string ParametersToString(IList<(string, string)> whereList)
+        {
+            Array.Sort(whereList.ToArray());
+            return string.Join(',', whereList.Select(x => x.Item1))
+                   + " "
+                   + string.Join(',', whereList.Select(x => x.Item2));
         }
 
         private IList<int> FindIndicesWhere((string, string) param, IList<int> indices)

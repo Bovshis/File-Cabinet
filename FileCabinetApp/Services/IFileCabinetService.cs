@@ -42,27 +42,6 @@ namespace FileCabinetApp.Services
         public int GetStat();
 
         /// <summary>
-        /// Find list of the records by first name.
-        /// </summary>
-        /// <param name="firstName">value to search.</param>
-        /// <returns>Searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
-
-        /// <summary>
-        /// Find list of the records by last Name.
-        /// </summary>
-        /// <param name="lastName">value to search.</param>
-        /// <returns>searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
-
-        /// <summary>
-        /// Find list of the records by date Of Birth.
-        /// </summary>
-        /// <param name="dateOfBirth">value to search.</param>
-        /// <returns>Searched records.</returns>
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth);
-
-        /// <summary>
         /// Make snapshot.
         /// </summary>
         /// <returns>FileCabinetService snapshot.</returns>

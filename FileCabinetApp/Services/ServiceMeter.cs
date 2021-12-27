@@ -28,27 +28,6 @@ namespace FileCabinetApp.Services
             Console.WriteLine($"Insert method execution duration is {ticks} ticks.");
         }
 
-        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(string dateOfBirth)
-        {
-            var ticks = TickCounterService.GetTicks(this.service.FindByDateOfBirth, dateOfBirth, out var records);
-            Console.WriteLine($"FindByDateOfBirth method execution duration is {ticks} ticks.");
-            return records;
-        }
-
-        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
-        {
-            var ticks = TickCounterService.GetTicks(this.service.FindByFirstName, firstName, out var records);
-            Console.WriteLine($"FindByFirstName method execution duration is {ticks} ticks.");
-            return records;
-        }
-
-        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
-        {
-            var ticks = TickCounterService.GetTicks(this.service.FindByLastName, lastName, out var records);
-            Console.WriteLine($"FindByLastName method execution duration is {ticks} ticks.");
-            return records;
-        }
-
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             var ticks = TickCounterService.GetTicks(this.service.GetRecords, out var records);
