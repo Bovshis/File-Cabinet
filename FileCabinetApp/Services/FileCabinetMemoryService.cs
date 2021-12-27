@@ -205,6 +205,19 @@ namespace FileCabinetApp.Services
             return indices;
         }
 
+        /// <summary>
+        /// Get records with parameters that contain in whereList.
+        /// </summary>
+        /// <param name="whereList">contain parameters for searching.</param>
+        /// <returns>List of records.</returns>
+        public IList<FileCabinetRecord> GetRecordsWhere(IList<(string, string)> whereList)
+        {
+            var indices = this.GetIndicesWhere(whereList.ToArray());
+            return this.list
+                .Where(x => indices.Contains(x.Id))
+                .ToList();
+        }
+
         private void UpdateRecord(int index, IList<(string, string)> replaceList)
         {
             var id = this.list.FindIndex(x => x.Id == index);

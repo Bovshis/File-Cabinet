@@ -275,14 +275,6 @@
             </summary>
             <param name="record">record.</param>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(System.Int32,FileCabinetApp.Records.RecordWithoutId)">
-            <summary>
-            Edit record.
-            </summary>
-            <param name="id">number of the edited record.</param>
-            <param name="recordWithoutId">record data.</param>
-            <returns>is record edited.</returns>
-        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirth(System.String)">
             <summary>
             Find list of the records by date Of Birth.
@@ -343,6 +335,13 @@
             <param name="replaceList">List with data for updating record.</param>
             <param name="whereList">List with data for finding records.</param>
             <returns>list of indices updated records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecordsWhere(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Get records with parameters that contain in whereList.
+            </summary>
+            <param name="whereList">contain parameters for searching.</param>
+            <returns>List of records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Purge">
             <summary>
@@ -448,6 +447,13 @@
             <param name="replaceList">List with data for updating record.</param>
             <param name="whereList">List with data for finding records.</param>
             <returns>list of indices updated records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetRecordsWhere(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Get records with parameters that contain in whereList.
+            </summary>
+            <param name="whereList">contain parameters for searching.</param>
+            <returns>List of records.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetServiceSnapshot">
             <summary>
@@ -573,6 +579,13 @@
             <param name="replaceList">List with data for updating record.</param>
             <param name="whereList">List with data for finding records.</param>
             <returns>list of indices updated records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetRecordsWhere(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Get records with parameters that contain in whereList.
+            </summary>
+            <param name="whereList">contain parameters for searching.</param>
+            <returns>List of records.</returns>
         </member>
         <member name="T:FileCabinetApp.Validators.IRecordValidator">
             <summary>

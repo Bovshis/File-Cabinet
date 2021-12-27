@@ -89,5 +89,12 @@ namespace FileCabinetApp.Services
         /// <param name="whereList">List with data for finding records.</param>
         /// <returns>list of indices updated records.</returns>
         public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList);
+
+        /// <summary>
+        /// Get records with parameters that contain in whereList.
+        /// </summary>
+        /// <param name="whereList">contain parameters for searching.</param>
+        /// <returns>List of records.</returns>
+        public IList<FileCabinetRecord> GetRecordsWhere(IList<(string, string)> whereList);
     }
 }

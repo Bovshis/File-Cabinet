@@ -87,5 +87,11 @@ namespace FileCabinetApp.Services
             this.logWriter.Write(this.service.Update, replaceList, whereList, out var list);
             return list;
         }
+
+        public IList<FileCabinetRecord> GetRecordsWhere(IList<(string, string)> whereList)
+        {
+            this.logWriter.Write(this.service.GetRecordsWhere, whereList, out var list);
+            return list;
+        }
     }
 }

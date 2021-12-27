@@ -69,7 +69,6 @@ namespace FileCabinetApp
         private static AppCommandRequest ReadCommandRequest()
         {
             var inputs = Console.ReadLine()?.Split(' ', 2);
-
             const int commandIndex = 0;
             var command = inputs?[commandIndex];
             if (string.IsNullOrEmpty(command))
@@ -80,7 +79,6 @@ namespace FileCabinetApp
 
             const int parametersIndex = 1;
             var parameters = inputs.Length > 1 ? inputs[parametersIndex] : string.Empty;
-
             return new AppCommandRequest(command, parameters);
         }
 
@@ -97,27 +95,25 @@ namespace FileCabinetApp
             var exitHandler = new ExitCommandHandler(RunOrExit);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var createHandler = new CreateCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService, DefaultRecordPrinter.Print);
-            var findHandler = new FindCommandHandler(fileCabinetService, DefaultRecordPrinter.Print);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var insertHandler = new InsertCommandHandler(fileCabinetService);
             var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
+            var selectHandler = new SelectCommandHandler(fileCabinetService, DefaultRecordPrinter.Print);
 
             helpHandler
                 .SetNext(exitHandler)
                 .SetNext(statHandler)
                 .SetNext(createHandler)
-                .SetNext(listHandler)
                 .SetNext(updateHandler)
-                .SetNext(findHandler)
                 .SetNext(exportHandler)
                 .SetNext(importHandler)
                 .SetNext(purgeHandler)
                 .SetNext(insertHandler)
-                .SetNext(deleteHandler);
+                .SetNext(deleteHandler)
+                .SetNext(selectHandler);
 
             return helpHandler;
         }

@@ -97,5 +97,12 @@ namespace FileCabinetApp.Services
             Console.WriteLine($"Update method execution duration is {ticks} ticks.");
             return list;
         }
+
+        public IList<FileCabinetRecord> GetRecordsWhere(IList<(string, string)> whereList)
+        {
+            var ticks = TickCounterService.GetTicks(this.service.GetRecordsWhere, whereList, out var list);
+            Console.WriteLine($"GetRecordsWhere method execution duration is {ticks} ticks.");
+            return list;
+        }
     }
 }
