@@ -42,12 +42,9 @@ namespace FileCabinetApp.Converters
         public static Tuple<bool, string, short> ConvertShort(string str)
         {
             var heightParsed = short.TryParse(str, out var height);
-            if (!heightParsed)
-            {
-                return new Tuple<bool, string, short>(false, "Bad height format", height);
-            }
-
-            return new Tuple<bool, string, short>(true, "Done", height);
+            return heightParsed
+                ? new Tuple<bool, string, short>(true, "Done", height)
+                : new Tuple<bool, string, short>(false, "Bad height format", height);
         }
 
         /// <summary>

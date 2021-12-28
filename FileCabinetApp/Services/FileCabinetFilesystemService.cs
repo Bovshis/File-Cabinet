@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -169,32 +170,33 @@ namespace FileCabinetApp.Services
         /// <returns>Amount deleted records.</returns>
         public int Purge()
         {
-            if (this.deletedRecordsAmount > 0)
+            if (this.deletedRecordsAmount <= 0)
             {
-                var filePath = this.fileStream.Name;
-                var byteRecords = this.GetByteRecords();
-
-                this.fileStream.Close();
-                this.fileStream.Dispose();
-                this.recordsOffsetList = new SortedList<int, int>();
-                this.recordsAmount = 0;
-
-                this.fileStream = new FileStream(filePath, FileMode.Create);
-
-                foreach (var byteRecord in byteRecords)
-                {
-                    if (BitConverter.ToInt16(byteRecord.Status) != (short)ByteRecordStatus.Deleted)
-                    {
-                        this.recordsAmount++;
-                        this.WriteRecord(byteRecord.ToFileCabinetRecord());
-                    }
-                }
-
-                Console.WriteLine($"Data file processing is completed: {this.deletedRecordsAmount} of {this.recordsAmount} records were purged.");
-                this.deletedRecordsAmount = 0;
+                return 0;
             }
 
-            return 0;
+            var filePath = this.fileStream.Name;
+            var byteRecords = this.GetByteRecords();
+
+            this.fileStream.Close();
+            this.fileStream.Dispose();
+            this.recordsOffsetList = new SortedList<int, int>();
+            this.recordsAmount = 0;
+
+            this.fileStream = new FileStream(filePath, FileMode.Create);
+
+            foreach (var byteRecord in byteRecords)
+            {
+                if (BitConverter.ToInt16(byteRecord.Status) != (short)ByteRecordStatus.Deleted)
+                {
+                    this.recordsAmount++;
+                    this.WriteRecord(byteRecord.ToFileCabinetRecord());
+                }
+            }
+
+            var buffer = this.deletedRecordsAmount;
+            this.deletedRecordsAmount = 0;
+            return buffer;
         }
 
         private void UpdateRecord(int index, IList<(string, string)> replaceList)
@@ -249,21 +251,16 @@ namespace FileCabinetApp.Services
         private IList<int> FindIndicesWhere((string, string) param, IList<int> indices)
         {
             var (key, value) = param;
-            switch (key.ToLower(CultureInfo.InvariantCulture))
+            return key.ToLower(CultureInfo.InvariantCulture) switch
             {
-                case "firstname":
-                    return this.FindWhereFirstName(value, indices).ToList();
-                case "lastname":
-                    return this.FindWhereLastName(value, indices).ToList();
-                case "dateofbirth":
-                    return this.FindWhereDateOfBirth(value, indices).ToList();
-                case "height":
-                case "weight":
-                case "favoritecharacter":
-                    throw new ArgumentException($"Not Implemented for FilesystemService");
-                default:
-                    throw new ArgumentException($"There is no key: {key}");
-            }
+                "firstname" => this.FindWhereFirstName(value, indices).ToList(),
+                "lastname" => this.FindWhereLastName(value, indices).ToList(),
+                "dateofbirth" => this.FindWhereDateOfBirth(value, indices).ToList(),
+                "height" => this.FindWhereHeight(value, indices).ToList(),
+                "weight" => this.FindWhereWeight(value, indices).ToList(),
+                "favoritecharacter" => this.FindWhereFavoriteCharacter(value, indices).ToList(),
+                _ => throw new ArgumentException($"There is no key: {key}")
+            };
         }
 
         private IList<int> GetAllIndices(params (string key, string value)[] where)
@@ -402,6 +399,48 @@ namespace FileCabinetApp.Services
                 var buffer = new byte[ByteOffsetConstants.NameCapacity];
                 this.fileStream.Read(buffer, 0, buffer.Length);
                 if (lastName.Equals(Encoding.UTF8.GetString(buffer), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return index;
+                }
+            }
+        }
+
+        private IEnumerable<int> FindWhereHeight(string height, IList<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                this.fileStream.Seek(this.recordsOffsetList[index] + ByteOffsetConstants.HeightOffset, SeekOrigin.Begin);
+                var buffer = new byte[2];
+                this.fileStream.Read(buffer, 0, buffer.Length);
+                if (Convert.ToInt16(height) == BitConverter.ToInt16(buffer))
+                {
+                    yield return index;
+                }
+            }
+        }
+
+        private IEnumerable<int> FindWhereWeight(string weight, IList<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                this.fileStream.Seek(this.recordsOffsetList[index] + ByteOffsetConstants.WeightOffset, SeekOrigin.Begin);
+                var buffer = new byte[8];
+                this.fileStream.Read(buffer, 0, buffer.Length);
+                if (Convert.ToDecimal(weight) == new decimal(BitConverter.ToDouble(buffer)))
+                {
+                    yield return index;
+                }
+            }
+        }
+
+        private IEnumerable<int> FindWhereFavoriteCharacter(string favoriteCharacter, IList<int> indices)
+        {
+            foreach (var index in indices)
+            {
+                this.fileStream.Seek(this.recordsOffsetList[index] + ByteOffsetConstants.FavoriteCharacterOffset, SeekOrigin.Begin);
+                var buffer = new byte[2];
+                this.fileStream.Read(buffer, 0, buffer.Length);
+                if (Convert.ToChar(favoriteCharacter) == BitConverter.ToChar(buffer))
                 {
                     yield return index;
                 }

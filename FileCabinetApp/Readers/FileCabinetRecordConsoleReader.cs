@@ -2,12 +2,19 @@
 using FileCabinetApp.Converters;
 using FileCabinetApp.Records;
 using FileCabinetApp.Validators;
-using FileCabinetApp.Validators.ConcreteValidators;
 
 namespace FileCabinetApp.Readers
 {
+    /// <summary>
+    /// Console record reader.
+    /// </summary>
     public static class FileCabinetRecordConsoleReader
     {
+        /// <summary>
+        /// Read record from console.
+        /// </summary>
+        /// <param name="validator">Validate record.</param>
+        /// <returns>Record without id <see cref="RecordWithoutId"/>.</returns>
         public static RecordWithoutId ReadRecordFromConsole(IRecordValidator validator)
         {
             var recordWithoutId = new RecordWithoutId();
@@ -38,7 +45,7 @@ namespace FileCabinetApp.Readers
             return recordWithoutId;
         }
 
-        public static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter)
+        private static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter)
         {
             do
             {

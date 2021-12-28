@@ -157,6 +157,14 @@ namespace FileCabinetApp.Services
                 .ToList();
         }
 
+        private static string ParametersToString(IList<(string, string)> whereList)
+        {
+            Array.Sort(whereList.ToArray());
+            return string.Join(',', whereList.Select(x => x.Item1))
+                   + " "
+                   + string.Join(',', whereList.Select(x => x.Item2));
+        }
+
         private void UpdateRecord(int index, IList<(string, string)> replaceList)
         {
             var id = this.list.FindIndex(x => x.Id == index);
@@ -217,14 +225,6 @@ namespace FileCabinetApp.Services
 
             this.storage.Add(parameters, indices);
             return indices;
-        }
-
-        private static string ParametersToString(IList<(string, string)> whereList)
-        {
-            Array.Sort(whereList.ToArray());
-            return string.Join(',', whereList.Select(x => x.Item1))
-                   + " "
-                   + string.Join(',', whereList.Select(x => x.Item2));
         }
 
         private IList<int> FindIndicesWhere((string, string) param, IList<int> indices)

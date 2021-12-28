@@ -3,13 +3,16 @@ using System.Text;
 
 namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
 {
+    /// <summary>
+    /// Command handler for execution 'help' command.
+    /// </summary>
     public class HelpCommandHandler : CommandHandlerBase
     {
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
-        private static readonly string[][] HelpMessages = new string[][]
+        private static readonly string[][] HelpMessages =
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
@@ -24,38 +27,37 @@ namespace FileCabinetApp.CommandHandlers.ConcreteHandlers
             new string[] { "select", "select records", "The 'select' command select records." },
         };
 
+        /// <summary>
+        /// Execute 'help' request.
+        /// </summary>
+        /// <param name="request">Request for execution that contain command and parameters.</param>
+        /// <returns>Execution result message.</returns>
         public override object Handle(AppCommandRequest request)
         {
-            if (request.Command.Equals("help", StringComparison.InvariantCultureIgnoreCase))
-            {
-                if (!string.IsNullOrEmpty(request.Parameters))
-                {
-                    var index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[CommandHelpIndex], request.Parameters, StringComparison.InvariantCultureIgnoreCase));
-                    if (index >= 0)
-                    {
-                        return HelpMessages[index][ExplanationHelpIndex] + "\n";
-                    }
-                    else
-                    {
-                        return $"There is no explanation for '{request.Parameters}' command.\n";
-                    }
-                }
-                else
-                {
-                    var sb = new StringBuilder();
-                    sb.Append("Available commands:\n");
-                    foreach (var helpMessage in HelpMessages)
-                    {
-                        sb.Append(helpMessage[CommandHelpIndex]).Append(" - ").Append(helpMessage[DescriptionHelpIndex]).Append('\n');
-                    }
-
-                    return sb.ToString();
-                }
-            }
-            else
+            if (!request.Command.Equals("help", StringComparison.InvariantCultureIgnoreCase))
             {
                 return base.Handle(request);
             }
+
+            if (!string.IsNullOrEmpty(request.Parameters))
+            {
+                var index = Array.FindIndex(HelpMessages, 0, HelpMessages.Length, i => string.Equals(i[CommandHelpIndex], request.Parameters, StringComparison.InvariantCultureIgnoreCase));
+                if (index >= 0)
+                {
+                    return HelpMessages[index][ExplanationHelpIndex] + "\n";
+                }
+
+                return $"There is no explanation for '{request.Parameters}' command.\n";
+            }
+
+            var sb = new StringBuilder();
+            sb.Append("Available commands:\n");
+            foreach (var helpMessage in HelpMessages)
+            {
+                sb.Append(helpMessage[CommandHelpIndex]).Append(" - ").Append(helpMessage[DescriptionHelpIndex]).Append('\n');
+            }
+
+            return sb.ToString();
         }
     }
 }

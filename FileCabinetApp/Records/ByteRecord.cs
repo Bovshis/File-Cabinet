@@ -76,8 +76,8 @@ namespace FileCabinetApp.Records
             return new FileCabinetRecord
             {
                 Id = BitConverter.ToInt32(this.Id),
-                FirstName = Encoding.UTF8.GetString(this.FirstName),
-                LastName = Encoding.UTF8.GetString(this.LastName),
+                FirstName = Encoding.UTF8.GetString(this.FirstName).Replace("\0", string.Empty),
+                LastName = Encoding.UTF8.GetString(this.LastName).Replace("\0", string.Empty),
                 DateOfBirth = new DateTime(
                     BitConverter.ToInt32(this.Year),
                     BitConverter.ToInt32(this.Month),
