@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Custom Rulset" Description="Custom Rulset" ToolsVersion="16.0">
+<RuleSet Name="Custom Rulset" Description="Custom Rulset" ToolsVersion="17.0">
   <Rules AnalyzerId="AsyncUsageAnalyzers" RuleNamespace="AsyncUsageAnalyzers">
     <Rule Id="UseConfigureAwait" Action="Warning" />
   </Rules>
@@ -76,8 +76,8 @@
     <Rule Id="SA1305" Action="Warning" />
     <Rule Id="SA1400" Action="Error" />
     <Rule Id="SA1412" Action="Warning" />
-    <Rule Id="SA1600" Action="Warning" />
-    <Rule Id="SA1609" Action="None" />
+    <Rule Id="SA1600" Action="None" />
+    <Rule Id="SA1601" Action="None" />
     <Rule Id="SA1633" Action="None" />
   </Rules>
 </RuleSet>

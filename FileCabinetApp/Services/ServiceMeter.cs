@@ -6,10 +6,17 @@ using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.Services
 {
+    /// <summary>
+    /// Ticks meter for <see cref="IFileCabinetService"/>.
+    /// </summary>
     public class ServiceMeter : IFileCabinetService
     {
         private readonly IFileCabinetService service;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceMeter"/> class.
+        /// </summary>
+        /// <param name="service">Service <see cref="IFileCabinetService"/>.</param>
         public ServiceMeter(IFileCabinetService service)
         {
             this.service = service;

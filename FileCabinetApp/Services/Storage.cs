@@ -2,6 +2,9 @@
 
 namespace FileCabinetApp.Services
 {
+    /// <summary>
+    /// Storage for method results.
+    /// </summary>
     public class Storage
     {
         private readonly Dictionary<string, IList<int>> dictionary = new ();

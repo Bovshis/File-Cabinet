@@ -4,9 +4,338 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.CommandHandlers.AppCommandRequest">
+            <summary>
+            Command request.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.AppCommandRequest.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.AppCommandRequest"/> class.
+            </summary>
+            <param name="command">Command.</param>
+            <param name="parameters">Parameters.</param>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.AppCommandRequest.Command">
+            <summary>
+            Gets or sets command.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.CommandHandlers.AppCommandRequest.Parameters">
+            <summary>
+            Gets or sets parameters.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.CommandHandlerBase">
+            <summary>
+            Commands handler.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.CommandHandlerBase.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
+            <summary>
+            Link this handler with next handler.
+            </summary>
+            <param name="handler">Next handler.</param>
+            <returns>Next handler for chain linking.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.CreateCommandHandler">
+            <summary>
+            Command handler for execution 'create' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.CreateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.CreateCommandHandler"/> class.
+            </summary>
+            <param name="service">Service.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.CreateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'create' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.DeleteCommandHandler">
+            <summary>
+            Command handler for execution 'export' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.DeleteCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.DeleteCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.DeleteCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'delete' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExitCommandHandler">
+            <summary>
+            Command handler for execution 'exit' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExitCommandHandler.#ctor(System.Action{System.Boolean})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExitCommandHandler"/> class.
+            </summary>
+            <param name="exit">Method than change isRunning <see cref="T:FileCabinetApp.Program"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExitCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'exit' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExportCommandHandler">
+            <summary>
+            Command handler for execution 'export' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExportCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExportCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.ExportCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'export' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.HelpCommandHandler">
+            <summary>
+            Command handler for execution 'help' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.HelpCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'help' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.ImportCommandHandler">
+            <summary>
+            Command handler for execution 'import' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.ImportCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.ImportCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.ImportCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'export' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.InsertCommandHandler">
+            <summary>
+            Command handler for execution 'insert' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.InsertCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.InsertCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.InsertCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'import' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.PurgeCommandHandler">
+            <summary>
+            Command handler for execution 'purge' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.PurgeCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.PurgeCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.FileCabinetFilesystemService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.PurgeCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'purge' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.SelectCommandHandler">
+            <summary>
+            Command handler for execution 'select' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.SelectCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,System.Action{System.Collections.Generic.IList{FileCabinetApp.Records.FileCabinetRecord},System.Collections.Generic.IList{System.String}})">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.SelectCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+            <param name="print">Method for printing records.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.SelectCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'select' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.StatCommandHandler">
+            <summary>
+            Command handler for execution 'stat' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.StatCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.StatCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.StatCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'export' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.UpdateCommandHandler">
+            <summary>
+            Command handler for execution 'update' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.UpdateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ConcreteHandlers.UpdateCommandHandler"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ConcreteHandlers.UpdateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute 'update' request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ICommandHandler">
+            <summary>
+            Commands handler.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ICommandHandler.SetNext(FileCabinetApp.CommandHandlers.ICommandHandler)">
+            <summary>
+            Link this handler with next handler.
+            </summary>
+            <param name="handler">Next handler.</param>
+            <returns>Next handler for chain linking.</returns>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+            Execute request.
+            </summary>
+            <param name="request">Request for execution that contain command and parameters.</param>
+            <returns>Execution result message.</returns>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase">
+            <summary>
+            Commands handler that use the service.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.service">
+            <summary>
+            Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase"/> class.
+            </summary>
+            <param name="service">Service for initializing <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.Constants.ByteOffsetConstants">
             <summary>
             Constants for ByteRecord.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.NameCapacity">
+            <summary>
+            Capacity byte representation of the name.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.DateCapacity">
+            <summary>
+            Capacity byte representation of the date.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.IdOffset">
+            <summary>
+            Offset from start of recording to id.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.FirstNameOffset">
+            <summary>
+            Offset from start of recording to FirstName.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.LastNameOffset">
+            <summary>
+            Offset from start of recording to LastName.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.YearOffset">
+            <summary>
+            Offset from start of recording to Year.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.MonthOffset">
+            <summary>
+            Offset from start of recording to Month.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.DayOffset">
+            <summary>
+            Offset from start of recording to Day.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.HeightOffset">
+            <summary>
+            Offset from start of recording to Height.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.WeightOffset">
+            <summary>
+            Offset from start of recording to Weight.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.FavoriteCharacterOffset">
+            <summary>
+            Offset from start of recording to FavoriteCharacter.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Constants.ByteOffsetConstants.Size">
+            <summary>
+            Total size byte representation of the record.
             </summary>
         </member>
         <member name="T:FileCabinetApp.Converters.Converter">
@@ -72,6 +401,18 @@
             record was delete
             </summary>
         </member>
+        <member name="T:FileCabinetApp.Printers.DefaultRecordPrinter">
+            <summary>
+            Record printer.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Printers.DefaultRecordPrinter.Print(System.Collections.Generic.IList{FileCabinetApp.Records.FileCabinetRecord},System.Collections.Generic.IList{System.String})">
+            <summary>
+            Print records to console.
+            </summary>
+            <param name="records">Records for printing.</param>
+            <param name="fields">Fields that print.</param>
+        </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
             Console application for executing commands in the file cabinet.
@@ -81,6 +422,18 @@
             <summary>
             Main method that determines which command to execute.
             </summary>
+        </member>
+        <member name="T:FileCabinetApp.Readers.FileCabinetRecordConsoleReader">
+            <summary>
+            Console record reader.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordConsoleReader.ReadRecordFromConsole(FileCabinetApp.Validators.IRecordValidator)">
+            <summary>
+            Read record from console.
+            </summary>
+            <param name="validator">Validate record.</param>
+            <returns>Record without id <see cref="T:FileCabinetApp.Records.RecordWithoutId"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader">
             <summary>
@@ -115,6 +468,17 @@
             Get records list from file.
             </summary>
             <returns>records list.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Readers.ValidationRulesReader">
+            <summary>
+            Validation rules reader.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.ValidationRulesReader.ReadRulesFromConfig">
+            <summary>
+            Read rules from config file.
+            </summary>
+            <returns>Validation rules <see cref="T:FileCabinetApp.Validators.Rules.ValidationRules"/>.</returns>
         </member>
         <member name="T:FileCabinetApp.Records.ByteRecord">
             <summary>
@@ -516,6 +880,45 @@
             <param name="whereList">contain parameters for searching.</param>
             <returns>List of records.</returns>
         </member>
+        <member name="T:FileCabinetApp.Services.ServiceLogger">
+            <summary>
+            Logger for <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceLogger.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.ServiceLogger"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.Services.ServiceMeter">
+            <summary>
+            Ticks meter for <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.ServiceMeter.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.ServiceMeter"/> class.
+            </summary>
+            <param name="service">Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.Services.Storage">
+            <summary>
+            Storage for method results.
+            </summary>
+        </member>
+        <member name="T:FileCabinetApp.Settings.Launcher">
+            <summary>
+            Program start launcher.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Settings.Launcher.SetSettings(System.String[])">
+            <summary>
+            Set program settings.
+            </summary>
+            <param name="settings">Setting.</param>
+            <returns>Service <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> with settings.</returns>
+        </member>
         <member name="T:FileCabinetApp.Validators.IRecordValidator">
             <summary>
             Validation parameters.
@@ -571,6 +974,17 @@
             Write record.
             </summary>
             <param name="record">Record for write.</param>
+        </member>
+        <member name="T:FileCabinetApp.Writers.LogsWriter">
+            <summary>
+            Logs writer.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Writers.LogsWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Writers.LogsWriter"/> class.
+            </summary>
+            <param name="writer">File for writing.</param>
         </member>
     </members>
 </doc>

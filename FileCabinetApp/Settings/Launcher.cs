@@ -6,10 +6,18 @@ using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.Settings
 {
+    /// <summary>
+    /// Program start launcher.
+    /// </summary>
     public class Launcher
     {
         private StringBuilder logsMessage;
 
+        /// <summary>
+        /// Set program settings.
+        /// </summary>
+        /// <param name="settings">Setting.</param>
+        /// <returns>Service <see cref="IFileCabinetService"/> with settings.</returns>
         public (IFileCabinetService service, string message) SetSettings(string[] settings)
         {
             try

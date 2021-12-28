@@ -3,10 +3,17 @@ using System.IO;
 
 namespace FileCabinetApp.Writers
 {
+    /// <summary>
+    /// Logs writer.
+    /// </summary>
     public class LogsWriter
     {
         private readonly TextWriter writer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogsWriter"/> class.
+        /// </summary>
+        /// <param name="writer">File for writing.</param>
         public LogsWriter(TextWriter writer)
         {
             this.writer = writer;

@@ -23,6 +23,17 @@ namespace FileCabinetApp
         /// </summary>
         public static void Main()
         {
+            StartProgram();
+            var commands = CreateCommandHandlers();
+            do
+            {
+                ExecuteCommand(commands);
+            }
+            while (isRunning);
+        }
+
+        private static void StartProgram()
+        {
             Console.Write("$ FileCabinetApp.exe ");
             var launcher = new Launcher();
             do
@@ -43,16 +54,19 @@ namespace FileCabinetApp
             Console.WriteLine($"File Cabinet Application, developed by {DeveloperName}");
             Console.WriteLine(HintMessage);
             Console.WriteLine();
-            var commands = CreateCommandHandlers();
-            do
-            {
-                Console.Write("> ");
-                var appCommandRequest = ReadCommandRequest();
-                if (appCommandRequest == null)
-                {
-                    continue;
-                }
+        }
 
+        private static void ExecuteCommand(ICommandHandler commands)
+        {
+            Console.Write("> ");
+            var appCommandRequest = ReadCommandRequest();
+            if (appCommandRequest == null)
+            {
+                return;
+            }
+
+            try
+            {
                 var result = commands.Handle(appCommandRequest);
                 if (result != null)
                 {
@@ -63,7 +77,10 @@ namespace FileCabinetApp
                     PrintMissedCommandInfo(appCommandRequest.Command);
                 }
             }
-            while (isRunning);
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private static AppCommandRequest ReadCommandRequest()

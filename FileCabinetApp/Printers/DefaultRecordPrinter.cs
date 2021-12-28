@@ -7,8 +7,16 @@ using FileCabinetApp.Records;
 
 namespace FileCabinetApp.Printers
 {
+    /// <summary>
+    /// Record printer.
+    /// </summary>
     public static class DefaultRecordPrinter
     {
+        /// <summary>
+        /// Print records to console.
+        /// </summary>
+        /// <param name="records">Records for printing.</param>
+        /// <param name="fields">Fields that print.</param>
         public static void Print(IList<FileCabinetRecord> records, IList<string> fields)
         {
             var lengths = GetLengths(records, fields);

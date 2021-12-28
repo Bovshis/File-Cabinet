@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace FileCabinetApp
 {
     public class AdvancedSearch
     {
-        public static readonly string[] Commands = {
+        public static readonly string[] Commands =
+        {
             "help", "exit", "stat", "create", "update", "export", "import", "delete", "purge", "select",
         };
 
-        private string command;
+        private readonly string command;
 
         public AdvancedSearch(string command)
         {
@@ -56,7 +54,8 @@ namespace FileCabinetApp
                 {
                     var substitutionCost = firstWord[i - 1] == secondWord[j - 1] ? 0 : 1;
 
-                    matrixD[i, j] = Minimum(matrixD[i - 1, j] + deletionCost,
+                    matrixD[i, j] = Minimum(
+                        matrixD[i - 1, j] + deletionCost,
                         matrixD[i, j - 1] + insertionCost,
                         matrixD[i - 1, j - 1] + substitutionCost);
                 }

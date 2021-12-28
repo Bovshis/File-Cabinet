@@ -7,11 +7,18 @@ using FileCabinetApp.Writers;
 
 namespace FileCabinetApp.Services
 {
+    /// <summary>
+    /// Logger for <see cref="IFileCabinetService"/>.
+    /// </summary>
     public class ServiceLogger : IFileCabinetService
     {
         private readonly IFileCabinetService service;
         private readonly LogsWriter logWriter = new LogsWriter(new StreamWriter("history.log", false));
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceLogger"/> class.
+        /// </summary>
+        /// <param name="service">Service <see cref="IFileCabinetService"/>.</param>
         public ServiceLogger(IFileCabinetService service)
         {
             this.service = service;
