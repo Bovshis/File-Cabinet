@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using FileCabinetApp.Records;
 
 namespace FileCabinetGenerator
 {
