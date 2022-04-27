@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileCabinetApp", "FileCabinetApp\FileCabinetApp.csproj", "{6CFD495F-682B-4858-82FE-7579DAE4E4B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCabinetGenerator", "FileCabinetGenerator\FileCabinetGenerator.csproj", "{5E43C40A-36EF-4359-AAA0-397B2CEB4B29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileCabinetGenerator", "FileCabinetGenerator\FileCabinetGenerator.csproj", "{5E43C40A-36EF-4359-AAA0-397B2CEB4B29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

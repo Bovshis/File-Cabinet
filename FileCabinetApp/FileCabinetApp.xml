@@ -608,6 +608,70 @@
             Gets or sets favorite character.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.#ctor(FileCabinetApp.Validators.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetDatabaseService"/> class.
+            </summary>
+            <param name="validator">validator.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.CreateRecord(FileCabinetApp.Records.RecordWithoutId)">
+            <summary>
+            Create record, adds to list and dictionaries.
+            </summary>
+            <param name="recordWithoutId">record data.</param>
+            <returns>record number.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.Delete(System.ValueTuple{System.String,System.String}[])">
+            <summary>
+            delete record with given parameter.
+            </summary>
+            <param name="where">parameters for deleting.</param>
+            <returns>List of deleted records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.GetRecords">
+            <summary>
+            Get records from the file cabinet list.
+            </summary>
+            <returns>Array of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.GetRecordsWhere(System.Collections.Generic.IList{System.ValueTuple{System.String,System.String}})">
+            <summary>
+            Get records with parameters that contain in whereList.
+            </summary>
+            <param name="whereList">contain parameters for searching.</param>
+            <returns>List of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.GetStat">
+            <summary>
+            Get count records from the file cabinet list..
+            </summary>
+            <returns>count of records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.GetValidator">
+            <summary>
+            Get validator.
+            </summary>
+            <returns>validator.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.Insert(FileCabinetApp.Records.FileCabinetRecord)">
+            <summary>
+            Insert record.
+            </summary>
+            <param name="record">record.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.MakeSnapshot">
+            <summary>
+            Make snapshot.
+            </summary>
+            <returns>FileCabinetService snapshot.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetDatabaseService.Restore(FileCabinetApp.Services.FileCabinetServiceSnapshot)">
+            <summary>
+            Restore records.
+            </summary>
+            <param name="fileCabinetServiceSnapshot">snapshot that contains data.</param>
+            <returns>amount imported records.</returns>
+        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetFilesystemService">
             <summary>
             File cabinet with file storage.

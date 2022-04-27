@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using FileCabinetApp.Converters;
 
@@ -54,18 +55,21 @@ namespace FileCabinetApp.Records
         /// <summary>
         /// Gets or sets record number in the file cabinet.
         /// </summary>
+        [Required]
         [XmlAttribute]
         public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets first name in the record in the file cabinet.
         /// </summary>
+        [Required]
         [XmlAttribute]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets last name in the record in the file cabinet.
         /// </summary>
+        [Required]
         [XmlAttribute]
         public string LastName { get; set; }
 

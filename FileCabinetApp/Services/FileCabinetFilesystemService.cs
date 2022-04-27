@@ -17,14 +17,15 @@ namespace FileCabinetApp.Services
     /// <summary>
     /// File cabinet with file storage.
     /// </summary>
-    public class FileCabinetFilesystemService : IFileCabinetService
+    public class FileCabinetFilesystemService : IFileCabinetService, IDisposable
     {
         private readonly IRecordValidator validator;
-
         private SortedList<int, int> recordsOffsetList;
         private FileStream fileStream;
         private int recordsAmount = 0;
         private int deletedRecordsAmount = 0;
+
+        private bool disposedValue = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
@@ -36,6 +37,14 @@ namespace FileCabinetApp.Services
             this.fileStream = fileStream;
             this.validator = validator;
             this.recordsOffsetList = new SortedList<int, int>();
+        }
+
+        ~FileCabinetFilesystemService() => this.Dispose(false);
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -197,6 +206,19 @@ namespace FileCabinetApp.Services
             var buffer = this.deletedRecordsAmount;
             this.deletedRecordsAmount = 0;
             return buffer;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposedValue)
+            {
+                if (disposing)
+                {
+                    this.fileStream.Dispose();
+                }
+
+                this.disposedValue = true;
+            }
         }
 
         private void UpdateRecord(int index, IList<(string, string)> replaceList)

@@ -68,7 +68,7 @@ namespace FileCabinetApp.Settings
             if (storageModeIndex != 0)
             {
                 var storageMode = settings[storageModeIndex];
-                const string memoryMode = "memory", fileMode = "file";
+                const string memoryMode = "memory", fileMode = "file", databaseMode = "database";
 
                 if (storageMode.Equals(memoryMode, StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -80,6 +80,12 @@ namespace FileCabinetApp.Settings
                 {
                     this.logsMessage.Append("Using file cabinet.");
                     return new FileCabinetFilesystemService(new FileStream("cabinet-records.db", FileMode.Create), validator);
+                }
+
+                if (storageMode.Equals(databaseMode, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    this.logsMessage.Append("Using database cabinet.");
+                    return new FileCabinetDatabaseService(validator);
                 }
 
                 throw new ArgumentException("Bad validation rules command");
