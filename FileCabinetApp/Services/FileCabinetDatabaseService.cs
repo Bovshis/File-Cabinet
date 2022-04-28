@@ -70,14 +70,15 @@ namespace FileCabinetApp.Services
         public IList<int> Delete(params (string key, string value)[] where)
         {
             using FileCabinetServiceContext db = new FileCabinetServiceContext();
-            var records = db.Records.Where(x => this.IsSatisfy(x, where.ToList()));
+            var records = db.Records.AsEnumerable().Where(x => this.IsSatisfy(x, where.ToList()));
             foreach (var record in records)
             {
                 db.Records.Remove(record);
             }
 
+            var res = records.Select(x => x.Id).ToList();
             db.SaveChanges();
-            return records.Select(x => x.Id).ToList();
+            return res;
         }
 
         /// <summary>
@@ -180,14 +181,15 @@ namespace FileCabinetApp.Services
         public IList<int> Update(IList<(string, string)> replaceList, IList<(string, string)> whereList)
         {
             using FileCabinetServiceContext db = new FileCabinetServiceContext();
-            var records = db.Records.Where(x => this.IsSatisfy(x, whereList));
+            var records = db.Records.AsEnumerable().Where(x => this.IsSatisfy(x, whereList));
             foreach (var record in records)
             {
                 this.UpdateRecord(record, replaceList);
             }
 
+            var res = records.Select(x => x.Id).ToList();
             db.SaveChanges();
-            return records.Select(x => x.Id).ToList();
+            return res;
         }
 
         private void UpdateRecord(FileCabinetRecord record, IList<(string, string)> replaceList)
@@ -197,6 +199,9 @@ namespace FileCabinetApp.Services
                 var (key, value) = query;
                 switch (key.ToLower(CultureInfo.InvariantCulture))
                 {
+                    case "id":
+                        Console.WriteLine("Id cannot be changed.");
+                        break;
                     case "firstname":
                         record.FirstName = value;
                         break;
@@ -209,7 +214,6 @@ namespace FileCabinetApp.Services
                     case "height":
                         record.Height = Convert.ToInt16(value);
                         break;
-
                     case "weight":
                         record.Weight = Convert.ToDecimal(value);
                         break;
@@ -229,6 +233,13 @@ namespace FileCabinetApp.Services
                 var (key, value) = query;
                 switch (key.ToLower(CultureInfo.InvariantCulture))
                 {
+                    case "id":
+                        if (record.Id != Convert.ToInt32(value))
+                        {
+                            return false;
+                        }
+
+                        break;
                     case "firstname":
                         if (record.FirstName != value)
                         {

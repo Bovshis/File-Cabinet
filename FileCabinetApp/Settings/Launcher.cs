@@ -68,7 +68,7 @@ namespace FileCabinetApp.Settings
             if (storageModeIndex != 0)
             {
                 var storageMode = settings[storageModeIndex];
-                const string memoryMode = "memory", fileMode = "file", databaseMode = "database";
+                const string memoryMode = "memory", fileMode = "file", databaseMode = "db";
 
                 if (storageMode.Equals(memoryMode, StringComparison.InvariantCultureIgnoreCase))
                 {
